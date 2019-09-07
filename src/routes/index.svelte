@@ -1,3 +1,14 @@
+<script>
+  import Form from "../components/form/Form.svelte";
+
+  let values = {
+    info: {
+      placeholder: "Jot something down...",
+      value: ""
+    }
+  };
+</script>
+
 <style>
   h1,
   figure,
@@ -46,7 +57,7 @@
 </figure>
 
 <p>
-  <strong>
-    Try editing this file (src/routes/index.svelte) to test live reloading!
-  </strong>
+  <Form bind:values />
 </p>
+
+<p>values: {JSON.stringify(values)}</p>
