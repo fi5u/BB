@@ -1,9 +1,17 @@
 <script>
-  export let signupForm;
+  export let form;
+  export let onsubmit;
 
+  import Button from "./Button.svelte";
   import Input from "./Input.svelte";
 </script>
 
-{#each signupForm as item}
-  <Input bind:value={item.value} {...item} />
-{/each}
+<form on:submit={onsubmit}>
+  {#each form as item}
+    {#if item.type === 'submit'}
+      <Button {...item} />
+    {:else}
+      <Input bind:value={item.value} {...item} />
+    {/if}
+  {/each}
+</form>

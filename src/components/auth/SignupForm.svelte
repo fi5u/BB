@@ -24,7 +24,11 @@
       type: "submit"
     }
   ];
+
+  function submit(event) {
+    event.preventDefault();
+  }
 </script>
 
-<Form bind:signupForm />
+<Form bind:form={signupForm} onsubmit={submit} />
 <p>Form: {JSON.stringify(signupForm)}</p>

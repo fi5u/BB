@@ -15,12 +15,10 @@
   };
 </script>
 
-{#if type === 'submit'}
-  <button type="submit">{sharedProps.label}</button>
+{#if type === 'email'}
+  <input {...sharedProps} bind:value type="email" />
 {:else if type === 'password'}
   <input {...sharedProps} bind:value type="password" />
-{:else if type === 'email'}
-  <input {...sharedProps} bind:value type="email" />
 {:else}
   <input {...sharedProps} bind:value type="text" />
 {/if}
