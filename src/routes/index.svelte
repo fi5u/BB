@@ -1,35 +1,10 @@
 <script>
-  import Form from "../components/form/Form.svelte";
-
-  let signupForm = [
-    {
-      autocomplete: "email",
-      id: "signup-email",
-      label: "Email address",
-      placeholder: "Email address",
-      type: "email",
-      value: ""
-    },
-    {
-      autocomplete: "new-password",
-      id: "signup-password",
-      label: "Password",
-      placeholder: "Minimum 8 characters",
-      type: "password",
-      value: ""
-    },
-    {
-      id: "signup-button",
-      label: "Sign up",
-      type: "submit"
-    }
-  ];
+  import SignupForm from "../components/auth/SignupForm.svelte";
 </script>
 
 <style>
   h1,
-  figure,
-  p {
+  figure {
     text-align: center;
     margin: 0 auto;
   }
@@ -74,6 +49,4 @@
 </figure>
 
 <h2>Signup</h2>
-<Form bind:signupForm />
-
-<p>Form: {JSON.stringify(signupForm)}</p>
+<SignupForm />
