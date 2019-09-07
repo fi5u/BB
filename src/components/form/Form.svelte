@@ -1,11 +1,9 @@
 <script>
-  export let values;
+  export let signupForm;
 
   import Input from "./Input.svelte";
 </script>
 
-{#each Object.keys(values) as inputValue}
-  <Input
-    bind:value={values[inputValue].value}
-    placeholder={values[inputValue].placeholder} />
+{#each signupForm as item}
+  <Input bind:value={item.value} {...item} />
 {/each}

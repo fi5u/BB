@@ -1,12 +1,29 @@
 <script>
   import Form from "../components/form/Form.svelte";
 
-  let values = {
-    info: {
-      placeholder: "Jot something down...",
+  let signupForm = [
+    {
+      autocomplete: "email",
+      id: "signup-email",
+      label: "Email address",
+      placeholder: "Email address",
+      type: "email",
       value: ""
+    },
+    {
+      autocomplete: "new-password",
+      id: "signup-password",
+      label: "Password",
+      placeholder: "Minimum 8 characters",
+      type: "password",
+      value: ""
+    },
+    {
+      id: "signup-button",
+      label: "Sign up",
+      type: "submit"
     }
-  };
+  ];
 </script>
 
 <style>
@@ -56,8 +73,7 @@
   <figcaption>HIGH FIVE!</figcaption>
 </figure>
 
-<p>
-  <Form bind:values />
-</p>
+<h2>Signup</h2>
+<Form bind:signupForm />
 
-<p>values: {JSON.stringify(values)}</p>
+<p>Form: {JSON.stringify(signupForm)}</p>
