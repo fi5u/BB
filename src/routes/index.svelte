@@ -1,5 +1,5 @@
 <script>
-  import SignupForm from "../components/auth/SignupForm.svelte";
+
 </script>
 
 <style>
@@ -26,10 +26,6 @@
     margin: 0 0 1em 0;
   }
 
-  p {
-    margin: 1em auto;
-  }
-
   @media (min-width: 480px) {
     h1 {
       font-size: 4em;
@@ -41,12 +37,11 @@
   <title>Baby Book</title>
 </svelte:head>
 
-<h1>Baby book</h1>
-
 <figure>
   <img alt="Borat" src="great-success.png" />
   <figcaption>HIGH FIVE!</figcaption>
 </figure>
 
-<h2>Signup</h2>
-<SignupForm />
+<h1>Baby book</h1>
+
+<a href="/continue/email">Continue with email</a>

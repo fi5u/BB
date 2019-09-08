@@ -1,4 +1,6 @@
 <script>
+  export let emailAddress = "";
+
   import Form from "../form/Form.svelte";
 
   let signupForm = [
@@ -8,7 +10,7 @@
       label: "Email address",
       placeholder: "Email address",
       type: "email",
-      value: ""
+      value: emailAddress
     },
     {
       autocomplete: "new-password",
@@ -31,4 +33,3 @@
 </script>
 
 <Form bind:form={signupForm} onsubmit={submit} />
-<p>Form: {JSON.stringify(signupForm)}</p>
