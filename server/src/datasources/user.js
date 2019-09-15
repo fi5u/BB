@@ -78,6 +78,12 @@ class UserAPI extends DataSource {
     });
     return found && found.length > 0;
   }
+
+  async getAllUsers() {
+    const users = await this.store.users.findAll()
+
+    return users
+  }
 }
 
 module.exports = UserAPI;

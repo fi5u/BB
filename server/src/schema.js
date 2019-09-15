@@ -14,6 +14,7 @@ const typeDefs = gql`
     ): LaunchConnection!
     launch(id: ID!): Launch
     me: User
+    users: [User]
   }
 
   type Mutation {
@@ -24,6 +25,8 @@ const typeDefs = gql`
     cancelTrip(launchId: ID!): TripUpdateResponse!
 
     login(email: String): String # login token
+
+    addUser(email: String!): User
   }
 
   type TripUpdateResponse {

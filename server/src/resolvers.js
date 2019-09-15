@@ -20,7 +20,7 @@ module.exports = {
         // last item in _all_ results, then there are no more results after this
         hasMore: launches.length
           ? launches[launches.length - 1].cursor !==
-            allLaunches[allLaunches.length - 1].cursor
+          allLaunches[allLaunches.length - 1].cursor
           : false,
       };
     },
@@ -28,6 +28,7 @@ module.exports = {
       dataSources.launchAPI.getLaunchById({ launchId: id }),
     me: async (_, __, { dataSources }) =>
       dataSources.userAPI.findOrCreateUser(),
+    users: async (_, __, { dataSources }) => dataSources.userAPI.getAllUsers()
   },
   Mutation: {
     bookTrips: async (_, { launchIds }, { dataSources }) => {
@@ -42,8 +43,8 @@ module.exports = {
           results.length === launchIds.length
             ? 'trips booked successfully'
             : `the following launches couldn't be booked: ${launchIds.filter(
-                id => !results.includes(id),
-              )}`,
+              id => !results.includes(id),
+            )}`,
         launches,
       };
     },
@@ -66,6 +67,10 @@ module.exports = {
     login: async (_, { email }, { dataSources }) => {
       const user = await dataSources.userAPI.findOrCreateUser({ email });
       if (user) return new Buffer(email).toString('base64');
+    },
+    addUser: async (_, { email }, { dataSources }) => {
+      const user = await dataSources.userAPI.findOrCreateUser({ email });
+      if (user) return dataSources.userAPI.findOrCreateUser(user.id);
     },
   },
   Launch: {
