@@ -27,6 +27,8 @@ const typeDefs = gql`
     login(email: String): String # login token
 
     addUser(email: String!): User
+
+    getUser(email: String!): User
   }
 
   type TripUpdateResponse {

@@ -31,6 +31,11 @@ class UserAPI extends DataSource {
     return users && users[0] ? users[0] : null;
   }
 
+  async findUser({ email: emailArg }) {
+    const user = await this.store.users.findUser({ where: { emailArg } });
+    return user || null
+  }
+
   async bookTrips({ launchIds }) {
     const userId = this.context.user.id;
     if (!userId) return;

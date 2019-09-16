@@ -70,7 +70,13 @@ module.exports = {
     },
     addUser: async (_, { email }, { dataSources }) => {
       const user = await dataSources.userAPI.findOrCreateUser({ email });
-      if (user) return dataSources.userAPI.findOrCreateUser(user.id);
+      if (user) return user
+    },
+    getUser: async (_, { email }, { dataSources }) => {
+      const user = await dataSources.userAPI.findUser({ email });
+      console.log('user:')
+      console.log(user)
+      if (user) return user;
     },
   },
   Launch: {
