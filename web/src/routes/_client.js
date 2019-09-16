@@ -7,7 +7,7 @@ import { getMainDefinition } from 'apollo-utilities';
 
 export const createApolloClient = () => {
   const httpLink = new HttpLink({
-    uri: 'http://localhost:3001/graphql'
+    uri: 'http://localhost:4000'
   });
   const wsLink = new WebSocketLink({
     uri: `ws://localhost:3001/subscriptions`,
