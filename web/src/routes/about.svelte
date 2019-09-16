@@ -6,11 +6,11 @@
   let random = 0;
   let randoms = 0;
 
-  onMount(() => {
+  onMount(async () => {
     const client = createApolloClient();
 
-    client
-      .query({
+    try {
+      const result = await client.query({
         query: gql`
           {
             users {
@@ -18,10 +18,13 @@
             }
           }
         `
-      })
-      .then(result => {
-        console.log(result);
       });
+
+      console.log(result);
+    } catch (error) {
+      console.log("Error in fetching data:");
+      console.log(error.message);
+    }
 
     // client.query({
     //   query: gql`{ random }`
