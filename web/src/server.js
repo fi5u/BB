@@ -1,43 +1,31 @@
 import sirv from 'sirv';
-import polka from 'polka';
 import compression from 'compression';
 import * as sapper from '@sapper/server';
-import redis from 'redis'
-import session from 'express-session'
-import connectRedis from 'connect-redis'
+
+import express from 'express';
+import http from 'http';
+import { execute, subscribe } from 'graphql';
+import { SubscriptionServer } from 'subscriptions-transport-ws';
+import { schema } from './_schema';
 
 const { PORT, NODE_ENV } = process.env;
 const dev = NODE_ENV === 'development';
-const client = redis.createClient()
-const RedisStore = connectRedis(session)
 
-polka()
-  .use(session({
-    store: new RedisStore({ client, host: 'redis', port: 6379 }),
-    cookie: {
-      maxAge: 604800000,
-    },
-    secret: 'hf52hnd2$jwj382n_mDw-qCwV',
-    resave: false,
-    rolling: true
-  }))
-  .use((req, res, next) => {
-    console.log(req.session.user);
-    console.log(req.session.refresh_token);
-    if (typeof req.session.user === 'undefined') {
-      req.session.user = false;
-    }
-    next()
-  })
-  .use(
-    compression({ threshold: 0 }),
-    sirv('static', { dev }),
-    sapper.middleware({
-      session: (req, res) => ({
-        user: req.session.user
-      })
-    })
-  )
-  .listen(PORT, err => {
-    if (err) console.log('error', err);
-  });
+const app = express() // You can also use Express
+	.use(
+		compression({ threshold: 0 }),
+		sirv('static', { dev }),
+		sapper.middleware()
+  );
+
+const server = http.createServer(app);
+
+server.listen(PORT, err => {
+  if (err) console.log('error', err);
+
+  new SubscriptionServer({execute, subscribe, schema},
+    {
+      server: server,
+      path: '/subscriptions'
+    });
+});
