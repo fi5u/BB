@@ -1,37 +1,37 @@
-<script>
-  import gql from "graphql-tag";
-  import { onMount } from "svelte";
+<script context="module">
   import { createApolloClient } from "./_client";
+  import gql from "graphql-tag";
 
-  let random = 0;
-  let randoms = 0;
+  const client = createApolloClient();
+
+  const USERS = gql`
+    {
+      users {
+        email
+      }
+    }
+  `;
+
+  export async function preload() {
+    return {
+      cache: await client.query({
+        query: USERS
+      })
+    };
+  }
+</script>
+
+<script>
+  import { onMount } from "svelte";
+  import { restore, query } from "svelte-apollo";
+
+  export let cache;
+
+  restore(client, USERS, cache.data);
+
+  const users = query(client, { query: USERS });
 
   onMount(async () => {
-    const client = createApolloClient();
-
-    try {
-      const result = await client.query({
-        query: gql`
-          {
-            users {
-              email
-            }
-          }
-        `
-      });
-
-      console.log(result);
-    } catch (error) {
-      console.log("Error in fetching data:");
-      console.log(error.message);
-    }
-
-    // client.query({
-    //   query: gql`{ random }`
-    // }).then(result => {
-    //   random = result.data.random;
-    // });
-
     // client.subscribe({
     //   query: gql`subscription { randoms }`
     // }).subscribe(result => {
@@ -48,8 +48,14 @@
 
 <p>This is the 'about' page. There's not much here.</p>
 
-<div>
-  Random: {random}
-  <br />
-  Randoms: {randoms}
-</div>
+{#await $users}
+  <li>Loading...</li>
+{:then result}
+  {#each result.data.users as user (user.email)}
+    <li>{user.email}</li>
+  {:else}
+    <li>No users found</li>
+  {/each}
+{:catch error}
+  <li>Error loading users: {error}</li>
+{/await}

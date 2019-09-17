@@ -4,6 +4,9 @@ import { split } from 'apollo-link';
 import { HttpLink } from 'apollo-link-http';
 import { WebSocketLink } from 'apollo-link-ws';
 import { getMainDefinition } from 'apollo-utilities';
+import WebSocket from 'isomorphic-ws'
+
+import "cross-fetch/polyfill";
 
 export const createApolloClient = () => {
   const httpLink = new HttpLink({
@@ -13,7 +16,8 @@ export const createApolloClient = () => {
     uri: `ws://localhost:3001/subscriptions`,
     options: {
       reconnect: true
-    }
+    },
+    webSocketImpl: WebSocket
   });
 
   const link = split(

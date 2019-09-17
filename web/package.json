@@ -13,10 +13,12 @@
   },
   "dependencies": {
     "compression": "^1.7.1",
+    "cross-fetch": "^3.0.4",
     "express": "^4.17.1",
     "express-graphql": "^0.9.0",
     "graphql": "^14.4.2",
     "graphql-tools": "^4.0.5",
+    "isomorphic-ws": "^4.0.1",
     "polka": "^0.5.0",
     "sirv": "^0.4.0",
     "subscriptions-transport-ws": "^0.9.16"
@@ -43,6 +45,7 @@
     "rollup-plugin-svelte": "^5.0.1",
     "rollup-plugin-terser": "^4.0.4",
     "sapper": "^0.27.0",
-    "svelte": "^3.0.0"
+    "svelte": "^3.0.0",
+    "svelte-apollo": "^0.3.0"
   }
 }
