@@ -1,8 +1,6 @@
 <script context="module">
-  import { createApolloClient } from "./_client";
+  import { client } from "./_client";
   import gql from "graphql-tag";
-
-  const client = createApolloClient();
 
   const USERS = gql`
     {
@@ -13,6 +11,9 @@
   `;
 
   export async function preload() {
+    // Persist after refresh
+    await client.resetStore();
+
     return {
       cache: await client.query({
         query: USERS
@@ -24,6 +25,7 @@
 <script>
   import { onMount } from "svelte";
   import { mutate, restore, setClient, query } from "svelte-apollo";
+  import AddUser from "../components/AddUser.svelte";
 
   export let cache;
 
@@ -31,36 +33,27 @@
     mutation($email: String!) {
       addUser(email: $email) {
         id
+        email
       }
     }
   `;
-
-  let email = "";
 
   restore(client, USERS, cache.data);
   setClient(client);
 
   const users = query(client, { query: USERS });
 
-  async function addUser(e) {
-    e.preventDefault();
-
+  async function addUser(email) {
     try {
       await mutate(client, {
         mutation: ADD_USER,
         variables: { email }
       });
 
-      console.log("Added successfully");
-
+      // Rehydrate the cache
       const finalData = cache.data.users;
       finalData.push({ email, __typename: "User" });
       restore(client, USERS, { users: finalData });
-
-      users.refetch();
-
-      // clear input
-      email = "";
     } catch (error) {
       console.error(error);
     }
@@ -95,8 +88,4 @@
   <li>Error loading users: {error}</li>
 {/await}
 
-<form on:submit={addUser}>
-  <label for="author">Author</label>
-  <input type="email" id="author-name" bind:value={email} />
-  <button type="submit">Add Author</button>
-</form>
+<AddUser {addUser} />
