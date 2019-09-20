@@ -1,8 +1,23 @@
 <script>
   import * as sapper from "@sapper/app";
+  import gql from "graphql-tag";
+  import { getClient, query } from "svelte-apollo";
+
   import Form from "../form/Form.svelte";
 
-  let user;
+  export let submittedForm;
+
+  const GET_USER = gql`
+    query($email: String!) {
+      user(email: $email) {
+        email
+      }
+    }
+  `;
+
+  const client = getClient();
+
+  let userData;
 
   let emailCheckForm = [
     {
@@ -23,13 +38,20 @@
   async function submit(event) {
     event.preventDefault();
 
-    // TODO: replace this with an actual check of the email in db
-    if (!user /* emailCheckForm[0].value.indexOf("new") > -1 */) {
-      // TODO: can we store this to the session, so we don't have to pass in url
-      sapper.goto(`/continue/new?e=${emailCheckForm[0].value}`);
-    } else {
-      sapper.goto(`/continue/verify?e=${emailCheckForm[0].value}`);
+    userData = query(client, {
+      query: GET_USER,
+      variables: { email: emailCheckForm[0].value }
+    });
+
+    const result = await userData.result();
+
+    let userType = "new";
+    if (result.data.user) {
+      // TODO: can we store this to the session, so we don't have to pass in url?
+      userType = "current";
     }
+
+    submittedForm(userType, emailCheckForm[0].value);
   }
 </script>
 
