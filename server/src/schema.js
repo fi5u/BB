@@ -14,6 +14,7 @@ const typeDefs = gql`
     ): LaunchConnection!
     launch(id: ID!): Launch
     me: User
+    user(email: String!): User
     users: [User]
   }
 

@@ -28,6 +28,8 @@ module.exports = {
       dataSources.launchAPI.getLaunchById({ launchId: id }),
     me: async (_, __, { dataSources }) =>
       dataSources.userAPI.findOrCreateUser(),
+    user: (_, { email }, { dataSources }) =>
+      dataSources.userAPI.findUser({ email }),
     users: async (_, __, { dataSources }) => dataSources.userAPI.getAllUsers()
   },
   Mutation: {
