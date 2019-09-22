@@ -38,20 +38,33 @@
   async function submit(event) {
     event.preventDefault();
 
-    userData = query(client, {
-      query: GET_USER,
-      variables: { email: emailCheckForm[0].value }
-    });
+    const response = await fetch(
+      `/api/auth/email-check?email=${emailCheckForm[0].value}`,
+      {
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json"
+        }
+      }
+    );
 
-    const result = await userData.result();
+    const { emailStatus } = await response.json();
 
-    let userType = "new";
-    if (result.data.user) {
-      // TODO: can we store this to the session, so we don't have to pass in url?
-      userType = "current";
-    }
+    // userData = query(client, {
+    //   query: GET_USER,
+    //   variables: { email: emailCheckForm[0].value }
+    // });
 
-    submittedForm(userType, emailCheckForm[0].value);
+    // const result = await userData.result();
+
+    // let userType = "new";
+    // if (result.data.user) {
+    //   // TODO: can we store this to the session, so we don't have to pass in url?
+    //   userType = "current";
+    // }
+
+    submittedForm(emailStatus, emailCheckForm[0].value);
   }
 </script>
 
