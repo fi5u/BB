@@ -1,27 +1,6 @@
 import { query } from "svelte-apollo";
-import { ApolloClient } from 'apollo-client';
-import { InMemoryCache } from 'apollo-cache-inmemory';
-import { HttpLink } from 'apollo-link-http';
-import gql from "graphql-tag";
-
-const createApolloClient = () => {
-  const httpLink = new HttpLink({
-    uri: 'http://localhost:4000'
-  });
-
-  return new ApolloClient({ link: httpLink, cache: new InMemoryCache() });
-}
-
-const client = createApolloClient();
-
-const GET_USER = gql`
-    query($email: String!) {
-      user(email: $email) {
-        email
-      }
-    }
-  `;
-
+import { client } from '../_graphql'
+import { GET_USER } from '../_graphql/_user'
 
 export async function get(req, res, next) {
   const {
