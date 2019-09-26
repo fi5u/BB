@@ -31,6 +31,13 @@ class UserAPI extends DataSource {
     return users && users[0] ? users[0] : null;
   }
 
+  async createUser({ email, password }) {
+    if (!email || !password || !isEmail.validate(email)) return null;
+
+    const user = await this.store.users.create({ email, password })
+    return user
+  }
+
   async findUser({ email }) {
     const user = await this.store.users.findOne({ where: { email } });
     return user || null
