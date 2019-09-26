@@ -18,4 +18,4 @@
 
 <p>Welcome back!</p>
 <p>{emailAddress}</p>
-<VerifyForm />
+<VerifyForm {emailAddress} />
