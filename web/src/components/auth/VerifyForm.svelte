@@ -26,14 +26,6 @@
   async function handleSubmit(event) {
     event.preventDefault();
 
-    // const formData = new FormData();
-    // formData.append("email", emailAddress);
-    // formData.append("password", verifyForm[0].value);
-
-    // const request = new XMLHttpRequest();
-    // request.open("POST", "/login");
-    // request.send(formData);
-
     const response = await fetch("/login", {
       method: "POST",
       headers: {

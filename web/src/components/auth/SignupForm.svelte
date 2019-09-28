@@ -1,5 +1,8 @@
 <script>
   export let emailAddress = "";
+  export let submittedForm;
+
+  import * as sapper from "@sapper/app";
 
   import Form from "../form/Form.svelte";
 
@@ -27,8 +30,22 @@
     }
   ];
 
-  function submit(event) {
+  async function submit(event) {
     event.preventDefault();
+
+    const response = await fetch("/signup", {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        email: emailAddress,
+        password: signupForm[1].value
+      })
+    });
+
+    submittedForm(response.ok ? "success" : "fail");
   }
 </script>
 

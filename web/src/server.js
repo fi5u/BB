@@ -7,7 +7,8 @@ import bodyParser from 'body-parser'
 import session from 'express-session'
 
 import passport from 'passport'
-import { localStrategy } from './server/passport'
+import { localStrategy } from './server/auth/passport'
+import { signup } from './server/auth/signup'
 
 const { PORT, NODE_ENV } = process.env;
 const dev = NODE_ENV === 'development';
@@ -64,6 +65,8 @@ app.post('/login',
     res.redirect('/continue/verify')
   }
 )
+
+app.post('/signup', signup)
 
 app.use(compression({ threshold: 0 }));
 app.use(sirv('static', { dev }));

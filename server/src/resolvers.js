@@ -76,8 +76,7 @@ module.exports = {
     },
     getUser: async (_, { email }, { dataSources }) => {
       const user = await dataSources.userAPI.findUser({ email });
-      console.log('user:')
-      console.log(user)
+
       if (user) return user;
     },
   },

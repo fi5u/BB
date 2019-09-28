@@ -1,6 +1,6 @@
 import { query } from "svelte-apollo";
-import { client } from '../routes/api/_graphql'
-import { GET_USER } from '../routes/api/_graphql/_user'
+import { client } from '../../routes/api/_graphql'
+import { GET_USER } from '../../routes/api/_graphql/_user'
 import { Strategy } from 'passport-local'
 
 export const localStrategy = new Strategy({

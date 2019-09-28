@@ -7,9 +7,19 @@
 </script>
 
 <script>
-  export let emailAddress;
+  import * as sapper from "@sapper/app";
 
   import SignupForm from "../../components/auth/SignupForm.svelte";
+
+  export let emailAddress;
+
+  function submittedForm(status) {
+    if (status === "success") {
+      sapper.goto("/app");
+    } else {
+      sapper.goto("/continue/new");
+    }
+  }
 </script>
 
 <svelte:head>
@@ -17,4 +27,4 @@
 </svelte:head>
 
 <p>Welcome! Let's get a few more details from you.</p>
-<SignupForm {emailAddress} />
+<SignupForm {emailAddress} {submittedForm} />
