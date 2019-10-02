@@ -1,9 +1,10 @@
 <script>
-  export let emailAddress;
-
   import { goto, stores } from "@sapper/app";
   import Form from "../form/Form.svelte";
   import fetch from "cross-fetch";
+
+  export let emailAddress;
+  export let handleFormSubmitted;
 
   const { session } = stores();
 
@@ -37,6 +38,17 @@
         password: verifyForm[0].value
       })
     });
+
+    if (response.url) {
+      verifyForm[0].value = "";
+      handleFormSubmitted(
+        `${response.url}${
+          response.url.indexOf("?") > -1 ? `&e=${emailAddress}` : ""
+        }`
+      );
+    } else {
+      // TODO: handle error
+    }
 
     // const response = await fetch("/login", {
     //   method: "POST",

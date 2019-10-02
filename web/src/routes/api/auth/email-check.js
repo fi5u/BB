@@ -8,13 +8,15 @@ export async function get(req, res, next) {
   } = req.query
 
   const userData = query(client, {
+    fetchPolicy: 'no-cache',
     query: GET_USER,
     variables: { email }
   });
 
   const result = await userData.result();
 
-  console.log(result.data.user)
+  console.log('result:')
+  console.log(result)
 
   res.json({ emailStatus: result.data.user ? 'current' : 'new' })
 }

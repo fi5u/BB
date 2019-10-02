@@ -7,8 +7,6 @@ export const localStrategy = new Strategy({
   usernameField: 'email'
 },
   async (email, password, done) => {
-    console.log('logging in with ' + email)
-    console.log('pw: ' + password)
     try {
       const userData = query(client, {
         query: GET_USER,
@@ -22,14 +20,39 @@ export const localStrategy = new Strategy({
       }
 
       // Create a password check function
-      if (true /* !user.validPassword(password) */) {
-        console.log('Failed')
+      if (password !== result.data.user.password) {
         return done(null, false, { message: 'Incorrect password.' });
       }
 
       return done(null, result.data.user);
     } catch (error) {
+      console.log('Login error')
       return done(error)
     }
   }
 );
+
+export function serializeUser(user, cb) {
+  console.log('serialize')
+  console.log(user)
+  cb(null, user.email);
+}
+
+export async function deserializeUser(email, cb) {
+  console.log('deserialize')
+  const userData = query(client, {
+    query: GET_USER,
+    variables: { email }
+  });
+
+  const result = await userData.result();
+
+  if (!result.data.user) {
+    return cb(new Error('No user'))
+  }
+
+  console.log('user:')
+  console.log(result.data.user)
+
+  cb(null, result.data.user);
+}

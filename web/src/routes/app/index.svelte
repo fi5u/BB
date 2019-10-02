@@ -1,14 +1,15 @@
 <script context="module">
-  export function preload(page, { user }) {
-    return { user };
+  export function preload(page /*, { user }*/) {
+    // return { user };
+    return {};
   }
 </script>
 
 <script>
-  export let user;
+  export let user = false;
 
-  import { stores } from "@sapper/app";
-  const { session } = stores();
+  // import { stores } from "@sapper/app";
+  // const { session } = stores();
 </script>
 
 <h2>App</h2>

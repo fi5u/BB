@@ -7,7 +7,7 @@ import bodyParser from 'body-parser'
 import session from 'express-session'
 
 import passport from 'passport'
-import { localStrategy } from './server/auth/passport'
+import { deserializeUser, localStrategy, serializeUser } from './server/auth/passport'
 import { signup } from './server/auth/signup'
 
 const { PORT, NODE_ENV } = process.env;
@@ -28,43 +28,15 @@ app.use(bodyParser.json());
 app.use(passport.initialize());
 app.use(passport.session());
 
-passport.serializeUser((user, cb) => {
-  console.log('serialize')
-  cb(null, user.id);
-});
-
-passport.deserializeUser(async (id, cb) => {
-  console.log('deserialize')
-  const userData = query(client, {
-    query: GET_USER,
-    variables: { email }
-  });
-
-  const result = await userData.result();
-
-  if (!result.data.user) {
-    return cb(new Error('No user'))
-  }
-
-  cb(null, result.data.user);
-});
+passport.serializeUser(serializeUser)
+passport.deserializeUser(deserializeUser)
 
 // Define routes
-app.post('/login',
-  (req, res, next) => {
-    console.log('POST login')
-    console.log(req.body)
-    next()
-  },
-  passport.authenticate('local', {
-    successRedirect: '/app',
-    failureRedirect: '/continue/verify',
-    failureFlash: false
-  }), (req, res) => {
-    console.log('Login failed')
-    res.redirect('/continue/verify')
-  }
-)
+app.post('/login', passport.authenticate('local', {
+  successRedirect: '/app',
+  failureRedirect: `/continue/verify?success=0`,
+  failureFlash: false,
+}))
 
 app.post('/signup', signup)
 
