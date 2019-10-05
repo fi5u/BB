@@ -2,6 +2,7 @@ import { query } from "svelte-apollo";
 import { client } from '../../routes/api/_graphql'
 import { GET_USER } from '../../routes/api/_graphql/_user'
 import { Strategy } from 'passport-local'
+import bcrypt from 'bcrypt'
 
 export const localStrategy = new Strategy({
   usernameField: 'email'
@@ -19,8 +20,8 @@ export const localStrategy = new Strategy({
         return done(null, false, { message: 'Incorrect email.' });
       }
 
-      // Create a password check function
-      if (password !== result.data.user.password) {
+      const match = await bcrypt.compare(password, result.data.user.password)
+      if (!match) {
         return done(null, false, { message: 'Incorrect password.' });
       }
 
