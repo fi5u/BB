@@ -4,6 +4,8 @@
 
   import Button from "./Button.svelte";
   import Input from "./Input.svelte";
+
+  console.log(form);
 </script>
 
 <form on:submit={onsubmit}>
@@ -11,7 +13,10 @@
     {#if item.type === 'submit'}
       <Button {...item} />
     {:else}
-      <Input bind:value={item.value} {...item} />
+      <Input
+        bind:errorMessage={item.errorMessage}
+        bind:value={item.value}
+        {...item} />
     {/if}
   {/each}
 </form>

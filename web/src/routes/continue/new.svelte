@@ -20,6 +20,8 @@
       sapper.goto("/continue/new");
     }
   }
+  // TODO: clear error when start typing, make sure
+  // new error can be displayed
 </script>
 
 <svelte:head>

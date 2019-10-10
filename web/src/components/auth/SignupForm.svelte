@@ -9,6 +9,7 @@
   let signupForm = [
     {
       autocomplete: "email",
+      errorMessage: "",
       id: "signup-email",
       label: "Email address",
       placeholder: "Email address",
@@ -17,6 +18,7 @@
     },
     {
       autocomplete: "new-password",
+      errorMessage: "",
       id: "signup-password",
       label: "Password",
       placeholder: "Minimum 8 characters",
@@ -40,10 +42,25 @@
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        email: emailAddress,
+        email: signupForm[0].value,
         password: signupForm[1].value
       })
     });
+
+    if (!response.ok) {
+      // Get error message
+      const data = await response.json();
+
+      if (data.errors) {
+        data.errors.forEach(error => {
+          const i = signupForm.findIndex(
+            item => item.id === `signup-${error.field}`
+          );
+
+          signupForm[i].errorMessage = error.error;
+        });
+      }
+    }
 
     submittedForm(response.ok ? "success" : "fail");
   }

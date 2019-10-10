@@ -11,7 +11,33 @@ export async function signup(req, res) {
   console.log('signing up with')
   console.log(email, password)
 
-  // TODO: validate email + password here
+  const { validateEmail } = await import(
+    '../../utils/auth'
+  )
+
+  let errors = []
+
+  const isEmailValid = await validateEmail(email)
+
+  if (!isEmailValid) {
+    errors = errors.concat({
+      error: 'Invalid email',
+      field: 'email',
+    })
+  }
+
+  if (password.length < 8) {
+    errors = errors.concat({
+      error: 'Password should be at least 8 characters',
+      field: 'password',
+    })
+  }
+
+  if (errors.length) {
+    return res.status(400).json({
+      errors
+    })
+  }
 
   try {
     const hash = await bcrypt.hash(password, saltRounds)
