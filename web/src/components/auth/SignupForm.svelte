@@ -1,10 +1,10 @@
 <script>
-  export let emailAddress = "";
-  export let submittedForm;
-
   import * as sapper from "@sapper/app";
 
   import Form from "../form/Form.svelte";
+
+  export let emailAddress = "";
+  export let submittedForm;
 
   let signupForm = [
     {

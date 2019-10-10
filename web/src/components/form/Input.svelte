@@ -1,21 +1,29 @@
 <script>
-  export let autocomplete = null;
-  export let errorMessage;
+  export let autocomplete;
+  export let errorMessage = null;
   export let id;
   export let label;
-  export let placeholder = null;
+  export let placeholder;
   export let type;
-  export let value = null;
+  export let value;
 
   let sharedProps = {
     autocomplete,
     id,
     label,
+    oninput: handleUpdate,
     placeholder,
     type
   };
 
-  $: console.log(errorMessage);
+  /**
+   * Handle input update
+   */
+  function handleUpdate() {
+    if (errorMessage) {
+      errorMessage = null;
+    }
+  }
 </script>
 
 {#if type === 'email'}

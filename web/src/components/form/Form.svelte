@@ -1,11 +1,9 @@
 <script>
-  export let form;
-  export let onsubmit;
-
   import Button from "./Button.svelte";
   import Input from "./Input.svelte";
 
-  console.log(form);
+  export let form;
+  export let onsubmit;
 </script>
 
 <form on:submit={onsubmit}>
