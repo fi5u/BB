@@ -17,3 +17,12 @@ export const GET_USER = gql`
       }
     }
   `;
+
+export const GET_USER_BY_ID = gql`
+    query($id: Int!) {
+      user(id: $id) {
+        email,
+        password
+      }
+    }
+  `;

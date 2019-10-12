@@ -52,6 +52,7 @@ module.exports.createStore = () => {
     email: SQL.STRING,
     password: SQL.STRING,
     token: SQL.STRING,
+    salt: SQL.STRING,
   });
 
   const trips = db.define('trip', {

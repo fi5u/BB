@@ -28,8 +28,8 @@ module.exports = {
       dataSources.launchAPI.getLaunchById({ launchId: id }),
     me: async (_, __, { dataSources }) =>
       dataSources.userAPI.findOrCreateUser(),
-    user: (_, { email }, { dataSources }) =>
-      dataSources.userAPI.findUser({ email }),
+    user: (_, { email, id }, { dataSources }) =>
+      dataSources.userAPI.findUser({ email, id }),
     users: async (_, __, { dataSources }) => dataSources.userAPI.getAllUsers()
   },
   Mutation: {
@@ -70,8 +70,8 @@ module.exports = {
       const user = await dataSources.userAPI.findOrCreateUser({ email });
       if (user) return new Buffer(email).toString('base64');
     },
-    addUser: async (_, { email, password }, { dataSources }) => {
-      const user = await dataSources.userAPI.createUser({ email, password });
+    addUser: async (_, { email, password, salt }, { dataSources }) => {
+      const user = await dataSources.userAPI.createUser({ email, password, salt });
       if (user) return user
     },
     getUser: async (_, { email }, { dataSources }) => {

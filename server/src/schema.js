@@ -14,7 +14,10 @@ const typeDefs = gql`
     ): LaunchConnection!
     launch(id: ID!): Launch
     me: User
-    user(email: String!): User
+    user(
+      email: String
+      id: Int
+    ): User
     users: [User]
   }
 
@@ -27,7 +30,7 @@ const typeDefs = gql`
 
     login(email: String): String # login token
 
-    addUser(email: String!, password: String!): User
+    addUser(email: String!, password: String!, salt: String!): User
 
     getUser(email: String!): User
   }
@@ -67,6 +70,7 @@ const typeDefs = gql`
     id: ID!
     email: String!
     password: String!
+    salt: String!
     trips: [Launch]!
   }
 

@@ -31,15 +31,19 @@ class UserAPI extends DataSource {
     return users && users[0] ? users[0] : null;
   }
 
-  async createUser({ email, password }) {
-    if (!email || !password || !isEmail.validate(email)) return null;
+  async createUser({ email, password, salt }) {
+    if (!email || !password || !salt || !isEmail.validate(email)) return null;
 
-    const user = await this.store.users.create({ email, password })
-    return user
+    const user = await this.store.users.create({ email, password, salt })
+
+    return {
+      id: user.id,
+      email
+    }
   }
 
-  async findUser({ email }) {
-    const user = await this.store.users.findOne({ where: { email } });
+  async findUser({ email, id }) {
+    const user = await this.store.users.findOne({ where: { email, id } });
     return user || null
   }
 

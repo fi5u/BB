@@ -1,9 +1,10 @@
 import { mutate } from "svelte-apollo";
 import { client } from '../../routes/api/_graphql'
 import { ADD_USER } from '../../routes/api/_graphql/_user'
-import bcrypt from 'bcrypt'
+import * as argon2 from 'argon2'
+import { randomBytes } from 'crypto'
+import { generateJWT } from './jwt'
 
-const saltRounds = 10
 
 export async function signup(req, res) {
   const { email, password } = req.body
@@ -40,18 +41,30 @@ export async function signup(req, res) {
   }
 
   try {
-    const hash = await bcrypt.hash(password, saltRounds)
+    const salt = randomBytes(32);
+    const passwordHashed = await argon2.hash(password, { salt });
 
     try {
-      const user = await mutate(client, {
+      const userRecord = await mutate(client, {
         mutation: ADD_USER,
-        variables: { email, password: hash }
+        variables: {
+          email,
+          password: passwordHashed,
+          salt: salt.toString('hex'),
+        }
       });
 
-      console.log('signed up:')
-      console.log(user)
+      const token = generateJWT(userRecord)
 
-      res.sendStatus(200)
+      console.log('signed up:')
+      console.log(userRecord)
+
+      res.json({
+        token,
+        user: {
+          email: userRecord.email,
+        },
+      }).status(200).end()
     } catch (error) {
       console.log('Error signing up')
       console.log(error.message)
