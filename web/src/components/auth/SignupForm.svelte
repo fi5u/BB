@@ -59,10 +59,7 @@
         signupForm[i].errorMessage = error.error;
       });
     } else {
-      console.log("no errors..");
       if (data.user) {
-        console.log("got user:");
-        console.log(data);
         submittedForm(data.user);
       } else {
         console.log("No errors, but no user!!");

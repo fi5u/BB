@@ -1,7 +1,8 @@
 <script>
   import { goto, stores } from "@sapper/app";
-  import Form from "../form/Form.svelte";
   import fetch from "cross-fetch";
+
+  import Form from "../form/Form.svelte";
 
   export let emailAddress;
   export let handleFormSubmitted;
@@ -42,26 +43,6 @@
     const user = await response.json();
 
     handleFormSubmitted(user);
-
-    // const response = await fetch("/login", {
-    //   method: "POST",
-    //   headers: {
-    //     Accept: "application/json",
-    //     "Content-Type": "application/json"
-    //   },
-    //   body: JSON.stringify({
-    //     email: verifyForm,
-    //     password: event.target[1].value
-    //   })
-    // });
-    // if (response.status === 201) {
-    //   // Sets the User to true in the Store so we do not have to refresh the page.
-    //   session.set({ user: true });
-    // }
-
-    // session.set({ user: true });
-
-    // goto("/app");
   }
 </script>
 

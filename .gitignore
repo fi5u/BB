@@ -7,3 +7,5 @@ node_modules/
 cypress/screenshots/
 __sapper__/
 .sessions/
+
+server/store.sqlite

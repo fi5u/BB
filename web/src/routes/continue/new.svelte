@@ -16,12 +16,8 @@
   const { session } = stores();
 
   function submittedForm(user) {
-    console.log("Form submitted..");
-    console.log(user);
     if (user) {
       $session.user = user;
-      console.log("session.user:");
-      console.log($session.user);
       goto("/app");
     } else {
       goto("/continue/new");
