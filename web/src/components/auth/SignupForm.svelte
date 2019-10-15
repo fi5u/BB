@@ -35,7 +35,7 @@
   async function submit(event) {
     event.preventDefault();
 
-    const response = await fetch("/signup", {
+    const response = await fetch("/api/auth/signup", {
       method: "POST",
       headers: {
         Accept: "application/json",
@@ -47,22 +47,27 @@
       })
     });
 
-    if (!response.ok) {
-      // Get error message
-      const data = await response.json();
+    const data = await response.json();
 
-      if (data.errors) {
-        data.errors.forEach(error => {
-          const i = signupForm.findIndex(
-            item => item.id === `signup-${error.field}`
-          );
+    if (data.errors) {
+      console.log("got errors..");
+      data.errors.forEach(error => {
+        const i = signupForm.findIndex(
+          item => item.id === `signup-${error.field}`
+        );
 
-          signupForm[i].errorMessage = error.error;
-        });
+        signupForm[i].errorMessage = error.error;
+      });
+    } else {
+      console.log("no errors..");
+      if (data.user) {
+        console.log("got user:");
+        console.log(data);
+        submittedForm(data.user);
+      } else {
+        console.log("No errors, but no user!!");
       }
     }
-
-    submittedForm(response.ok ? "success" : "fail");
   }
 </script>
 

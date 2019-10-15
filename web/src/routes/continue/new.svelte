@@ -7,17 +7,24 @@
 </script>
 
 <script>
-  import * as sapper from "@sapper/app";
+  import { goto, stores } from "@sapper/app";
 
   import SignupForm from "../../components/auth/SignupForm.svelte";
 
   export let emailAddress;
 
-  function submittedForm(status) {
-    if (status === "success") {
-      sapper.goto("/app");
+  const { session } = stores();
+
+  function submittedForm(user) {
+    console.log("Form submitted..");
+    console.log(user);
+    if (user) {
+      $session.user = user;
+      console.log("session.user:");
+      console.log($session.user);
+      goto("/app");
     } else {
-      sapper.goto("/continue/new");
+      goto("/continue/new");
     }
   }
 </script>

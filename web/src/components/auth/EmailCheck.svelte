@@ -7,13 +7,13 @@
 
   export let submittedForm;
 
-  const GET_USER = gql`
-    query($email: String!) {
-      user(email: $email) {
-        email
-      }
-    }
-  `;
+  // const GET_USER = gql`
+  //   query($email: String!) {
+  //     user(email: $email) {
+  //       email
+  //     }
+  //   }
+  // `;
 
   const client = getClient();
 
@@ -39,7 +39,7 @@
     event.preventDefault();
 
     const response = await fetch(
-      `/api/auth/email-check?email=${emailCheckForm[0].value}`,
+      `/api/auth/user?email=${emailCheckForm[0].value}`,
       {
         method: "GET",
         headers: {
@@ -49,7 +49,7 @@
       }
     );
 
-    const { emailStatus } = await response.json();
+    const { user } = await response.json();
 
     // userData = query(client, {
     //   query: GET_USER,
@@ -64,7 +64,7 @@
     //   userType = "current";
     // }
 
-    submittedForm(emailStatus, emailCheckForm[0].value);
+    submittedForm(user ? "current" : "new", emailCheckForm[0].value);
   }
 </script>
 

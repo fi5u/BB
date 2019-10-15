@@ -1,12 +1,19 @@
 <script context="module">
-  export function preload(page /*, { user }*/) {
-    // return { user };
-    return {};
+  export function preload(page, { user }) {
+    console.log("app session:");
+    console.log(user);
+    if (!user) {
+      console.log("no user redirecting:");
+      console.log(user);
+      return this.redirect(302, `/continue/email`);
+    }
+
+    return { user };
   }
 </script>
 
 <script>
-  export let user = false;
+  export let user;
 
   // import { stores } from "@sapper/app";
   // const { session } = stores();

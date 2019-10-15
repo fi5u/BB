@@ -8,15 +8,21 @@
 </script>
 
 <script>
-  import * as sapper from "@sapper/app";
+  import { goto, stores } from "@sapper/app";
 
   import VerifyForm from "../../components/auth/VerifyForm.svelte";
 
   export let emailAddress;
   export let hasFailed;
 
-  function handleFormSubmitted(redirectUrl) {
-    sapper.goto(redirectUrl);
+  const { session } = stores();
+
+  function handleFormSubmitted(user) {
+    if (user) {
+      session.user = user;
+      return goto("/app");
+    }
+    console.log("Error in submitting form");
   }
 </script>
 

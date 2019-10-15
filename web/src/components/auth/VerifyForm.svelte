@@ -27,7 +27,7 @@
   async function handleSubmit(event) {
     event.preventDefault();
 
-    const response = await fetch("/login", {
+    const response = await fetch("api/auth/login", {
       method: "POST",
       headers: {
         Accept: "application/json",
@@ -39,16 +39,9 @@
       })
     });
 
-    if (response.url) {
-      verifyForm[0].value = "";
-      handleFormSubmitted(
-        `${response.url}${
-          response.url.indexOf("?") > -1 ? `&e=${emailAddress}` : ""
-        }`
-      );
-    } else {
-      // TODO: handle error
-    }
+    const user = await response.json();
+
+    handleFormSubmitted(user);
 
     // const response = await fetch("/login", {
     //   method: "POST",
