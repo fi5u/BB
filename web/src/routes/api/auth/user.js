@@ -9,10 +9,16 @@ export async function get(req, res) {
     }).status(200).end()
   }
 
-  // TODO: base64 encode email and password and pass in
-  // Authorization header https://stackoverflow.com/a/36822785/997596
+  if (!req.headers.authorization || req.headers.authorization.indexOf('Basic ') === -1) {
+    console.log('No authorization headers')
+    return res.end(JSON.stringify({
+      user: null,
+    }));
+  }
 
-  const { email, password } = req.query
+  const base64Credentials = req.headers.authorization.split(' ')[1];
+  const credentials = Buffer.from(base64Credentials, 'base64').toString('ascii');
+  const [email, password] = credentials.split(':');
 
   if (email && !password) {
     // Check for existance of email only

@@ -2,6 +2,7 @@
   import * as sapper from "@sapper/app";
 
   import Form from "../form/Form.svelte";
+  import Buffer_ from "buffer/";
 
   export let submittedForm;
 
@@ -24,16 +25,20 @@
   async function submit(event) {
     event.preventDefault();
 
-    const response = await fetch(
-      `/api/auth/user?email=${emailCheckForm[0].value}`,
-      {
-        method: "GET",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json"
-        }
+    const Buffer = Buffer_.Buffer;
+
+    const auth = `Basic ${new Buffer(`${emailCheckForm[0].value}`).toString(
+      "base64"
+    )}`;
+
+    const response = await fetch("/api/auth/user", {
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+        Authorization: auth,
+        "Content-Type": "application/json"
       }
-    );
+    });
 
     const { user } = await response.json();
 
