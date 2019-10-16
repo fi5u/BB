@@ -48,14 +48,18 @@ export async function post(req, res) {
       }
     });
 
+    // Do not send typename back
+    const { __typename, ...user } = userRecord.data.addUser
+
     console.log('signed up:')
-    console.log(userRecord)
+    console.log(user)
+
+    // Save user to session
+    req.session.user = user;
 
     res.setHeader('Content-Type', 'application/json');
     res.end(JSON.stringify({
-      user: {
-        email: userRecord.data.addUser.email,
-      },
+      user,
     }));
   } catch (error) {
     console.log('Error signing up')

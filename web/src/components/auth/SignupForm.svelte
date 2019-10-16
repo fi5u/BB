@@ -63,6 +63,7 @@
         submittedForm(data.user);
       } else {
         console.log("No errors, but no user!!");
+        console.log(data);
       }
     }
   }

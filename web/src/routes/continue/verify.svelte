@@ -19,7 +19,7 @@
 
   function handleFormSubmitted(user) {
     if (user) {
-      session.user = user;
+      $session.user = user;
       return goto("/app");
     }
     console.log("Error in submitting form");

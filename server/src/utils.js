@@ -32,6 +32,7 @@ module.exports.createStore = () => {
   const Op = SQL.Op;
   const operatorsAliases = {
     $in: Op.in,
+    $or: Op.or
   };
 
   const db = new SQL('database', 'username', 'password', {

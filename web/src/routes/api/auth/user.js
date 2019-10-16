@@ -25,6 +25,9 @@ export async function get(req, res) {
 
     const result = await userData.result();
 
+    // Note: do not save this user to session
+    // This is simply a check
+
     res.setHeader('Content-Type', 'application/json');
 
     if (result && result.data && result.data.user) {

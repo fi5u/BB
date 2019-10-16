@@ -4,9 +4,9 @@ import { GET_USER } from '../_graphql/_user'
 import * as argon2 from 'argon2'
 
 export async function post(req, res) {
-  const { email, password } = req.body
-
   try {
+    const { email, password: passwordInput } = req.body
+
     const userData = query(client, {
       query: GET_USER,
       variables: { email }
@@ -19,20 +19,29 @@ export async function post(req, res) {
     }
 
     const userRecord = result.data.user
-    const correctPassword = await argon2.verify(password, userRecord.password);
+
+    const correctPassword = await argon2.verify(userRecord.password, passwordInput);
 
     if (!correctPassword) {
       throw new Error('Incorrect password')
     }
 
+    // Do not send typename or password back
+    const { __typename, password, ...user } = userRecord
+
+    console.log('logged in:')
+    console.log(user)
+
+    // Save user to session
+    req.session.user = user;
+
     res.setHeader('Content-Type', 'application/json');
     return res.end(JSON.stringify({
-      user: {
-        email,
-      }
+      user
     }));
   } catch (error) {
     console.log('Login error')
+    console.log(error)
     res.setHeader('Content-Type', 'application/json');
     res.end(JSON.stringify({
       user: null,

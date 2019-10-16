@@ -43,7 +43,7 @@ class UserAPI extends DataSource {
   }
 
   async findUser({ email, id }) {
-    const user = await this.store.users.findOne({ where: { email, id } });
+    const user = await this.store.users.findOne({ where: { $or: { email, id } } });
     return user || null
   }
 

@@ -1,13 +1,10 @@
 <script>
-  import { goto, stores } from "@sapper/app";
   import fetch from "cross-fetch";
 
   import Form from "../form/Form.svelte";
 
   export let emailAddress;
   export let handleFormSubmitted;
-
-  const { session } = stores();
 
   let verifyForm = [
     {
