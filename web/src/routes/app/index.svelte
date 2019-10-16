@@ -1,11 +1,8 @@
 <script context="module">
-  export function preload(page, { user }) {
-    if (!user) {
-      console.log("no user redirecting:");
-      return this.redirect(302, `/continue/email`);
-    }
+  import { protectRoute } from "../../utils/routes";
 
-    return { user };
+  export function preload(page, { user }) {
+    return protectRoute(this, "registered", user);
   }
 </script>
 

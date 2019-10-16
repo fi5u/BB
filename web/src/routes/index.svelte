@@ -1,3 +1,11 @@
+<script context="module">
+  import { protectRoute } from "../utils/routes";
+
+  export function preload(page, { user }) {
+    return protectRoute(this, "visitor", user);
+  }
+</script>
+
 <style>
   h1,
   figure {

@@ -1,3 +1,11 @@
+<script context="module">
+  import { protectRoute } from "../../utils/routes";
+
+  export function preload(page, { user }) {
+    return protectRoute(this, "visitor", user);
+  }
+</script>
+
 <script>
   import * as sapper from "@sapper/app";
 

@@ -1,5 +1,9 @@
 <script context="module">
-  export async function preload({ query }) {
+  import { protectRoute } from "../../utils/routes";
+
+  export async function preload({ query }, { user }) {
+    protectRoute(this, "visitor", user);
+
     return {
       emailAddress: query.e
     };
