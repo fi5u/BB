@@ -2,6 +2,11 @@
   import { protectRoute } from "../../utils/routes";
 
   export async function preload({ query }, { savedEmail, user }) {
+    // If no saved email, redirect back to email entry
+    if (!savedEmail) {
+      return this.redirect(302, "/continue/email");
+    }
+
     protectRoute(this, "visitor", user);
 
     return {
