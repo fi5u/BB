@@ -45,8 +45,13 @@ export async function post(req, res) {
   } catch (error) {
     console.log('Login error')
     console.log(error)
+
     res.setHeader('Content-Type', 'application/json');
     res.end(JSON.stringify({
+      errors: [{
+        error: error.message,
+        field: 'password'
+      }],
       user: null,
     }));
   }

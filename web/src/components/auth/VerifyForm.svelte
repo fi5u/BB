@@ -9,6 +9,7 @@
   let verifyForm = [
     {
       autocomplete: "current-password",
+      errorMessage: "",
       id: "verify-password",
       label: "Password",
       placeholder: "Password",
@@ -37,9 +38,25 @@
       })
     });
 
-    const user = await response.json();
+    const data = await response.json();
 
-    handleFormSubmitted(user);
+    if (data.errors) {
+      console.log("got errors..");
+      data.errors.forEach(error => {
+        const i = verifyForm.findIndex(
+          item => item.id === `verify-${error.field}`
+        );
+
+        verifyForm[i].errorMessage = error.error;
+      });
+    } else {
+      if (data.user) {
+        handleFormSubmitted(data.user);
+      } else {
+        console.log("No errors, but no user!!");
+        console.log(data);
+      }
+    }
   }
 </script>
 
