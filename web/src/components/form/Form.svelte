@@ -6,7 +6,7 @@
   export let onsubmit;
 </script>
 
-<form on:submit={onsubmit}>
+<form on:submit|preventDefault={onsubmit}>
   {#each form as item}
     {#if item.type === 'submit'}
       <Button {...item} />

@@ -24,7 +24,6 @@
 
   async function handleSubmit(event) {
     const updatedForm = await submitAuthForm(
-      event,
       "verify",
       {
         email: emailAddress,

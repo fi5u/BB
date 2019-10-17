@@ -6,9 +6,7 @@
  * @param {object} formData Current form data
  * @param {(object) => void} success
  */
-export async function submitAuthForm(event, key, inputData, formData, success) {
-  event.preventDefault();
-
+export async function submitAuthForm(key, inputData, formData, success) {
   const response = await fetch(`/api/auth/${key === 'verify' ? 'login' : key}`, {
     body: JSON.stringify(inputData),
     headers: {

@@ -33,7 +33,6 @@
 
   async function handleSubmit(event) {
     const updatedForm = await submitAuthForm(
-      event,
       "signup",
       {
         email: signupForm[0].value,
