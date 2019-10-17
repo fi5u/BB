@@ -1,10 +1,9 @@
 <script>
-  import * as sapper from "@sapper/app";
-
   import Form from "../form/Form.svelte";
+  import { submitAuthForm } from "../../utils/auth";
 
   export let emailAddress = "";
-  export let submittedForm;
+  export let submitSuccess;
 
   let signupForm = [
     {
@@ -32,41 +31,22 @@
     }
   ];
 
-  async function submit(event) {
-    event.preventDefault();
-
-    const response = await fetch("/api/auth/signup", {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
+  async function handleSubmit(event) {
+    const updatedForm = await submitAuthForm(
+      event,
+      "signup",
+      {
         email: signupForm[0].value,
         password: signupForm[1].value
-      })
-    });
+      },
+      signupForm,
+      submitSuccess
+    );
 
-    const data = await response.json();
-
-    if (data.errors) {
-      console.log("got errors..");
-      data.errors.forEach(error => {
-        const i = signupForm.findIndex(
-          item => item.id === `signup-${error.field}`
-        );
-
-        signupForm[i].errorMessage = error.error;
-      });
-    } else {
-      if (data.user) {
-        submittedForm(data.user);
-      } else {
-        console.log("No errors, but no user!!");
-        console.log(data);
-      }
+    if (updatedForm) {
+      signupForm = updatedForm;
     }
   }
 </script>
 
-<Form bind:form={signupForm} onsubmit={submit} />
+<Form bind:form={signupForm} onsubmit={handleSubmit} />

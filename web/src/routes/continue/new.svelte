@@ -19,7 +19,7 @@
 
   const { session } = stores();
 
-  function submittedForm(user) {
+  function submitSuccess(user) {
     if (user) {
       $session.user = user;
       goto("/app");
@@ -34,4 +34,4 @@
 </svelte:head>
 
 <p>Welcome! Let's get a few more details from you.</p>
-<SignupForm {emailAddress} {submittedForm} />
+<SignupForm {emailAddress} {submitSuccess} />

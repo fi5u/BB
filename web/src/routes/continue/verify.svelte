@@ -26,7 +26,7 @@
 
   const { session } = stores();
 
-  function handleFormSubmitted(user) {
+  function submitSuccess(user) {
     if (user) {
       $session.user = user;
       return goto("/app");
@@ -43,4 +43,4 @@
   {hasFailed ? 'Oops, incorrect login details, please try again' : 'Welcome back!'}
 </p>
 <p>{emailAddress}</p>
-<VerifyForm {emailAddress} {handleFormSubmitted} />
+<VerifyForm {emailAddress} {submitSuccess} />
