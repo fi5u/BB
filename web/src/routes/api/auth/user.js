@@ -31,6 +31,8 @@ export async function get(req, res) {
 
     const result = await userData.result();
 
+    req.session.savedEmail = email
+
     // Note: do not save this user to session
     // This is simply a check
 

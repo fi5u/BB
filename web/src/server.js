@@ -30,6 +30,7 @@ polka()
     sirv('static', { dev }),
     sapper.middleware({
       session: req => ({
+        savedEmail: req.session && req.session.savedEmail,
         user: req.session && req.session.user
       })
     })

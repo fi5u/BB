@@ -7,15 +7,19 @@
 </script>
 
 <script>
-  import * as sapper from "@sapper/app";
+  import { goto, stores } from "@sapper/app";
 
   import EmailCheck from "../../components/auth/EmailCheck.svelte";
 
+  const { session } = stores();
+
   function submittedForm(userType, email) {
+    $session.savedEmail = email;
+
     if (userType === "new") {
-      sapper.goto(`/continue/new?e=${email}`);
+      goto("/continue/new");
     } else {
-      sapper.goto(`/continue/verify?e=${email}`);
+      goto("/continue/verify");
     }
   }
 </script>

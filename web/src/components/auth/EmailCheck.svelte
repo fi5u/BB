@@ -1,8 +1,8 @@
 <script>
   import * as sapper from "@sapper/app";
+  import Buffer_ from "buffer/";
 
   import Form from "../form/Form.svelte";
-  import Buffer_ from "buffer/";
 
   export let submittedForm;
 

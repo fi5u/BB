@@ -1,11 +1,11 @@
 <script context="module">
   import { protectRoute } from "../../utils/routes";
 
-  export async function preload({ query }, { user }) {
+  export async function preload({ query }, { savedEmail, user }) {
     protectRoute(this, "visitor", user);
 
     return {
-      emailAddress: query.e,
+      emailAddress: savedEmail,
       hasFailed: query.success === "0"
     };
   }

@@ -57,6 +57,9 @@ export async function post(req, res) {
     // Save user to session
     req.session.user = user;
 
+    // Delete saved email
+    delete req.session.savedEmail;
+
     res.setHeader('Content-Type', 'application/json');
     res.end(JSON.stringify({
       user,
