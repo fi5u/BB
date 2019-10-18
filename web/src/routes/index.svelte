@@ -38,14 +38,11 @@
 </style>
 
 <svelte:head>
-  <title>Sapper project template</title>
+  <title>Baby Book</title>
 </svelte:head>
 
-<h1>Great success!</h1>
-
 <figure>
-  <img alt="Borat" src="great-success.png" />
-  <figcaption>HIGH FIVE!</figcaption>
+  <img alt="Baby" src="https://placehold.it/600" />
 </figure>
 
 <h1>Baby book</h1>
