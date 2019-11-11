@@ -5,11 +5,14 @@ import bodyParser from 'body-parser';
 import session from 'express-session';
 import sessionFileStore from 'session-file-store';
 import * as sapper from '@sapper/server';
+import * as crypto from 'crypto'
 
 const { PORT, NODE_ENV } = process.env;
 const dev = NODE_ENV === 'development';
 
 const FileStore = sessionFileStore(session);
+
+global.crypto = crypto
 
 polka()
   .use(bodyParser.urlencoded({ extended: true }))

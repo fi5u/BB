@@ -51,8 +51,9 @@ module.exports.createStore = () => {
     createdAt: SQL.DATE,
     updatedAt: SQL.DATE,
     email: SQL.STRING,
+    fbId: SQL.INTEGER,
+    name: SQL.STRING,
     password: SQL.STRING,
-    token: SQL.STRING,
     salt: SQL.STRING,
   });
 

@@ -25,7 +25,7 @@
 </script>
 
 <svelte:head>
-  <title>Continue with email • Baby Book</title>
+  <title>Continue with email • BB</title>
 </svelte:head>
 
 <p>Enter your email address to get going</p>

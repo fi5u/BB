@@ -1,6 +1,4 @@
-import { query } from "svelte-apollo";
-import { client } from '../_graphql'
-import { GET_USER } from '../_graphql/_user'
+import { getUser } from '../../../utils/auth'
 
 export async function get(req, res) {
   if (req.session.user) {
@@ -22,27 +20,18 @@ export async function get(req, res) {
 
   if (email && !password) {
     // Check for existance of email only
-
-    const userData = query(client, {
-      fetchPolicy: 'no-cache',
-      query: GET_USER,
-      variables: { email }
-    });
-
-    const result = await userData.result();
-
     req.session.savedEmail = email
+
+    const user = await getUser(email)
 
     // Note: do not save this user to session
     // This is simply a check
 
     res.setHeader('Content-Type', 'application/json');
 
-    if (result && result.data && result.data.user) {
-      return res.end(JSON.stringify({
-        user: result.data.user
-      }));
-    }
+    return res.end(JSON.stringify({
+      user
+    }));
   }
 
   res.end(JSON.stringify({

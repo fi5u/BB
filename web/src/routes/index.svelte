@@ -6,6 +6,21 @@
   }
 </script>
 
+<script>
+  import { goto, stores } from "@sapper/app";
+
+  import FacebookAuth from "../components/auth/FacebookAuth.svelte";
+
+  const { session } = stores();
+  let loggedInStatus = "Logged out";
+
+  function fbAuthSuccess(data) {
+    $session.user = data.detail.user;
+
+    goto("/app");
+  }
+</script>
+
 <style>
   h1,
   figure {
@@ -38,13 +53,18 @@
 </style>
 
 <svelte:head>
-  <title>Baby Book</title>
+  <title>BB</title>
 </svelte:head>
 
 <figure>
-  <img alt="Baby" src="https://placehold.it/600" />
+  <img alt="B" src="https://placehold.it/600" />
 </figure>
 
-<h1>Baby book</h1>
+<h1>BB</h1>
+
+<FacebookAuth
+  on:init-error={ev => alert(ev.detail.error.message)}
+  on:auth-failure={ev => alert('auth failure')}
+  on:auth-success={fbAuthSuccess} />
 
 <a href="/continue/email">Continue with email</a>

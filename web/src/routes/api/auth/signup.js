@@ -1,9 +1,5 @@
-import { mutate } from "svelte-apollo";
-import { client } from '../_graphql'
-import { ADD_USER } from '../_graphql/_user'
-import * as argon2 from 'argon2'
-import { randomBytes } from 'crypto'
 import * as emailValidator from 'email-validator'
+import { signUpUser } from '../../../utils/auth'
 
 export async function post(req, res) {
   const { email, password } = req.body
@@ -35,38 +31,23 @@ export async function post(req, res) {
     }));
   }
 
-  const salt = randomBytes(32);
-  const passwordHashed = await argon2.hash(password, { salt });
+  const { error, user } = await signUpUser({ email, password })
 
-  try {
-    const userRecord = await mutate(client, {
-      mutation: ADD_USER,
-      variables: {
-        email,
-        password: passwordHashed,
-        salt: salt.toString('hex'),
-      }
-    });
+  res.setHeader('Content-Type', 'application/json');
 
-    // Do not send typename back
-    const { __typename, ...user } = userRecord.data.addUser
-
-    console.log('signed up:')
-    console.log(user)
-
+  if (user) {
     // Save user to session
     req.session.user = user;
 
     // Delete saved email
     delete req.session.savedEmail;
 
-    res.setHeader('Content-Type', 'application/json');
     res.end(JSON.stringify({
       user,
     }));
-  } catch (error) {
+  } else {
     console.log('Error signing up')
-    console.log(error.message)
+    console.log(error)
 
     res.setHeader('Content-Type', 'application/json');
     res.end(JSON.stringify({

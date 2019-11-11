@@ -16,6 +16,7 @@ const typeDefs = gql`
     me: User
     user(
       email: String
+      fbId: String
       id: Int
     ): User
     users: [User]
@@ -30,9 +31,11 @@ const typeDefs = gql`
 
     login(email: String): String # login token
 
-    addUser(email: String!, password: String!, salt: String!): User
+    addUser(email: String, fbId: String, name: String, password: String, salt: String): User
 
-    getUser(email: String!): User
+    updateUser(email: String, id: Int, name: String): User
+
+    getUser(email: String, fbId: String): User
   }
 
   type TripUpdateResponse {
@@ -67,10 +70,12 @@ const typeDefs = gql`
   }
 
   type User {
+    email: String
+    fbId: ID
     id: ID!
-    email: String!
-    password: String!
-    salt: String!
+    name: String
+    password: String
+    salt: String
     trips: [Launch]!
   }
 

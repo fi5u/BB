@@ -30,7 +30,7 @@
 </script>
 
 <svelte:head>
-  <title>Sign up • Baby Book</title>
+  <title>Sign up • BB</title>
 </svelte:head>
 
 <p>Welcome! Let's get a few more details from you.</p>

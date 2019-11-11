@@ -1,8 +1,17 @@
 import gql from "graphql-tag";
 
 export const ADD_USER = gql`
-    mutation($email: String!, $password: String!, $salt: String!) {
-      addUser(email: $email, password: $password, salt: $salt) {
+    mutation($email: String, $fbId: String, $name: String, $password: String, $salt: String) {
+      addUser(email: $email, fbId: $fbId, name: $name, password: $password, salt: $salt) {
+        id
+        email
+      }
+    }
+  `;
+
+export const UPDATE_USER = gql`
+    mutation($email: String, $id: Int, $name: String) {
+      updateUser(email: $email, id: $id, name: $name) {
         id
         email
       }
@@ -10,10 +19,14 @@ export const ADD_USER = gql`
   `;
 
 export const GET_USER = gql`
-    query($email: String!) {
-      user(email: $email) {
+    query($email: String, $fbId: String) {
+      user(email: $email, fbId: $fbId) {
         email,
-        password
+        fbId,
+        id,
+        name,
+        password,
+        salt
       }
     }
   `;

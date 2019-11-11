@@ -1,7 +1,6 @@
 import { query } from "svelte-apollo";
 import { client } from '../_graphql'
 import { GET_USER } from '../_graphql/_user'
-import * as argon2 from 'argon2'
 
 export async function post(req, res) {
   try {
@@ -19,15 +18,25 @@ export async function post(req, res) {
     }
 
     const userRecord = result.data.user
+    console.log('userRecord:')
+    console.log(userRecord)
 
-    const correctPassword = await argon2.verify(userRecord.password, passwordInput);
+    const passwordHashed = await crypto
+      .createHash("sha256")
+      .update(passwordInput)
+      .update(userRecord.salt)
+      .digest("hex")
+
+    const correctPassword = passwordHashed === userRecord.password;
 
     if (!correctPassword) {
+      console.log('wrong password')
       throw new Error('Incorrect password')
     }
 
-    // Do not send typename or password back
-    const { __typename, password, ...user } = userRecord
+    // Only return email and id
+    const { email: emailRecord, id } = userRecord
+    const user = { email: emailRecord, id }
 
     console.log('logged in:')
     console.log(user)

@@ -28,6 +28,8 @@
 
   function submitSuccess(user) {
     if (user) {
+      console.log("Got user:");
+      console.log(user);
       $session.user = user;
       return goto("/app");
     }
@@ -36,7 +38,7 @@
 </script>
 
 <svelte:head>
-  <title>Log in • Baby Book</title>
+  <title>Log in • BB</title>
 </svelte:head>
 
 <p>

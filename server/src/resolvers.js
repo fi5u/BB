@@ -28,8 +28,8 @@ module.exports = {
       dataSources.launchAPI.getLaunchById({ launchId: id }),
     me: async (_, __, { dataSources }) =>
       dataSources.userAPI.findOrCreateUser(),
-    user: (_, { email, id }, { dataSources }) =>
-      dataSources.userAPI.findUser({ email, id }),
+    user: (_, { email, fbId, id }, { dataSources }) =>
+      dataSources.userAPI.findUser({ email, fbId, id }),
     users: async (_, __, { dataSources }) => dataSources.userAPI.getAllUsers()
   },
   Mutation: {
@@ -70,8 +70,13 @@ module.exports = {
       const user = await dataSources.userAPI.findOrCreateUser({ email });
       if (user) return new Buffer(email).toString('base64');
     },
-    addUser: async (_, { email, password, salt }, { dataSources }) => {
-      const user = await dataSources.userAPI.createUser({ email, password, salt });
+    addUser: async (_, { email, fbId, name, password, salt }, { dataSources }) => {
+      const user = await dataSources.userAPI.createUser({ email, fbId, name, password, salt });
+      if (user) return user
+    },
+    updateUser: async (_, { email, id, name }, { dataSources }) => {
+      console.log('resolver updateUser()')
+      const user = await dataSources.userAPI.updateUser({ email, id, name });
       if (user) return user
     },
     getUser: async (_, { email }, { dataSources }) => {
