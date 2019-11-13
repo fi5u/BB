@@ -3,9 +3,6 @@ import { getUser, signUpUser, updateUser } from '../../../utils/auth'
 export async function post(req, res) {
   const { email, fbId, name } = req.body
 
-  console.log('continuing with Facebook')
-  console.log(email, fbId, name)
-
   res.setHeader('Content-Type', 'application/json');
 
   if (!fbId) {
@@ -22,15 +19,11 @@ export async function post(req, res) {
 
   // Check if already user, and log straight in
   if (registeredUser) {
-    console.log('Got user:')
-    console.log(registeredUser)
-
     user = registeredUser
 
     // If email or name different to saved, save to db
     // Making sure not to overwrite with empty values
     if ((email && registeredUser.email !== email) || (name && registeredUser.name !== name)) {
-      console.log('Updating user..')
       const updatedUser = await updateUser({ email, id: parseInt(registeredUser.id), name })
 
       if (user) {

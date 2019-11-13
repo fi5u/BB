@@ -1,6 +1,7 @@
 <script>
   import asyncScriptLoader from "async-script-loader";
   import { onMount, createEventDispatcher } from "svelte";
+  import { log } from "../../utils/logging";
 
   const dispatch = createEventDispatcher();
 
@@ -11,46 +12,49 @@
   export let text = "Continue with Facebook";
 
   onMount(() => {
-    console.log("Mounted");
     asyncScriptLoader("https://connect.facebook.net/en_US/sdk.js")
       .then(() => {
-        console.log("script has been loaded");
         disabled = false;
-        initialise();
+        initialize();
       })
-      .catch(err => console.log(err));
+      .catch(fbLoadError => {
+        log.error(`Facebook sdk load`, { error: fbLoadError.message });
+      });
   });
 
-  function initialise() {
-    console.log("FB init");
+  function initialize() {
     const FB = window["FB"];
+
     FB.init({
       appId: appId,
       cookie: true,
       xfbml: false,
       version: version
     });
+
     disabled = false;
   }
 
   function login() {
-    console.log("login");
     const FB = window["FB"];
     FB.login(
       function(response) {
-        console.log("response:");
-        console.log(response);
         if (response.status === "connected") {
           const authResponse = response.authResponse;
           const accessToken = authResponse.accessToken;
 
-          console.log("Welcome!  Fetching your information.... ");
+          log.info("Facebook login");
+
           FB.api("/me?fields=id,email,name", async function(fieldsResponse) {
             const email = fieldsResponse.email;
             const fbId = fieldsResponse.id;
             const name = fieldsResponse.name;
 
-            console.log("Successful login for: " + name);
+            log.info("Facebook authenticated", {
+              email,
+              fbId,
+              name
+            });
 
             const response = await fetch("/api/auth/facebook", {
               body: JSON.stringify({ email, fbId, name }),
@@ -65,12 +69,20 @@
 
             if (user) {
               dispatch("auth-success", { user });
+            } else {
+              log.error("Facebook auth no user", {
+                email,
+                fbId,
+                name
+              });
             }
-
-            // TODO: handle no user / error
           });
         } else {
           dispatch("auth-failure", { response });
+
+          log.error("Facebook auth no connection", {
+            status: response.status
+          });
         }
       },
       { scope: "email, public_profile" }

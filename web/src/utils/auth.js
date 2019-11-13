@@ -9,19 +9,14 @@ export async function getUser(email, fbId) {
     import('../routes/api/_graphql/_user')
   ])
 
-  console.log('Fetching user data for email: ' + email + ' fbId: ' + fbId)
   const userData = query(client, {
     fetchPolicy: 'no-cache',
     query: GET_USER,
     variables: { email, fbId }
   });
 
-  console.log('getting result..')
   try {
     const result = await userData.result();
-
-    console.log('got result:')
-    console.log(result)
 
     if (result && result.data && result.data.user) {
       return result.data.user
