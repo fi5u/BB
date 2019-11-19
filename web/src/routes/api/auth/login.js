@@ -1,10 +1,13 @@
 import { query } from "svelte-apollo";
 import { client } from '../_graphql'
 import { GET_USER } from '../_graphql/_user'
+import { log } from '../../../utils/logging'
 
 export async function post(req, res) {
   try {
     const { email, password: passwordInput } = req.body
+
+    log.info('Login', { email })
 
     const userData = query(client, {
       query: GET_USER,
@@ -14,12 +17,12 @@ export async function post(req, res) {
     const result = await userData.result();
 
     if (!result.data.user) {
+      log.info('User not found', { email })
+
       throw new Error('User not found')
     }
 
     const userRecord = result.data.user
-    console.log('userRecord:')
-    console.log(userRecord)
 
     const passwordHashed = await crypto
       .createHash("sha256")
@@ -30,7 +33,8 @@ export async function post(req, res) {
     const correctPassword = passwordHashed === userRecord.password;
 
     if (!correctPassword) {
-      console.log('wrong password')
+      log.info('Incorrect password')
+
       throw new Error('Incorrect password')
     }
 
@@ -38,8 +42,7 @@ export async function post(req, res) {
     const { email: emailRecord, id } = userRecord
     const user = { email: emailRecord, id }
 
-    console.log('logged in:')
-    console.log(user)
+    log.info('Successful login', { id })
 
     // Save user to session
     req.session.user = user;
@@ -52,9 +55,6 @@ export async function post(req, res) {
       user
     }));
   } catch (error) {
-    console.log('Login error')
-    console.log(error)
-
     res.setHeader('Content-Type', 'application/json');
     res.end(JSON.stringify({
       errors: [{

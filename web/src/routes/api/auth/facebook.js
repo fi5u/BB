@@ -1,4 +1,5 @@
 import { getUser, signUpUser, updateUser } from '../../../utils/auth'
+import { log } from '../../../utils/logging'
 
 export async function post(req, res) {
   const { email, fbId, name } = req.body
@@ -7,7 +8,8 @@ export async function post(req, res) {
 
   if (!fbId) {
     // email (and poss name) may be null
-    console.log('FB data missing')
+    log.error('Cannot authorize with Facebook, Facebook id missing')
+
     return res.end(JSON.stringify({
       user: null,
     }));
@@ -19,6 +21,7 @@ export async function post(req, res) {
 
   // Check if already user, and log straight in
   if (registeredUser) {
+    log.info('Facebook auth login')
     user = registeredUser
 
     // If email or name different to saved, save to db
@@ -31,6 +34,7 @@ export async function post(req, res) {
       }
     }
   } else {
+    log.info('Facebook auth signup')
     // Sign up user
     const { error, user: signedUpUser } = await signUpUser({
       email,
@@ -39,8 +43,7 @@ export async function post(req, res) {
     })
 
     if (error) {
-      console.log('Error signing up:')
-      console.log(error)
+      log.error('Facebook signup', { error })
     } else {
       user = signedUpUser
     }
@@ -53,6 +56,8 @@ export async function post(req, res) {
     return res.end(JSON.stringify({
       user,
     }));
+  } else {
+    log.error('Facebook auth, no user')
   }
 
   return res.end(JSON.stringify({

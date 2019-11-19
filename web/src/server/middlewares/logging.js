@@ -8,11 +8,14 @@ module.exports = {
     switch (req.method) {
       case 'POST': {
         const { extra = {}, level, message, uId } = req.body
+        const isDev = process.env.NODE_ENV === 'development'
 
         const d = new Date()
-        const ua = req.headers['user-agent']
 
-        extra.ua = extra.ua || ua
+        if (!isDev) {
+          const ua = req.headers['user-agent']
+          extra.ua = extra.ua || ua
+        }
 
         const ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress
 

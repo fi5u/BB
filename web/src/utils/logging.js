@@ -19,7 +19,7 @@ export const log = levels.reduce((acc, cur) => {
  * @param {object} params.extra Extra data to log
  */
 function logging(params) {
-  fetch('/api/logging', {
+  fetch('http://localhost:3000/api/logging', {
     body: JSON.stringify(params),
     credentials: 'include',
     headers: {

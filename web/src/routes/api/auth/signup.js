@@ -1,15 +1,17 @@
 import * as emailValidator from 'email-validator'
 import { signUpUser } from '../../../utils/auth'
+import { log } from '../../../utils/logging'
 
 export async function post(req, res) {
   const { email, password } = req.body
 
-  console.log('signing up with')
-  console.log(email, password)
+  log.info('Signup', { email })
 
   let errors = []
 
   if (!emailValidator.validate(email)) {
+    log.info('Invalid email', { email })
+
     errors = errors.concat({
       error: 'Invalid email',
       field: 'email',
@@ -17,6 +19,8 @@ export async function post(req, res) {
   }
 
   if (password.length < 8) {
+    log.info('Too short password', { email, passwordLength: password.length })
+
     errors = errors.concat({
       error: 'Password should be at least 8 characters',
       field: 'password',
@@ -46,10 +50,10 @@ export async function post(req, res) {
       user,
     }));
   } else {
-    console.log('Error signing up')
-    console.log(error)
+    log.error('Signup error, no user', { email, error })
 
-    res.setHeader('Content-Type', 'application/json');
+    res.setHeader('Content-Type', 'application/json')
+
     res.end(JSON.stringify({
       user: null,
     }));

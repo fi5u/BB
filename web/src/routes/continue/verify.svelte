@@ -20,6 +20,7 @@
   import { goto, stores } from "@sapper/app";
 
   import VerifyForm from "../../components/auth/VerifyForm.svelte";
+  import { log } from "../../utils/logging";
 
   export let emailAddress;
   export let hasFailed;
@@ -28,12 +29,11 @@
 
   function submitSuccess(user) {
     if (user) {
-      console.log("Got user:");
-      console.log(user);
       $session.user = user;
       return goto("/app");
     }
-    console.log("Error in submitting form");
+
+    log.error("Could not verify, no user");
   }
 </script>
 

@@ -1,8 +1,12 @@
+import { log } from "./logging";
+
 /**
  * Get user data
  * @param {string} email Email of user to fetch
  */
 export async function getUser(email, fbId) {
+  log.info('Get user', { email, fbId })
+
   const [{ query }, { client }, { GET_USER }] = await Promise.all([
     import('svelte-apollo'),
     import('../routes/api/_graphql'),
@@ -19,16 +23,19 @@ export async function getUser(email, fbId) {
     const result = await userData.result();
 
     if (result && result.data && result.data.user) {
+      log.info('Found user', { id: result.data.user.id })
+
       return result.data.user
+    } else {
+      throw new Error('No user')
     }
   } catch (error) {
-    console.log('Error getting result():')
-    console.log(error.message)
+    log.error('Error getting user', { email, error: error.message, fbId })
   }
 }
 
 export async function updateUser(values) {
-  console.log(`updateUser(${JSON.stringify(values)})`)
+  log.info('Update user', values)
 
   const [{ mutate }, { client }, { UPDATE_USER }] = await Promise.all([
     import('svelte-apollo'),
@@ -42,19 +49,16 @@ export async function updateUser(values) {
       variables: values
     });
 
-    console.log('userRecord:')
-    console.log(userRecord)
-
     // Only return email and id
     const { email: emailRecord, id } = userRecord.data.updateUser
     const user = { email: emailRecord, id }
-    console.log('user:')
-    console.log(user)
+
+    log.info('Updated user', { id })
 
     return { user }
   } catch (error) {
-    console.log('Error updating user..')
-    console.log(error.message)
+    log.error('Could not update user', values)
+
     return {
       error: error.message,
       user: null,
@@ -71,8 +75,18 @@ export async function signUpUser({
   name,
   password
 }) {
+  log.info('Sign up user', {
+    email,
+    fbId,
+    name,
+  })
+
   if ((!email && !fbId) || (!email && !password)) {
-    console.log('Incorrect data')
+    log.error('Incorrect data', {
+      email,
+      fbId,
+      name,
+    })
 
     return {
       error: 'Incorrect data',
@@ -92,17 +106,12 @@ export async function signUpUser({
 
     if (password) {
       salt = await crypto.randomBytes(24).toString('hex')
-      console.log('salt:')
-      console.log(salt)
 
       passwordHashed = await crypto
         .createHash("sha256")
         .update(password)
         .update(salt)
         .digest("hex")
-
-      console.log('password hashed:')
-      console.log(passwordHashed)
     }
 
     try {
@@ -117,19 +126,16 @@ export async function signUpUser({
         }
       });
 
-      console.log('userRecord:')
-      console.log(userRecord)
-
       // Only return email and id
       const { email: emailRecord, id } = userRecord.data.addUser
       const user = { email: emailRecord, id }
-      console.log('user:')
-      console.log(user)
+
+      log.info('User signed up', user)
 
       return { user }
     } catch (error) {
-      console.log('Error signing up..')
-      console.log(error.message)
+      log.error('Signup', { error: error.message })
+
       return {
         error: error.message,
         user: null,
@@ -137,8 +143,7 @@ export async function signUpUser({
     }
 
   } catch (passwordHashError) {
-    console.log('passwordHashError:')
-    console.log(passwordHashError)
+    log.error('Password hash error', { error: passwordHashError.message })
 
     return {
       error: passwordHashError.message,
@@ -183,8 +188,8 @@ export async function submitAuthForm(key, inputData, formData, success) {
 
       return false
     } else {
-      console.log("No errors, but no user!!");
-      console.log(data);
+      log.error('Submit auth form, no user and no errors')
+      // TODO: notification back to user
     }
   }
 }

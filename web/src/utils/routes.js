@@ -6,14 +6,12 @@
  */
 export function protectRoute(self, permittedUserType, user) {
   if (user && permittedUserType === 'visitor') {
-    console.log("Got user, redirecting to app..");
-    return self.redirect(302, `/app`);
+    return self.redirect(302, `/app`)
   }
 
   if (!user && permittedUserType === 'registered') {
     // TODO: save intended target page and redirect after login
-    console.log("No user, redirecting to login..");
-    return self.redirect(302, `/continue/email`);
+    return self.redirect(302, `/continue/email`)
   }
 
   return { user }

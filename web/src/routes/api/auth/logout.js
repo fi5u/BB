@@ -1,4 +1,9 @@
+import { log } from '../../../utils/logging'
+
 export function post(req, res) {
-  delete req.session.user;
-  res.end(JSON.stringify({ ok: true }));
+  log.info('Logout')
+
+  delete req.session.user
+
+  res.end(JSON.stringify({ ok: true }))
 }

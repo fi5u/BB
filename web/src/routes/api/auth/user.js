@@ -1,14 +1,20 @@
 import { getUser } from '../../../utils/auth'
+import { log } from '../../../utils/logging'
 
 export async function get(req, res) {
   if (req.session.user) {
+    log.info('User in session')
+
     return res.json({
       user: req.session.user,
     }).status(200).end()
   }
 
+  log.info('No user in session')
+
   if (!req.headers.authorization || req.headers.authorization.indexOf('Basic ') === -1) {
-    console.log('No authorization headers')
+    log.error('Get user, not authorization headers')
+
     return res.end(JSON.stringify({
       user: null,
     }));
