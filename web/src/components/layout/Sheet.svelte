@@ -1,7 +1,8 @@
 <script>
+  import { fly } from "svelte/transition";
+
   export let closeSheet;
   export let content;
-  export let isVisible;
   export let title;
 </script>
 
@@ -16,7 +17,7 @@
   }
 </style>
 
-<article>
+<article transition:fly>
   <button on:click={closeSheet}>X</button>
   <h1>{title}</h1>
   <div>{content}</div>
