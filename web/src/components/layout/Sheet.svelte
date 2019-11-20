@@ -17,7 +17,7 @@
   }
 </style>
 
-<article transition:fly>
+<article transition:fly={{ y: 200, duration: 200 }}>
   <button on:click={closeSheet}>X</button>
   <h1>{title}</h1>
   <div>{content}</div>
