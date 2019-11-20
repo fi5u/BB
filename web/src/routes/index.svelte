@@ -10,9 +10,9 @@
   import { goto, stores } from "@sapper/app";
 
   import FacebookAuth from "../components/auth/FacebookAuth.svelte";
+  import Smallprint from "../components/policies/Smallprint.svelte";
 
   const { session } = stores();
-  let loggedInStatus = "Logged out";
 
   function fbAuthSuccess(data) {
     $session.user = data.detail.user;
@@ -68,3 +68,5 @@
   on:auth-success={fbAuthSuccess} />
 
 <a href="/continue/email">Continue with email</a>
+
+<Smallprint key="continue" />
