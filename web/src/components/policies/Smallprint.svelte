@@ -20,6 +20,9 @@
     <button on:click={() => setActivePolicy('terms')}>
       terms and conditions
     </button>
+    and
+    <button on:click={() => setActivePolicy('privacy')}>privacy policy</button>
+    .
   </p>
 {/if}
 
