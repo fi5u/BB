@@ -7,18 +7,8 @@
 </script>
 
 <script>
-  import { goto, stores } from "@sapper/app";
-
-  import FacebookAuth from "../components/auth/FacebookAuth.svelte";
   import Smallprint from "../components/policies/Smallprint.svelte";
-
-  const { session } = stores();
-
-  function fbAuthSuccess(data) {
-    $session.user = data.detail.user;
-
-    goto("/app");
-  }
+  import FacebookAuthButton from "../components/auth/FacebookAuthButton.svelte";
 </script>
 
 <style>
@@ -62,10 +52,7 @@
 
 <h1>BB</h1>
 
-<FacebookAuth
-  on:init-error={ev => alert(ev.detail.error.message)}
-  on:auth-failure={ev => alert('auth failure')}
-  on:auth-success={fbAuthSuccess} />
+<FacebookAuthButton />
 
 <a href="/continue/email">Continue with email</a>
 
