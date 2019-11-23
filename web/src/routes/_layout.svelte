@@ -1,7 +1,6 @@
 <script>
   import { onMount, setContext } from "svelte";
 
-  import Nav from "../components/Nav.svelte";
   import Notification from "../components/layout/Notification.svelte";
 
   export let segment;
@@ -45,7 +44,6 @@
   }
 </style>
 
-<!-- <Nav {segment}/> -->
 <svelte:window on:click={mainClick} />
 
 <main>
