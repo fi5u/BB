@@ -1,5 +1,10 @@
-Sapper, GraphQL, and Subscriptions.
+## TODO
 
-The code for this blog post: [Frustrated.blog][blog]
-
-[blog]: https://frustrated.blog/2019/07/18/sapper-graphql-subscriptions.html
+- [ ] Profile edit page – change email, etc
+- [ ] Config file
+- [ ] Clean up server dir
+- [ ] Theming
+- [ ] Localization
+- [ ] Tests
+- [ ] Upload to remote location
+- [ ] Analytics
