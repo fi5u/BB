@@ -23,7 +23,7 @@ export async function getUser(email, fbId) {
     const result = await userData.result();
 
     if (result && result.data && result.data.user) {
-      log.info('Found user', { id: result.data.user.id })
+      log.info('Found user', { id: result.data.user.id }, result.data.user.id)
 
       return result.data.user
     } else {
@@ -31,6 +31,31 @@ export async function getUser(email, fbId) {
     }
   } catch (error) {
     log.error('Error getting user', { email, error: error.message, fbId })
+  }
+}
+
+export function authSuccess(user) {
+  if (typeof window !== 'undefined') {
+    window.localStorage.setItem('user', JSON.stringify({
+      id: user.id
+    }))
+  }
+}
+
+/**
+ * Log the user out from server
+ **/
+export async function logoutUser() {
+  await fetch("api/auth/logout", {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json"
+    }
+  });
+
+  if (typeof window !== 'undefined') {
+    window.localStorage.removeItem('user')
   }
 }
 
@@ -184,6 +209,7 @@ export async function submitAuthForm(key, inputData, formData, success) {
     return formData
   } else {
     if (user) {
+      authSuccess(user);
       success(user);
 
       return false

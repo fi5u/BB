@@ -21,7 +21,7 @@ export async function post(req, res) {
 
   // Check if already user, and log straight in
   if (registeredUser) {
-    log.info('Facebook auth login')
+    log.info('Facebook auth login', {}, registeredUser.id)
     user = registeredUser
 
     // If email or name different to saved, save to db

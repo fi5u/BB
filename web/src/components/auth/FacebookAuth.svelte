@@ -2,6 +2,7 @@
   import asyncScriptLoader from "async-script-loader";
   import { onMount, createEventDispatcher } from "svelte";
   import { log } from "../../utils/logging";
+  import { authSuccess } from "../../utils/auth";
 
   const dispatch = createEventDispatcher();
 
@@ -68,6 +69,8 @@
             const { user } = await response.json();
 
             if (user) {
+              authSuccess(user);
+
               dispatch("auth-success", { user });
             } else {
               log.error("Facebook auth no user", {
