@@ -60,7 +60,7 @@ export async function logoutUser() {
 }
 
 export async function updateUser(values) {
-  log.info('Update user', values)
+  log.info('Update user', values, values.id)
 
   const [{ mutate }, { client }, { UPDATE_USER }] = await Promise.all([
     import('svelte-apollo'),
@@ -74,15 +74,18 @@ export async function updateUser(values) {
       variables: values
     });
 
-    // Only return email and id
-    const { email: emailRecord, id } = userRecord.data.updateUser
-    const user = { email: emailRecord, id }
+    // Only return email, name and id
+    const { email: emailRecord, id, name: nameRecord } = userRecord.data.updateUser
+    const user = { email: emailRecord, id, name: nameRecord }
 
-    log.info('Updated user', { id })
+    log.info('Updated user', { id }, id)
 
     return { user }
   } catch (error) {
-    log.error('Could not update user', values)
+    log.error('Could not update user', {
+      error: error.message,
+      ...values,
+    }, values.id)
 
     return {
       error: error.message,

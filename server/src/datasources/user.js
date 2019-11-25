@@ -89,8 +89,9 @@ class UserAPI extends DataSource {
       await user.save();
 
       return {
+        email: user.email,
         id: user.id,
-        email: user.email
+        name: user.name,
       }
     } catch (error) {
       console.log('Error updating values:')

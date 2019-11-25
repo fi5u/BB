@@ -1,5 +1,5 @@
 <script>
-  import { onMount, setContext } from "svelte";
+  import { setContext } from "svelte";
 
   import Notification from "../components/layout/Notification.svelte";
 

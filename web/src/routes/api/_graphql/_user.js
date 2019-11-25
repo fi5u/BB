@@ -14,6 +14,7 @@ export const UPDATE_USER = gql`
       updateUser(email: $email, id: $id, name: $name) {
         id
         email
+        name
       }
     }
   `;

@@ -24,12 +24,27 @@ export async function post(req, res) {
     log.info('Facebook auth login', {}, registeredUser.id)
     user = registeredUser
 
-    // If email or name different to saved, save to db
-    // Making sure not to overwrite with empty values
-    if ((email && registeredUser.email !== email) || (name && registeredUser.name !== name)) {
-      const updatedUser = await updateUser({ email, id: parseInt(registeredUser.id), name })
+    // Only update with missing details from Facebook,
+    // do not overwrite any values in db
+    const updateObj = {}
 
-      if (user) {
+    if (!registeredUser.email && email && registeredUser.email !== email) {
+      updateObj.email = email
+    }
+
+    if (!registeredUser.name && name && registeredUser.name !== name) {
+      updateObj.name = name
+    }
+
+    if (Object.keys(updateObj).length) {
+      log.info('Updating empty db values with Facebook data', updateObj, registeredUser.id)
+
+      const { user: updatedUser } = await updateUser({
+        id: parseInt(registeredUser.id),
+        ...updateObj,
+      })
+
+      if (updatedUser) {
         user = updatedUser
       }
     }

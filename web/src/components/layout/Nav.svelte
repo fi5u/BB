@@ -23,8 +23,8 @@
 
 <nav>
   <a class={segment === undefined ? 'selected' : ''} href="/app">Home</a>
-  <a class={segment === 'dashboard' ? 'selected' : ''} href="/app/dashboard">
-    Dashboard
+  <a class={segment === 'settings' ? 'selected' : ''} href="/app/settings">
+    Settings
   </a>
   <button on:click={logout}>Logout</button>
 </nav>
