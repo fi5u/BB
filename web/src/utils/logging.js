@@ -39,7 +39,7 @@ async function logging(params) {
 export const serverLog = levels.reduce((acc, cur) => {
   return {
     ...acc,
-    [cur]: (req, res, message, extra, uId) => serverLogging(req, res, {
+    [cur]: (req, message, extra, uId) => serverLogging(req, {
       extra,
       level: cur,
       message,
@@ -48,7 +48,8 @@ export const serverLog = levels.reduce((acc, cur) => {
   }
 }, {})
 
-export function serverLogging(req, res, params) {
+// TODO: go back and remove res from all serverLog calls
+export function serverLogging(req, params) {
   const { extra = {}, level, message, uId } = params || req.body
   const isDev = process.env.NODE_ENV === 'development'
 
@@ -74,6 +75,4 @@ export function serverLogging(req, res, params) {
     const stream = fs.createWriteStream(__dirname + '/../../../logs/debug.log', { flags: 'a' })
     stream.write(logString + '\n')
   }
-
-  res.end()
 }

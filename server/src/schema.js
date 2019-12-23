@@ -33,7 +33,7 @@ const typeDefs = gql`
 
     addUser(email: String, fbId: String, name: String, password: String, salt: String): User
 
-    updateUser(email: String, id: Int, name: String): User
+    updateUser(email: String, id: Int, name: String, password: String, salt: String): User
 
     getUser(email: String, fbId: String): User
   }

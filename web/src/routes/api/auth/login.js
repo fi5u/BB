@@ -1,15 +1,17 @@
 import { query } from "svelte-apollo";
 import { client } from '../_graphql'
 import { GET_USER } from '../_graphql/_user'
-import { log } from '../../../utils/logging'
+import { serverLog } from '../../../utils/logging'
+import { verifyPassword } from '../../../utils/auth'
 
 export async function post(req, res) {
   try {
     const { email, password: passwordInput } = req.body
 
-    log.info('Login', { email })
+    serverLog.info(req, 'Login', { email })
 
     const userData = query(client, {
+      fetchPolicy: 'no-cache',
       query: GET_USER,
       variables: { email }
     });
@@ -17,32 +19,25 @@ export async function post(req, res) {
     const result = await userData.result();
 
     if (!result.data.user) {
-      log.info('User not found', { email })
+      serverLog.info(req, 'User not found', { email })
 
       throw new Error('User not found')
     }
 
     const userRecord = result.data.user
+    const isCorrectPassword = await verifyPassword(passwordInput, userRecord.password, userRecord.salt)
 
-    const passwordHashed = await crypto
-      .createHash("sha256")
-      .update(passwordInput)
-      .update(userRecord.salt)
-      .digest("hex")
-
-    const correctPassword = passwordHashed === userRecord.password;
-
-    if (!correctPassword) {
-      log.info('Incorrect password')
+    if (!isCorrectPassword) {
+      serverLog.info(req, 'Incorrect password', { email })
 
       throw new Error('Incorrect password')
     }
 
-    // Only return email and id
+    // Only return email, id and hasPassword
     const { email: emailRecord, id } = userRecord
-    const user = { email: emailRecord, id }
+    const user = { email: emailRecord, hasPassword: true, id }
 
-    log.info('Successful login', { id })
+    serverLog.info(req, 'Successful login', { id }, id)
 
     // Save user to session
     req.session.user = user;

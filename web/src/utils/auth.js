@@ -2,10 +2,10 @@ import { log } from "./logging";
 
 /**
  * Get user data
- * @param {string} email Email of user to fetch
+ * @param {object} params Id params: email, fbId, id
  */
-export async function getUser(email, fbId) {
-  log.info('Get user', { email, fbId })
+export async function getUser(params) {
+  log.info('Get user', params)
 
   const [{ query }, { client }, { GET_USER }] = await Promise.all([
     import('svelte-apollo'),
@@ -16,21 +16,21 @@ export async function getUser(email, fbId) {
   const userData = query(client, {
     fetchPolicy: 'no-cache',
     query: GET_USER,
-    variables: { email, fbId }
+    variables: params
   });
 
   try {
     const result = await userData.result();
 
     if (result && result.data && result.data.user) {
-      log.info('Found user', { id: result.data.user.id }, result.data.user.id)
+      log.info('Found user', { id: result.data.user.id })
 
       return result.data.user
     } else {
       throw new Error('No user')
     }
   } catch (error) {
-    log.error('Error getting user', { email, error: error.message, fbId })
+    log.error('Error getting user', { ...params, error: error.message })
   }
 }
 
@@ -60,7 +60,17 @@ export async function logoutUser() {
 }
 
 export async function updateUser(values) {
-  log.info('Update user', values, values.id)
+  const { password, ...rest } = values
+
+  let redactedValues = rest
+  if (password) {
+    redactedValues = {
+      ...redactedValues,
+      password: '•••'
+    }
+  }
+
+  log.info('Update user', redactedValues, values.id)
 
   const [{ mutate }, { client }, { UPDATE_USER }] = await Promise.all([
     import('svelte-apollo'),
@@ -133,13 +143,9 @@ export async function signUpUser({
     let salt
 
     if (password) {
-      salt = await crypto.randomBytes(24).toString('hex')
-
-      passwordHashed = await crypto
-        .createHash("sha256")
-        .update(password)
-        .update(salt)
-        .digest("hex")
+      const { generatedPasswordHashed, generatedSalt } = await generatePasswordHash(password)
+      passwordHashed = generatedPasswordHashed
+      salt = generatedSalt
     }
 
     try {
@@ -181,6 +187,57 @@ export async function signUpUser({
 }
 
 /**
+ * Generate a password hash and salt returns object with salt and hash
+ * @param {string} password Plain text password to hash
+ */
+export async function generatePasswordHash(password) {
+  const Buffer_ = await import("buffer/");
+
+  const Buffer = Buffer_.Buffer;
+
+  const base64Password = new Buffer(password).toString(
+    "base64"
+  )
+
+  const response = await fetch("http://localhost:3000/api/auth/password", {
+    method: "GET",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+      password: base64Password
+    }
+  });
+
+  const { generatedPasswordHashed, generatedSalt } = await response.json();
+
+  return {
+    generatedPasswordHashed,
+    generatedSalt
+  }
+}
+
+/**
+ * Verify a password with a salt
+ * @param {string} passwordInput Password to verify
+ * @param {string} userRecordPassword Hashed db password
+ * @param {string} salt Salt to verify with
+ */
+export async function verifyPassword(passwordInput, userRecordPassword, salt) {
+  const response = await fetch("http://localhost:3000/api/auth/password", {
+    body: JSON.stringify({ passwordInput, userRecordPassword, salt }),
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json"
+    }
+  });
+
+  const { isVerified } = await response.json();
+
+  return isVerified
+}
+
+/**
  * Submit signup / login form
  * @param {Event} event Submit event
  * @param {string} key Auth key
@@ -198,10 +255,10 @@ export async function submitAuthForm(key, inputData, formData, success) {
     method: "POST",
   });
 
-  const { error, user } = await response.json();
+  const { errors, user } = await response.json();
 
-  if (error) {
-    error.forEach(err => {
+  if (errors) {
+    errors.forEach(err => {
       const i = formData.findIndex(
         item => item.id === `${key}-${err.field}`
       );
@@ -218,7 +275,6 @@ export async function submitAuthForm(key, inputData, formData, success) {
       return false
     } else {
       log.error('Submit auth form, no user and no errors')
-      // TODO: notification back to user
     }
   }
 }

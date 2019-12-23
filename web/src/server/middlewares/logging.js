@@ -7,7 +7,8 @@ module.exports = {
   log: async (req, res) => {
     switch (req.method) {
       case 'POST': {
-        return serverLogging(req, res)
+        serverLogging(req)
+        res.end()
       }
     }
   },

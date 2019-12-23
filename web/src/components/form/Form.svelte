@@ -4,6 +4,7 @@
 
   export let form;
   export let onsubmit;
+  export let passwordUpdate;
 </script>
 
 <form on:submit|preventDefault={onsubmit}>

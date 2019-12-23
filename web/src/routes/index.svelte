@@ -47,7 +47,7 @@
 </svelte:head>
 
 <figure>
-  <img alt="B" src="https://placehold.it/600" />
+  <img alt="BB" height="400" src="https://placehold.it/600" width="400" />
 </figure>
 
 <h1>BB</h1>

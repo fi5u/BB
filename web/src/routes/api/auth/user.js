@@ -28,7 +28,7 @@ export async function get(req, res) {
     // Check for existance of email only
     req.session.savedEmail = email
 
-    const user = await getUser(email)
+    const user = await getUser({ email })
 
     // Note: do not save this user to session
     // This is simply a check

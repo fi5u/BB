@@ -26,6 +26,7 @@
   }
 </script>
 
+<label for={sharedProps.id}>{sharedProps.label}</label>
 {#if type === 'email'}
   <input {...sharedProps} bind:value type="email" />
 {:else if type === 'password'}

@@ -48,15 +48,11 @@ class UserAPI extends DataSource {
     }
   }
 
-  async updateUser({ email, id, name }) {
-    console.log('updateUser()')
+  async updateUser({ email, id, name, password, salt }) {
     if (!id) {
       console.log('Preventing update user..')
       return null
     }
-
-    console.log('Updating:')
-    console.log({ email, id, name })
 
     try {
       if (email) {
@@ -84,6 +80,14 @@ class UserAPI extends DataSource {
 
       if (name) {
         user.name = name
+      }
+
+      if (password) {
+        user.password = password
+      }
+
+      if (salt) {
+        user.salt = salt
       }
 
       await user.save();

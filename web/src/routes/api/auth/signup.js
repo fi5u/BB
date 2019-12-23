@@ -41,7 +41,10 @@ export async function post(req, res) {
 
   if (user) {
     // Save user to session
-    req.session.user = user;
+    req.session.user = {
+      ...user,
+      hasPassword: true
+    };
 
     // Delete saved email
     delete req.session.savedEmail;

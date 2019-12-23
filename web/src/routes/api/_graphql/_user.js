@@ -10,8 +10,8 @@ export const ADD_USER = gql`
   `;
 
 export const UPDATE_USER = gql`
-    mutation($email: String, $id: Int, $name: String) {
-      updateUser(email: $email, id: $id, name: $name) {
+    mutation($email: String, $id: Int, $name: String, $password: String, $salt: String) {
+      updateUser(email: $email, id: $id, name: $name, password: $password, salt: $salt) {
         id
         email
         name
@@ -20,8 +20,8 @@ export const UPDATE_USER = gql`
   `;
 
 export const GET_USER = gql`
-    query($email: String, $fbId: String) {
-      user(email: $email, fbId: $fbId) {
+    query($email: String, $fbId: String, $id: Int) {
+      user(email: $email, fbId: $fbId, id: $id) {
         email,
         fbId,
         id,

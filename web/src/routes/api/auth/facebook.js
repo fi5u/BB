@@ -17,11 +17,16 @@ export async function post(req, res) {
 
   let user
 
-  const registeredUser = await getUser(email, fbId)
+  const userRecord = await getUser({ email, fbId })
+
+  // Only return email, id and hasPassword
+  const { email: emailRecord, id, name: nameRecord } = userRecord
+  const registeredUser = { email: emailRecord, hasPassword: !!userRecord.password, id, name: nameRecord }
 
   // Check if already user, and log straight in
   if (registeredUser) {
     log.info('Facebook auth login', {}, registeredUser.id)
+
     user = registeredUser
 
     // Only update with missing details from Facebook,
