@@ -13,7 +13,7 @@ const dev = NODE_ENV === 'development';
 
 const FileStore = sessionFileStore(session);
 
-global.crypto = crypto
+global.crypto = crypto // TODO: do we need this?
 
 const app = polka()
 

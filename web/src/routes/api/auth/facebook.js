@@ -19,13 +19,13 @@ export async function post(req, res) {
 
   const userRecord = await getUser({ email, fbId })
 
-  // Only return email, id and hasPassword
-  const { email: emailRecord, id, name: nameRecord } = userRecord
-  const registeredUser = { email: emailRecord, hasPassword: !!userRecord.password, id, name: nameRecord }
-
   // Check if already user, and log straight in
-  if (registeredUser) {
-    log.info('Facebook auth login', {}, registeredUser.id)
+  if (userRecord.id) {
+    log.info('Facebook auth login', {}, userRecord.id)
+
+    // Only return email, id and hasPassword
+    const { email: emailRecord, id, name: nameRecord } = userRecord
+    const registeredUser = { email: emailRecord, hasPassword: !!userRecord.password, id, name: nameRecord }
 
     user = registeredUser
 
@@ -65,7 +65,10 @@ export async function post(req, res) {
     if (error) {
       log.error('Facebook signup', { error })
     } else {
-      user = signedUpUser
+      user = {
+        ...signedUpUser,
+        name,
+      }
     }
   }
 

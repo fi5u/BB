@@ -3,6 +3,7 @@ import { log } from "./logging";
 /**
  * Get user data
  * @param {object} params Id params: email, fbId, id
+ * @param {object} req Request object
  */
 export async function getUser(params) {
   log.info('Get user', params)
@@ -23,14 +24,16 @@ export async function getUser(params) {
     const result = await userData.result();
 
     if (result && result.data && result.data.user) {
-      log.info('Found user', { id: result.data.user.id })
+      await log.info('Found user', { id: result.data.user.id })
 
       return result.data.user
     } else {
-      throw new Error('No user')
+      await log.info('No user')
+
+      return {}
     }
   } catch (error) {
-    log.error('Error getting user', { ...params, error: error.message })
+    await log.error('Error getting user', { ...params, error: error.message })
   }
 }
 
@@ -164,11 +167,11 @@ export async function signUpUser({
       const { email: emailRecord, id } = userRecord.data.addUser
       const user = { email: emailRecord, id }
 
-      log.info('User signed up', user)
+      log.info('User signed up', user, id)
 
       return { user }
     } catch (error) {
-      log.error('Signup', { error: error.message })
+      log.error('Signup', { email, error: error.message, fbId, name })
 
       return {
         error: error.message,
@@ -177,7 +180,7 @@ export async function signUpUser({
     }
 
   } catch (passwordHashError) {
-    log.error('Password hash error', { error: passwordHashError.message })
+    log.error('Password hash error', { email, error: passwordHashError.message, fbId, name })
 
     return {
       error: passwordHashError.message,
