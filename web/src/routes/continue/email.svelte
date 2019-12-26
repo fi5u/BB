@@ -13,8 +13,13 @@
 
   const { session } = stores();
 
-  function submittedForm(userType, email) {
+  function submittedForm({ email, hasPassword, userType }) {
     $session.savedEmail = email;
+
+    if (userType === "current") {
+      // Has password if signed up with email
+      $session.hasPassword = hasPassword;
+    }
 
     if (userType === "new") {
       goto("/continue/new");

@@ -28,7 +28,11 @@ export async function get(req, res) {
     // Check for existance of email only
     req.session.savedEmail = email
 
-    const user = await getUser({ email })
+    const userRecord = await getUser({ email })
+
+    // Only return email, id and hasPassword
+    const { email: emailRecord, id, password } = userRecord
+    const user = { email: emailRecord, hasPassword: !!password, id }
 
     // Note: do not save this user to session
     // This is simply a check

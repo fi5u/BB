@@ -192,11 +192,14 @@
         return;
       }
 
-      const isCurrentPasswordCorrect = verifyPassword(
-        currentPassword,
-        userRecord.password,
-        userRecord.salt
-      );
+      // Only verify if has a current password
+      const isCurrentPasswordCorrect = user.hasPassword
+        ? await verifyPassword(
+            currentPassword,
+            userRecord.password,
+            userRecord.salt
+          )
+        : true;
 
       if (!isCurrentPasswordCorrect) {
         log.info("Incorrect password when updating", {}, user.id);

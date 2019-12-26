@@ -46,7 +46,8 @@ export async function post(req, res) {
       hasPassword: true
     };
 
-    // Delete saved email
+    // Delete session values
+    delete req.session.hasPassword;
     delete req.session.savedEmail;
 
     res.end(JSON.stringify({

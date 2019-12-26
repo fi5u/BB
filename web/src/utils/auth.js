@@ -65,6 +65,7 @@ export async function logoutUser() {
 export async function updateUser(values) {
   const { password, ...rest } = values
 
+  // Remove password for logging
   let redactedValues = rest
   if (password) {
     redactedValues = {
@@ -228,11 +229,11 @@ export async function generatePasswordHash(password) {
 export async function verifyPassword(passwordInput, userRecordPassword, salt) {
   const response = await fetch("http://localhost:3000/api/auth/password", {
     body: JSON.stringify({ passwordInput, userRecordPassword, salt }),
-    method: "POST",
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json"
-    }
+    },
+    method: "POST",
   });
 
   const { isVerified } = await response.json();

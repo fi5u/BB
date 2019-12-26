@@ -42,7 +42,11 @@
 
     const { user } = await response.json();
 
-    submittedForm(user ? "current" : "new", emailCheckForm[0].value);
+    submittedForm({
+      email: emailCheckForm[0].value,
+      hasPassword: user.hasPassword,
+      userType: user ? "current" : "new"
+    });
   }
 </script>
 

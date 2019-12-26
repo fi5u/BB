@@ -76,6 +76,10 @@ export async function post(req, res) {
     // Save user to session
     req.session.user = user;
 
+    // Delete session values
+    delete req.session.hasPassword;
+    delete req.session.savedEmail;
+
     return res.end(JSON.stringify({
       user,
     }));

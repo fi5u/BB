@@ -8,7 +8,7 @@
   let notificationText = "";
 
   setContext("notification", {
-    createNotification: text => {
+    createNotification: (text, level = "success") => {
       notificationText = text;
     }
   });

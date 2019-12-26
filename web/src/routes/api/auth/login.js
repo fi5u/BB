@@ -33,19 +33,21 @@ export async function post(req, res) {
       throw new Error('Incorrect password')
     }
 
-    // Only return email, id and hasPassword
-    const { email: emailRecord, id } = userRecord
-    const user = { email: emailRecord, hasPassword: true, id }
+    // Only return email, hasPassword, id and name
+    const { email: emailRecord, id, name } = userRecord
+    const user = { email: emailRecord, hasPassword: true, id, name }
 
     serverLog.info(req, 'Successful login', { id }, id)
 
     // Save user to session
     req.session.user = user;
 
-    // Delete saved email
+    // Delete session values
+    delete req.session.hasPassword;
     delete req.session.savedEmail;
 
     res.setHeader('Content-Type', 'application/json');
+
     return res.end(JSON.stringify({
       user
     }));
