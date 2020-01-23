@@ -6,12 +6,21 @@
   export let segment;
 
   let notificationText = "";
+  let notificationLevel = "success";
 
   setContext("notification", {
-    createNotification: (text, level = "success") => {
-      notificationText = text;
-    }
+    createNotification
   });
+
+  /**
+   * Create a notification
+   * @param {string} text Text to show
+   * @param {'error' | 'success'} level Notification level
+   **/
+  function createNotification(text, level = "success") {
+    notificationText = text;
+    notificationLevel = level;
+  }
 
   /**
    * Main element clicked

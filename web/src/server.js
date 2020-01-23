@@ -8,6 +8,9 @@ import * as sapper from '@sapper/server';
 import * as crypto from 'crypto'
 import { log } from './server/middlewares/logging'
 
+import { config } from "dotenv";
+config();
+
 const { PORT, NODE_ENV } = process.env;
 const dev = NODE_ENV === 'development';
 
@@ -20,7 +23,7 @@ const app = polka()
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
 app.use(session({
-  secret: 'vlsSw3dCsWtr53G8VdloapFw2dCnMmfeE',
+  secret: process.env.SESSION_SECRET,
   resave: false,
   saveUninitialized: true,
   cookie: {

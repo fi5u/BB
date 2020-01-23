@@ -54,6 +54,7 @@ module.exports.createStore = () => {
     fbId: SQL.INTEGER,
     name: SQL.STRING,
     password: SQL.STRING,
+    passwordResetTime: SQL.STRING,
     salt: SQL.STRING,
   });
 

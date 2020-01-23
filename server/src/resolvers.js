@@ -74,8 +74,8 @@ module.exports = {
       const user = await dataSources.userAPI.createUser({ email, fbId, name, password, salt });
       if (user) return user
     },
-    updateUser: async (_, { email, id, name, password, salt }, { dataSources }) => {
-      const user = await dataSources.userAPI.updateUser({ email, id, name, password, salt });
+    updateUser: async (_, { email, id, name, password, passwordResetTime, salt }, { dataSources }) => {
+      const user = await dataSources.userAPI.updateUser({ email, id, name, password, passwordResetTime, salt });
       if (user) return user
     },
     getUser: async (_, { email }, { dataSources }) => {

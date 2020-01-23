@@ -250,7 +250,7 @@
         return merged;
       });
 
-      // Reset passeord fields in form
+      // Reset password fields in form
       [
         "update-current-password",
         "update-new-password",

@@ -1,17 +1,27 @@
 <script context="module">
+  import { getLoadNotification } from "../../utils/notifications";
   import { protectRoute } from "../../utils/routes";
 
-  export function preload(page, { user }) {
-    return protectRoute(this, "visitor", user);
+  export function preload({ query }, { user }) {
+    protectRoute(this, "visitor", user);
+
+    return getLoadNotification(query);
   }
 </script>
 
 <script>
   import { goto, stores } from "@sapper/app";
+  import { getContext } from "svelte";
 
+  import { showLoadNotification } from "../../utils/notifications";
   import EmailCheck from "../../components/auth/EmailCheck.svelte";
 
+  export let onLoadNotification;
+
   const { session } = stores();
+  const notification = getContext("notification");
+
+  showLoadNotification(notification, onLoadNotification);
 
   function submittedForm({ email, hasPassword, userType }) {
     $session.savedEmail = email;
@@ -34,4 +44,5 @@
 </svelte:head>
 
 <p>Enter your email address to get going</p>
+
 <EmailCheck {submittedForm} />

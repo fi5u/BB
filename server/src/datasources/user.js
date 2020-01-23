@@ -48,7 +48,7 @@ class UserAPI extends DataSource {
     }
   }
 
-  async updateUser({ email, id, name, password, salt }) {
+  async updateUser({ email, id, name, password, passwordResetTime, salt }) {
     if (!id) {
       console.log('Preventing update user..')
       return null
@@ -84,6 +84,10 @@ class UserAPI extends DataSource {
 
       if (password) {
         user.password = password
+      }
+
+      if (passwordResetTime || passwordResetTime === '') {
+        user.passwordResetTime = passwordResetTime
       }
 
       if (salt) {

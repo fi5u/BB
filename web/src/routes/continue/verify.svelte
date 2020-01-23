@@ -1,4 +1,5 @@
 <script context="module">
+  import { getLoadNotification } from "../../utils/notifications";
   import { protectRoute } from "../../utils/routes";
 
   export async function preload({ query }, { hasPassword, savedEmail, user }) {
@@ -10,6 +11,7 @@
     protectRoute(this, "visitor", user);
 
     return {
+      ...getLoadNotification(query),
       emailAddress: savedEmail,
       hasFailed: query.success === "0",
       hasPassword
@@ -19,16 +21,23 @@
 
 <script>
   import { goto, stores } from "@sapper/app";
+  import { getContext } from "svelte";
 
+  import { log } from "../../utils/logging";
+  import { showLoadNotification } from "../../utils/notifications";
   import FacebookAuthButton from "../../components/auth/FacebookAuthButton.svelte";
   import VerifyForm from "../../components/auth/VerifyForm.svelte";
-  import { log } from "../../utils/logging";
 
   export let emailAddress;
   export let hasFailed;
   export let hasPassword;
+  export let onLoadNotification;
 
   const { session } = stores();
+
+  const notification = getContext("notification");
+
+  showLoadNotification(notification, onLoadNotification);
 
   function submitSuccess(user) {
     if (user) {
@@ -50,7 +59,10 @@
 
 {#if hasPassword}
   <p>{emailAddress}</p>
+
   <VerifyForm {emailAddress} {submitSuccess} />
+
+  <a href="/continue/forgot">Forgot password</a>
 {:else}
   <p>Log in with Facebook</p>
   <FacebookAuthButton />

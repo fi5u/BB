@@ -9,4 +9,4 @@ __sapper__/
 .sessions/
 logs/
 
-server/store.sqlite
+server/store.sqlite*

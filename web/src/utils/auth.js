@@ -96,9 +96,15 @@ export async function updateUser(values) {
 
     return { user }
   } catch (error) {
+    const { password, ...redactedValues } = values
+
+    if (values.password) {
+      redactedValues.password = '•••'
+    }
+
     log.error('Could not update user', {
       error: error.message,
-      ...values,
+      ...redactedValues,
     }, values.id)
 
     return {
@@ -243,7 +249,6 @@ export async function verifyPassword(passwordInput, userRecordPassword, salt) {
 
 /**
  * Submit signup / login form
- * @param {Event} event Submit event
  * @param {string} key Auth key
  * @param {object} inputData Email / password data
  * @param {object} formData Current form data
@@ -281,4 +286,80 @@ export async function submitAuthForm(key, inputData, formData, success) {
       log.error('Submit auth form, no user and no errors')
     }
   }
+}
+
+/**
+ * Submit forgot password form.
+ * We deliberately do not confirm incorrect email to prevent
+ * attempts to guess an email.
+ * @param {object} inputData Email data
+ * @param {object} formData Current form data
+ * @param {(object) => void} success
+ */
+export async function submitForgotPasswordForm(inputData, formData, success) {
+  const response = await fetch(`/api/auth/forgot/${encodeURIComponent(inputData.email)}`, {
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json"
+    },
+    method: "GET",
+  });
+
+  const { errors } = await response.json();
+
+  if (errors) {
+    errors.forEach(err => {
+      const i = formData.findIndex(
+        item => item.id === `forgot-${err.field}`
+      );
+
+      formData[i].errorMessage = err.error;
+    });
+  } else {
+    formData[0].value = ''
+
+    success()
+  }
+
+  return formData
+}
+
+export async function submitResetPasswordForm(inputData, formData, success) {
+  const response = await fetch('/api/auth/reset', {
+    body: JSON.stringify({
+      passwordNew: inputData.passwordNew,
+      passwordRetype: inputData.passwordRetype,
+      userId: inputData.userId,
+    }),
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json"
+    },
+    method: "POST",
+  });
+
+  const { errors } = await response.json();
+
+  let notification
+
+  if (errors) {
+    errors.forEach(err => {
+      if (err.field === 'notification') {
+        notification = err.error
+      } else {
+        const i = formData.findIndex(
+          item => item.id === `reset-${err.field}`
+        );
+
+        formData[i].errorMessage = err.error;
+      }
+    });
+  } else {
+    formData[0].value = ''
+    formData[1].value = ''
+
+    success()
+  }
+
+  return { updatedForm: formData, notification }
 }

@@ -10,8 +10,8 @@ export const ADD_USER = gql`
   `;
 
 export const UPDATE_USER = gql`
-    mutation($email: String, $id: Int, $name: String, $password: String, $salt: String) {
-      updateUser(email: $email, id: $id, name: $name, password: $password, salt: $salt) {
+    mutation($email: String, $id: Int, $name: String, $password: String, $passwordResetTime: String, $salt: String) {
+      updateUser(email: $email, id: $id, name: $name, password: $password, passwordResetTime: $passwordResetTime, salt: $salt) {
         id
         email
         name
@@ -27,6 +27,7 @@ export const GET_USER = gql`
         id,
         name,
         password,
+        passwordResetTime,
         salt
       }
     }
