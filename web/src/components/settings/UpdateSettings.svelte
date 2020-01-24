@@ -84,6 +84,8 @@
    * @param event Submit event
    */
   async function submit(event) {
+    event.preventDefault();
+
     const notification = getContext("notification");
 
     function editUpdateObject(key, dbKey) {
@@ -104,8 +106,6 @@
 
       return true;
     }
-
-    event.preventDefault();
 
     const updateObject = {
       id: parseInt(user.id)
