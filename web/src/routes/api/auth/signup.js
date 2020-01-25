@@ -28,38 +28,44 @@ export async function post(req, res) {
   }
 
   if (errors.length) {
-    res.setHeader('Content-Type', 'application/json');
-    return res.end(JSON.stringify({
-      errors,
-      user: null,
-    }));
+    res.setHeader('Content-Type', 'application/json')
+    return res.end(
+      JSON.stringify({
+        errors,
+        user: null,
+      })
+    )
   }
 
   const { error, user } = await signUpUser({ email, password })
 
-  res.setHeader('Content-Type', 'application/json');
+  res.setHeader('Content-Type', 'application/json')
 
   if (user) {
     // Save user to session
     req.session.user = {
       ...user,
-      hasPassword: true
-    };
+      hasPassword: true,
+    }
 
     // Delete session values
-    delete req.session.hasPassword;
-    delete req.session.savedEmail;
+    delete req.session.hasPassword
+    delete req.session.savedEmail
 
-    res.end(JSON.stringify({
-      user,
-    }));
+    res.end(
+      JSON.stringify({
+        user,
+      })
+    )
   } else {
     log.error('Signup error, no user', { email, error })
 
     res.setHeader('Content-Type', 'application/json')
 
-    res.end(JSON.stringify({
-      user: null,
-    }));
+    res.end(
+      JSON.stringify({
+        user: null,
+      })
+    )
   }
 }

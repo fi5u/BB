@@ -5,24 +5,32 @@ export async function get(req, res) {
   if (req.session.user) {
     log.info('User in session')
 
-    return res.json({
-      user: req.session.user,
-    }).status(200).end()
+    return res
+      .json({
+        user: req.session.user,
+      })
+      .status(200)
+      .end()
   }
 
   log.info('No user in session')
 
-  if (!req.headers.authorization || req.headers.authorization.indexOf('Basic ') === -1) {
+  if (
+    !req.headers.authorization ||
+    req.headers.authorization.indexOf('Basic ') === -1
+  ) {
     log.error('Get user, not authorization headers')
 
-    return res.end(JSON.stringify({
-      user: null,
-    }));
+    return res.end(
+      JSON.stringify({
+        user: null,
+      })
+    )
   }
 
-  const base64Credentials = req.headers.authorization.split(' ')[1];
-  const credentials = Buffer.from(base64Credentials, 'base64').toString('ascii');
-  const [email, password] = credentials.split(':');
+  const base64Credentials = req.headers.authorization.split(' ')[1]
+  const credentials = Buffer.from(base64Credentials, 'base64').toString('ascii')
+  const [email, password] = credentials.split(':')
 
   if (email && !password) {
     // Check for existance of email only
@@ -37,14 +45,18 @@ export async function get(req, res) {
     // Note: do not save this user to session
     // This is simply a check
 
-    res.setHeader('Content-Type', 'application/json');
+    res.setHeader('Content-Type', 'application/json')
 
-    return res.end(JSON.stringify({
-      user
-    }));
+    return res.end(
+      JSON.stringify({
+        user,
+      })
+    )
   }
 
-  res.end(JSON.stringify({
-    user: null,
-  }));
+  res.end(
+    JSON.stringify({
+      user: null,
+    })
+  )
 }

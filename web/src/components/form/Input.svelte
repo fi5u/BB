@@ -1,11 +1,11 @@
 <script>
-  export let autocomplete;
-  export let errorMessage = null;
-  export let id;
-  export let label;
-  export let placeholder;
-  export let type;
-  export let value;
+  export let autocomplete
+  export let errorMessage = null
+  export let id
+  export let label
+  export let placeholder
+  export let type
+  export let value
 
   let sharedProps = {
     autocomplete,
@@ -13,15 +13,15 @@
     label,
     oninput: handleUpdate,
     placeholder,
-    type
-  };
+    type,
+  }
 
   /**
    * Handle input update
    */
   function handleUpdate() {
     if (errorMessage) {
-      errorMessage = null;
+      errorMessage = null
     }
   }
 </script>

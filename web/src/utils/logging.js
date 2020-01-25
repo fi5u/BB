@@ -4,12 +4,13 @@ const levels = ['info', 'error', 'warn']
 export const log = levels.reduce((acc, cur) => {
   return {
     ...acc,
-    [cur]: (message, extra, uId) => logging({
-      extra,
-      level: cur,
-      message,
-      uId,
-    })
+    [cur]: (message, extra, uId) =>
+      logging({
+        extra,
+        level: cur,
+        message,
+        uId,
+      }),
   }
 }, {})
 
@@ -29,7 +30,7 @@ async function logging(params) {
     body: JSON.stringify(params),
     credentials: 'include',
     headers: {
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
     },
     method: 'POST',
   })
@@ -39,12 +40,13 @@ async function logging(params) {
 export const serverLog = levels.reduce((acc, cur) => {
   return {
     ...acc,
-    [cur]: (req, message, extra, uId) => serverLogging(req, {
-      extra,
-      level: cur,
-      message,
-      uId
-    })
+    [cur]: (req, message, extra, uId) =>
+      serverLogging(req, {
+        extra,
+        level: cur,
+        message,
+        uId,
+      }),
   }
 }, {})
 
@@ -67,12 +69,16 @@ export function serverLogging(req, params) {
 
   const ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress
 
-  const logString = `${level.slice(0, 3).toUpperCase()} ${userId || 0}@${ip} [${d.toISOString()}] ${message} ${JSON.stringify(extra)}`
+  const logString = `${level.slice(0, 3).toUpperCase()} ${userId ||
+    0}@${ip} [${d.toISOString()}] ${message} ${JSON.stringify(extra)}`
 
   if (process.env.NODE_ENV === 'development') {
     console.log(logString)
   } else {
-    const stream = fs.createWriteStream(__dirname + '/../../../logs/debug.log', { flags: 'a' })
+    const stream = fs.createWriteStream(
+      __dirname + '/../../../logs/debug.log',
+      { flags: 'a' }
+    )
     stream.write(logString + '\n')
   }
 }

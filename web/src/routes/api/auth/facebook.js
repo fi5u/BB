@@ -4,15 +4,17 @@ import { log } from '../../../utils/logging'
 export async function post(req, res) {
   const { email, fbId, name } = req.body
 
-  res.setHeader('Content-Type', 'application/json');
+  res.setHeader('Content-Type', 'application/json')
 
   if (!fbId) {
     // email (and poss name) may be null
     log.error('Cannot authorize with Facebook, Facebook id missing')
 
-    return res.end(JSON.stringify({
-      user: null,
-    }));
+    return res.end(
+      JSON.stringify({
+        user: null,
+      })
+    )
   }
 
   let user
@@ -25,7 +27,12 @@ export async function post(req, res) {
 
     // Only return email, id and hasPassword
     const { email: emailRecord, id, name: nameRecord } = userRecord
-    const registeredUser = { email: emailRecord, hasPassword: !!userRecord.password, id, name: nameRecord }
+    const registeredUser = {
+      email: emailRecord,
+      hasPassword: !!userRecord.password,
+      id,
+      name: nameRecord,
+    }
 
     user = registeredUser
 
@@ -42,7 +49,11 @@ export async function post(req, res) {
     }
 
     if (Object.keys(updateObj).length) {
-      log.info('Updating empty db values with Facebook data', updateObj, registeredUser.id)
+      log.info(
+        'Updating empty db values with Facebook data',
+        updateObj,
+        registeredUser.id
+      )
 
       const { user: updatedUser } = await updateUser({
         id: parseInt(registeredUser.id),
@@ -59,7 +70,7 @@ export async function post(req, res) {
     const { error, user: signedUpUser } = await signUpUser({
       email,
       fbId,
-      name
+      name,
     })
 
     if (error) {
@@ -74,20 +85,24 @@ export async function post(req, res) {
 
   if (user) {
     // Save user to session
-    req.session.user = user;
+    req.session.user = user
 
     // Delete session values
-    delete req.session.hasPassword;
-    delete req.session.savedEmail;
+    delete req.session.hasPassword
+    delete req.session.savedEmail
 
-    return res.end(JSON.stringify({
-      user,
-    }));
+    return res.end(
+      JSON.stringify({
+        user,
+      })
+    )
   } else {
     log.error('Facebook auth, no user')
   }
 
-  return res.end(JSON.stringify({
-    user: null
-  }));
+  return res.end(
+    JSON.stringify({
+      user: null,
+    })
+  )
 }

@@ -1,4 +1,4 @@
-import { log } from "./logging";
+import { log } from './logging'
 
 /**
  * Get user data
@@ -11,17 +11,17 @@ export async function getUser(params) {
   const [{ query }, { client }, { GET_USER }] = await Promise.all([
     import('svelte-apollo'),
     import('../routes/api/_graphql'),
-    import('../routes/api/_graphql/_user')
+    import('../routes/api/_graphql/_user'),
   ])
 
   const userData = query(client, {
     fetchPolicy: 'no-cache',
     query: GET_USER,
-    variables: params
-  });
+    variables: params,
+  })
 
   try {
-    const result = await userData.result();
+    const result = await userData.result()
 
     if (result && result.data && result.data.user) {
       await log.info('Found user', { id: result.data.user.id })
@@ -39,9 +39,12 @@ export async function getUser(params) {
 
 export function authSuccess(user) {
   if (typeof window !== 'undefined') {
-    window.localStorage.setItem('user', JSON.stringify({
-      id: user.id
-    }))
+    window.localStorage.setItem(
+      'user',
+      JSON.stringify({
+        id: user.id,
+      })
+    )
   }
 }
 
@@ -49,13 +52,13 @@ export function authSuccess(user) {
  * Log the user out from server
  **/
 export async function logoutUser() {
-  await fetch("api/auth/logout", {
-    method: "POST",
+  await fetch('api/auth/logout', {
+    method: 'POST',
     headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json"
-    }
-  });
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+  })
 
   if (typeof window !== 'undefined') {
     window.localStorage.removeItem('user')
@@ -70,7 +73,7 @@ export async function updateUser(values) {
   if (password) {
     redactedValues = {
       ...redactedValues,
-      password: '•••'
+      password: '•••',
     }
   }
 
@@ -85,11 +88,15 @@ export async function updateUser(values) {
   try {
     const userRecord = await mutate(client, {
       mutation: UPDATE_USER,
-      variables: values
-    });
+      variables: values,
+    })
 
     // Only return email, name and id
-    const { email: emailRecord, id, name: nameRecord } = userRecord.data.updateUser
+    const {
+      email: emailRecord,
+      id,
+      name: nameRecord,
+    } = userRecord.data.updateUser
     const user = { email: emailRecord, id, name: nameRecord }
 
     log.info('Updated user', { id }, id)
@@ -102,10 +109,14 @@ export async function updateUser(values) {
       redactedValues.password = '•••'
     }
 
-    log.error('Could not update user', {
-      error: error.message,
-      ...redactedValues,
-    }, values.id)
+    log.error(
+      'Could not update user',
+      {
+        error: error.message,
+        ...redactedValues,
+      },
+      values.id
+    )
 
     return {
       error: error.message,
@@ -117,12 +128,7 @@ export async function updateUser(values) {
 /**
  * Sign a user up
  */
-export async function signUpUser({
-  email,
-  fbId,
-  name,
-  password
-}) {
+export async function signUpUser({ email, fbId, name, password }) {
   log.info('Sign up user', {
     email,
     fbId,
@@ -153,7 +159,10 @@ export async function signUpUser({
     let salt
 
     if (password) {
-      const { generatedPasswordHashed, generatedSalt } = await generatePasswordHash(password)
+      const {
+        generatedPasswordHashed,
+        generatedSalt,
+      } = await generatePasswordHash(password)
       passwordHashed = generatedPasswordHashed
       salt = generatedSalt
     }
@@ -167,8 +176,8 @@ export async function signUpUser({
           name,
           password: passwordHashed,
           salt,
-        }
-      });
+        },
+      })
 
       // Only return email and id
       const { email: emailRecord, id } = userRecord.data.addUser
@@ -185,9 +194,13 @@ export async function signUpUser({
         user: null,
       }
     }
-
   } catch (passwordHashError) {
-    log.error('Password hash error', { email, error: passwordHashError.message, fbId, name })
+    log.error('Password hash error', {
+      email,
+      error: passwordHashError.message,
+      fbId,
+      name,
+    })
 
     return {
       error: passwordHashError.message,
@@ -201,28 +214,26 @@ export async function signUpUser({
  * @param {string} password Plain text password to hash
  */
 export async function generatePasswordHash(password) {
-  const Buffer_ = await import("buffer/");
+  const Buffer_ = await import('buffer/')
 
-  const Buffer = Buffer_.Buffer;
+  const Buffer = Buffer_.Buffer
 
-  const base64Password = new Buffer(password).toString(
-    "base64"
-  )
+  const base64Password = new Buffer(password).toString('base64')
 
-  const response = await fetch("http://localhost:3000/api/auth/password", {
-    method: "GET",
+  const response = await fetch('http://localhost:3000/api/auth/password', {
+    method: 'GET',
     headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
-      password: base64Password
-    }
-  });
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      password: base64Password,
+    },
+  })
 
-  const { generatedPasswordHashed, generatedSalt } = await response.json();
+  const { generatedPasswordHashed, generatedSalt } = await response.json()
 
   return {
     generatedPasswordHashed,
-    generatedSalt
+    generatedSalt,
   }
 }
 
@@ -233,16 +244,16 @@ export async function generatePasswordHash(password) {
  * @param {string} salt Salt to verify with
  */
 export async function verifyPassword(passwordInput, userRecordPassword, salt) {
-  const response = await fetch("http://localhost:3000/api/auth/password", {
+  const response = await fetch('http://localhost:3000/api/auth/password', {
     body: JSON.stringify({ passwordInput, userRecordPassword, salt }),
     headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json"
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
     },
-    method: "POST",
-  });
+    method: 'POST',
+  })
 
-  const { isVerified } = await response.json();
+  const { isVerified } = await response.json()
 
   return isVerified
 }
@@ -255,31 +266,32 @@ export async function verifyPassword(passwordInput, userRecordPassword, salt) {
  * @param {(object) => void} success
  */
 export async function submitAuthForm(key, inputData, formData, success) {
-  const response = await fetch(`/api/auth/${key === 'verify' ? 'login' : key}`, {
-    body: JSON.stringify(inputData),
-    headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json"
-    },
-    method: "POST",
-  });
+  const response = await fetch(
+    `/api/auth/${key === 'verify' ? 'login' : key}`,
+    {
+      body: JSON.stringify(inputData),
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      method: 'POST',
+    }
+  )
 
-  const { errors, user } = await response.json();
+  const { errors, user } = await response.json()
 
   if (errors) {
     errors.forEach(err => {
-      const i = formData.findIndex(
-        item => item.id === `${key}-${err.field}`
-      );
+      const i = formData.findIndex(item => item.id === `${key}-${err.field}`)
 
-      formData[i].errorMessage = err.error;
-    });
+      formData[i].errorMessage = err.error
+    })
 
     return formData
   } else {
     if (user) {
-      authSuccess(user);
-      success(user);
+      authSuccess(user)
+      success(user)
 
       return false
     } else {
@@ -297,24 +309,25 @@ export async function submitAuthForm(key, inputData, formData, success) {
  * @param {(object) => void} success
  */
 export async function submitForgotPasswordForm(inputData, formData, success) {
-  const response = await fetch(`/api/auth/forgot/${encodeURIComponent(inputData.email)}`, {
-    headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json"
-    },
-    method: "GET",
-  });
+  const response = await fetch(
+    `/api/auth/forgot/${encodeURIComponent(inputData.email)}`,
+    {
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      method: 'GET',
+    }
+  )
 
-  const { errors } = await response.json();
+  const { errors } = await response.json()
 
   if (errors) {
     errors.forEach(err => {
-      const i = formData.findIndex(
-        item => item.id === `forgot-${err.field}`
-      );
+      const i = formData.findIndex(item => item.id === `forgot-${err.field}`)
 
-      formData[i].errorMessage = err.error;
-    });
+      formData[i].errorMessage = err.error
+    })
   } else {
     formData[0].value = ''
 
@@ -332,13 +345,13 @@ export async function submitResetPasswordForm(inputData, formData, success) {
       userId: inputData.userId,
     }),
     headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json"
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
     },
-    method: "POST",
-  });
+    method: 'POST',
+  })
 
-  const { errors } = await response.json();
+  const { errors } = await response.json()
 
   let notification
 
@@ -347,13 +360,11 @@ export async function submitResetPasswordForm(inputData, formData, success) {
       if (err.field === 'notification') {
         notification = err.error
       } else {
-        const i = formData.findIndex(
-          item => item.id === `reset-${err.field}`
-        );
+        const i = formData.findIndex(item => item.id === `reset-${err.field}`)
 
-        formData[i].errorMessage = err.error;
+        formData[i].errorMessage = err.error
       }
-    });
+    })
   } else {
     formData[0].value = ''
     formData[1].value = ''

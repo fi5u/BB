@@ -1,4 +1,4 @@
-const LaunchAPI = require('../launch');
+const LaunchAPI = require('../launch')
 
 /**
  * There are mock Launches at the bottom of this file.
@@ -9,56 +9,56 @@ const LaunchAPI = require('../launch');
 
 const mocks = {
   get: jest.fn(),
-};
+}
 
-const ds = new LaunchAPI();
-ds.get = mocks.get;
+const ds = new LaunchAPI()
+ds.get = mocks.get
 
 describe('[LaunchAPI.launchReducer]', () => {
   it('properly transforms launch', () => {
-    expect(ds.launchReducer(mockLaunchResponse)).toEqual(mockLaunch);
-  });
-});
+    expect(ds.launchReducer(mockLaunchResponse)).toEqual(mockLaunch)
+  })
+})
 
 describe('[LaunchAPI.getAllLaunches]', () => {
   it('looks up launches from api', async () => {
     // if api response is list of raw launches,
     // res should be list of transformed launches
-    mocks.get.mockReturnValueOnce([mockLaunchResponse]);
-    const res = await ds.getAllLaunches();
+    mocks.get.mockReturnValueOnce([mockLaunchResponse])
+    const res = await ds.getAllLaunches()
 
-    expect(res).toEqual([mockLaunch]);
-    expect(mocks.get).toBeCalledWith('launches');
-  });
-});
+    expect(res).toEqual([mockLaunch])
+    expect(mocks.get).toBeCalledWith('launches')
+  })
+})
 
 describe('[LaunchAPI.getLaunchById]', () => {
   it('should look up single launch from api', async () => {
     // if api response is list of raw launches,
     // res should be single transformed launch
-    mocks.get.mockReturnValueOnce([mockLaunchResponse]);
-    const res = await ds.getLaunchById({ launchId: 1 });
+    mocks.get.mockReturnValueOnce([mockLaunchResponse])
+    const res = await ds.getLaunchById({ launchId: 1 })
 
-    expect(res).toEqual(mockLaunch);
-    expect(mocks.get).toBeCalledWith('launches', { flight_number: 1 });
-  });
-});
+    expect(res).toEqual(mockLaunch)
+    expect(mocks.get).toBeCalledWith('launches', { flight_number: 1 })
+  })
+})
 
 describe('[LaunchAPI.getLaunchesByIds]', () => {
   it('should call getLaunchById for each id', async () => {
     // temporarily overwrite getLaunchById to test
-    const getLaunchById = ds.getLaunchById;
-    ds.getLaunchById = jest.fn(() => ({ id: 1 }));
+    const getLaunchById = ds.getLaunchById
+    ds.getLaunchById = jest.fn(() => ({ id: 1 }))
 
-    const res = await ds.getLaunchesByIds({ launchIds: [1, 2] });
+    const res = await ds.getLaunchesByIds({ launchIds: [1, 2] })
 
-    expect(res).toEqual([{ id: 1 }, { id: 1 }]);
-    expect(ds.getLaunchById).toHaveBeenCalledTimes(2);
+    expect(res).toEqual([{ id: 1 }, { id: 1 }])
+    expect(ds.getLaunchById).toHaveBeenCalledTimes(2)
 
     // set getLaunchById back to default
-    ds.getLaunchById = getLaunchById;
-  });
-});
+    ds.getLaunchById = getLaunchById
+  })
+})
 
 /**
  * MOCK DATA BELOW
@@ -79,7 +79,7 @@ const mockLaunch = {
     name: 'Falcon 1',
     type: 'Merlin A',
   },
-};
+}
 
 // raw launch response from API
 const mockLaunchResponse = {
@@ -181,6 +181,6 @@ const mockLaunchResponse = {
   details: 'Engine failure at 33 seconds and loss of vehicle',
   static_fire_date_utc: '2006-03-17T00:00:00.000Z',
   static_fire_date_unix: 1142553600,
-};
+}
 
-module.exports.mockLaunchResponse = mockLaunchResponse;
+module.exports.mockLaunchResponse = mockLaunchResponse

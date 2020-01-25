@@ -1,49 +1,49 @@
 <script>
-  import Form from "../form/Form.svelte";
-  import { submitAuthForm } from "../../utils/auth";
+  import Form from '../form/Form.svelte'
+  import { submitAuthForm } from '../../utils/auth'
 
-  export let emailAddress = "";
-  export let submitSuccess;
+  export let emailAddress = ''
+  export let submitSuccess
 
   let signupForm = [
     {
-      autocomplete: "email",
-      errorMessage: "",
-      id: "signup-email",
-      label: "Email address",
-      placeholder: "Email address",
-      type: "email",
-      value: emailAddress
+      autocomplete: 'email',
+      errorMessage: '',
+      id: 'signup-email',
+      label: 'Email address',
+      placeholder: 'Email address',
+      type: 'email',
+      value: emailAddress,
     },
     {
-      autocomplete: "new-password",
-      errorMessage: "",
-      id: "signup-password",
-      label: "Password",
-      placeholder: "Minimum 8 characters",
-      type: "password",
-      value: ""
+      autocomplete: 'new-password',
+      errorMessage: '',
+      id: 'signup-password',
+      label: 'Password',
+      placeholder: 'Minimum 8 characters',
+      type: 'password',
+      value: '',
     },
     {
-      id: "signup-button",
-      label: "Sign up",
-      type: "submit"
-    }
-  ];
+      id: 'signup-button',
+      label: 'Sign up',
+      type: 'submit',
+    },
+  ]
 
   async function handleSubmit(event) {
     const updatedForm = await submitAuthForm(
-      "signup",
+      'signup',
       {
         email: signupForm[0].value,
-        password: signupForm[1].value
+        password: signupForm[1].value,
       },
       signupForm,
       submitSuccess
-    );
+    )
 
     if (updatedForm) {
-      signupForm = updatedForm;
+      signupForm = updatedForm
     }
   }
 </script>

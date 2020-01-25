@@ -1,4 +1,4 @@
-import { query } from "svelte-apollo";
+import { query } from 'svelte-apollo'
 import { client } from '../_graphql'
 import { GET_USER } from '../_graphql/_user'
 import { serverLog } from '../../../utils/logging'
@@ -13,10 +13,10 @@ export async function post(req, res) {
     const userData = query(client, {
       fetchPolicy: 'no-cache',
       query: GET_USER,
-      variables: { email }
-    });
+      variables: { email },
+    })
 
-    const result = await userData.result();
+    const result = await userData.result()
 
     if (!result.data.user) {
       serverLog.info(req, 'User not found', { email })
@@ -25,7 +25,11 @@ export async function post(req, res) {
     }
 
     const userRecord = result.data.user
-    const isCorrectPassword = await verifyPassword(passwordInput, userRecord.password, userRecord.salt)
+    const isCorrectPassword = await verifyPassword(
+      passwordInput,
+      userRecord.password,
+      userRecord.salt
+    )
 
     if (!isCorrectPassword) {
       serverLog.info(req, 'Incorrect password', { email })
@@ -40,25 +44,31 @@ export async function post(req, res) {
     serverLog.info(req, 'Successful login', { id }, id)
 
     // Save user to session
-    req.session.user = user;
+    req.session.user = user
 
     // Delete session values
-    delete req.session.hasPassword;
-    delete req.session.savedEmail;
+    delete req.session.hasPassword
+    delete req.session.savedEmail
 
-    res.setHeader('Content-Type', 'application/json');
+    res.setHeader('Content-Type', 'application/json')
 
-    return res.end(JSON.stringify({
-      user
-    }));
+    return res.end(
+      JSON.stringify({
+        user,
+      })
+    )
   } catch (error) {
-    res.setHeader('Content-Type', 'application/json');
-    res.end(JSON.stringify({
-      errors: [{
-        error: error.message,
-        field: 'password'
-      }],
-      user: null,
-    }));
+    res.setHeader('Content-Type', 'application/json')
+    res.end(
+      JSON.stringify({
+        errors: [
+          {
+            error: error.message,
+            field: 'password',
+          },
+        ],
+        user: null,
+      })
+    )
   }
 }

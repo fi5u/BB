@@ -2,7 +2,7 @@ import { getUser } from '../../../../utils/auth'
 import { log } from '../../../../utils/logging'
 
 export async function get(req, res) {
-  const { userId } = req.params;
+  const { userId } = req.params
 
   let reason = ''
 
@@ -33,20 +33,24 @@ export async function get(req, res) {
       throw new Error('Link expired')
     }
 
-    res.setHeader('Content-Type', 'application/json');
+    res.setHeader('Content-Type', 'application/json')
 
-    res.end(JSON.stringify({
-      email: userRecord.email,
-      isPermitted: true
-    }))
+    res.end(
+      JSON.stringify({
+        email: userRecord.email,
+        isPermitted: true,
+      })
+    )
   } catch (error) {
     log.info('Get password reset access', { error: error.message })
 
-    res.setHeader('Content-Type', 'application/json');
+    res.setHeader('Content-Type', 'application/json')
 
-    res.end(JSON.stringify({
-      reason,
-      isPermitted: false
-    }))
+    res.end(
+      JSON.stringify({
+        reason,
+        isPermitted: false,
+      })
+    )
   }
 }

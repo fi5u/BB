@@ -1,4 +1,4 @@
-const { gql } = require('apollo-server');
+const { gql } = require('apollo-server')
 
 const typeDefs = gql`
   type Query {
@@ -14,11 +14,7 @@ const typeDefs = gql`
     ): LaunchConnection!
     launch(id: ID!): Launch
     me: User
-    user(
-      email: String
-      fbId: String
-      id: Int
-    ): User
+    user(email: String, fbId: String, id: Int): User
     users: [User]
   }
 
@@ -30,10 +26,22 @@ const typeDefs = gql`
     cancelTrip(launchId: ID!): TripUpdateResponse!
 
     login(email: String): String # login token
+    addUser(
+      email: String
+      fbId: String
+      name: String
+      password: String
+      salt: String
+    ): User
 
-    addUser(email: String, fbId: String, name: String, password: String, salt: String): User
-
-    updateUser(email: String, id: Int, name: String, password: String, passwordResetTime: String, salt: String): User
+    updateUser(
+      email: String
+      id: Int
+      name: String
+      password: String
+      passwordResetTime: String
+      salt: String
+    ): User
 
     getUser(email: String, fbId: String): User
   }
@@ -89,6 +97,6 @@ const typeDefs = gql`
     SMALL
     LARGE
   }
-`;
+`
 
-module.exports = typeDefs;
+module.exports = typeDefs

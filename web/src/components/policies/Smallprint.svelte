@@ -1,16 +1,16 @@
 <script>
-  import PolicySheets from "./PolicySheets.svelte";
+  import PolicySheets from './PolicySheets.svelte'
 
-  export let key = "continue";
+  export let key = 'continue'
 
-  let activePolicy = "";
+  let activePolicy = ''
 
   /**
    * Set current active policy
    * @param {string} policy Policy to activate
    **/
   function setActivePolicy(policy) {
-    activePolicy = policy;
+    activePolicy = policy
   }
 </script>
 

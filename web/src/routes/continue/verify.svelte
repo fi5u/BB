@@ -1,51 +1,51 @@
 <script context="module">
-  import { getLoadNotification } from "../../utils/notifications";
-  import { protectRoute } from "../../utils/routes";
+  import { getLoadNotification } from '../../utils/notifications'
+  import { protectRoute } from '../../utils/routes'
 
   export async function preload({ query }, { hasPassword, savedEmail, user }) {
     // If no saved email, redirect back to email entry
     if (!savedEmail) {
-      return this.redirect(302, "/continue/email");
+      return this.redirect(302, '/continue/email')
     }
 
-    protectRoute(this, "visitor", user);
+    protectRoute(this, 'visitor', user)
 
     return {
       ...getLoadNotification(query),
       emailAddress: savedEmail,
-      hasFailed: query.success === "0",
-      hasPassword
-    };
+      hasFailed: query.success === '0',
+      hasPassword,
+    }
   }
 </script>
 
 <script>
-  import { goto, stores } from "@sapper/app";
-  import { getContext } from "svelte";
+  import { goto, stores } from '@sapper/app'
+  import { getContext } from 'svelte'
 
-  import { log } from "../../utils/logging";
-  import { showLoadNotification } from "../../utils/notifications";
-  import FacebookAuthButton from "../../components/auth/FacebookAuthButton.svelte";
-  import VerifyForm from "../../components/auth/VerifyForm.svelte";
+  import { log } from '../../utils/logging'
+  import { showLoadNotification } from '../../utils/notifications'
+  import FacebookAuthButton from '../../components/auth/FacebookAuthButton.svelte'
+  import VerifyForm from '../../components/auth/VerifyForm.svelte'
 
-  export let emailAddress;
-  export let hasFailed;
-  export let hasPassword;
-  export let onLoadNotification;
+  export let emailAddress
+  export let hasFailed
+  export let hasPassword
+  export let onLoadNotification
 
-  const { session } = stores();
+  const { session } = stores()
 
-  const notification = getContext("notification");
+  const notification = getContext('notification')
 
-  showLoadNotification(notification, onLoadNotification);
+  showLoadNotification(notification, onLoadNotification)
 
   function submitSuccess(user) {
     if (user) {
-      $session.user = user;
-      return goto("/app");
+      $session.user = user
+      return goto('/app')
     }
 
-    log.error("Could not verify, no user");
+    log.error('Could not verify, no user')
   }
 </script>
 

@@ -1,10 +1,10 @@
 <script>
-  import Button from "./Button.svelte";
-  import Input from "./Input.svelte";
+  import Button from './Button.svelte'
+  import Input from './Input.svelte'
 
-  export let form;
-  export let onsubmit;
-  export let passwordUpdate;
+  export let form
+  export let onsubmit
+  export let passwordUpdate
 </script>
 
 <form on:submit|preventDefault={onsubmit}>
@@ -15,7 +15,8 @@
       <Input
         bind:errorMessage={item.errorMessage}
         bind:value={item.value}
-        {...item} />
+        {...item}
+      />
     {/if}
   {/each}
 </form>

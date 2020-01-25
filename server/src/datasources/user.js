@@ -1,10 +1,10 @@
-const { DataSource } = require('apollo-datasource');
-const isEmail = require('isemail');
+const { DataSource } = require('apollo-datasource')
+const isEmail = require('isemail')
 
 class UserAPI extends DataSource {
   constructor({ store }) {
-    super();
-    this.store = store;
+    super()
+    this.store = store
   }
 
   /**
@@ -14,7 +14,7 @@ class UserAPI extends DataSource {
    * here, so we can know about the user making requests
    */
   initialize(config) {
-    this.context = config.context;
+    this.context = config.context
   }
 
   /**
@@ -24,27 +24,36 @@ class UserAPI extends DataSource {
    */
   async findOrCreateUser({ email: emailArg } = {}) {
     const email =
-      this.context && this.context.user ? this.context.user.email : emailArg;
-    if (!email || !isEmail.validate(email)) return null;
+      this.context && this.context.user ? this.context.user.email : emailArg
+    if (!email || !isEmail.validate(email)) return null
 
-    const users = await this.store.users.findOrCreate({ where: { email } });
-    return users && users[0] ? users[0] : null;
+    const users = await this.store.users.findOrCreate({ where: { email } })
+    return users && users[0] ? users[0] : null
   }
 
   async createUser({ email, fbId, name, password, salt }) {
-    if (email && !password && !salt && !isEmail.validate(email) || (!email && !fbId)) {
+    if (
+      (email && !password && !salt && !isEmail.validate(email)) ||
+      (!email && !fbId)
+    ) {
       console.log('Preventing create user..')
       return null
-    };
+    }
 
     console.log('Creating:')
     console.log({ email, fbId, name, password, salt })
 
-    const user = await this.store.users.create({ email, fbId, name, password, salt })
+    const user = await this.store.users.create({
+      email,
+      fbId,
+      name,
+      password,
+      salt,
+    })
 
     return {
       id: user.id,
-      email
+      email,
     }
   }
 
@@ -57,21 +66,19 @@ class UserAPI extends DataSource {
     try {
       if (email) {
         // Check that email has not already been used in db
-        const emailCheckUser = await this.store.users.findOne(
-          { where: { email } }
-        )
+        const emailCheckUser = await this.store.users.findOne({
+          where: { email },
+        })
 
         if (emailCheckUser) {
           throw new Error('Cannot change email, already exists')
         }
       }
 
-      const user = await this.store.users.findOne(
-        { where: { id } }
-      )
+      const user = await this.store.users.findOne({ where: { id } })
 
       if (!user) {
-        throw Error(`User not updated. id: ${id}`);
+        throw Error(`User not updated. id: ${id}`)
       }
 
       if (email) {
@@ -94,7 +101,7 @@ class UserAPI extends DataSource {
         user.salt = salt
       }
 
-      await user.save();
+      await user.save()
 
       return {
         email: user.email,
@@ -108,56 +115,58 @@ class UserAPI extends DataSource {
   }
 
   async findUser({ email, fbId, id }) {
-    const user = await this.store.users.findOne({ where: { $or: { email, fbId, id } } });
+    const user = await this.store.users.findOne({
+      where: { $or: { email, fbId, id } },
+    })
     return user || null
   }
 
   async bookTrips({ launchIds }) {
-    const userId = this.context.user.id;
-    if (!userId) return;
+    const userId = this.context.user.id
+    if (!userId) return
 
-    let results = [];
+    let results = []
 
     // for each launch id, try to book the trip and add it to the results array
     // if successful
     for (const launchId of launchIds) {
-      const res = await this.bookTrip({ launchId });
-      if (res) results.push(res);
+      const res = await this.bookTrip({ launchId })
+      if (res) results.push(res)
     }
 
-    return results;
+    return results
   }
 
   async bookTrip({ launchId }) {
-    const userId = this.context.user.id;
+    const userId = this.context.user.id
     const res = await this.store.trips.findOrCreate({
       where: { userId, launchId },
-    });
-    return res && res.length ? res[0].get() : false;
+    })
+    return res && res.length ? res[0].get() : false
   }
 
   async cancelTrip({ launchId }) {
-    const userId = this.context.user.id;
-    return !!this.store.trips.destroy({ where: { userId, launchId } });
+    const userId = this.context.user.id
+    return !!this.store.trips.destroy({ where: { userId, launchId } })
   }
 
   async getLaunchIdsByUser() {
-    const userId = this.context.user.id;
+    const userId = this.context.user.id
     const found = await this.store.trips.findAll({
       where: { userId },
-    });
+    })
     return found && found.length
       ? found.map(l => l.dataValues.launchId).filter(l => !!l)
-      : [];
+      : []
   }
 
   async isBookedOnLaunch({ launchId }) {
-    if (!this.context || !this.context.user) return false;
-    const userId = this.context.user.id;
+    if (!this.context || !this.context.user) return false
+    const userId = this.context.user.id
     const found = await this.store.trips.findAll({
       where: { userId, launchId },
-    });
-    return found && found.length > 0;
+    })
+    return found && found.length > 0
   }
 
   async getAllUsers() {
@@ -167,4 +176,4 @@ class UserAPI extends DataSource {
   }
 }
 
-module.exports = UserAPI;
+module.exports = UserAPI

@@ -1,14 +1,14 @@
 <script context="module">
-  import { protectRoute } from "../utils/routes";
+  import { protectRoute } from '../utils/routes'
 
   export function preload(page, { user }) {
-    return protectRoute(this, "visitor", user);
+    return protectRoute(this, 'visitor', user)
   }
 </script>
 
 <script>
-  import Smallprint from "../components/policies/Smallprint.svelte";
-  import FacebookAuthButton from "../components/auth/FacebookAuthButton.svelte";
+  import Smallprint from '../components/policies/Smallprint.svelte'
+  import FacebookAuthButton from '../components/auth/FacebookAuthButton.svelte'
 </script>
 
 <style>

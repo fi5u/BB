@@ -1,8 +1,8 @@
 <script>
-  import { getContext } from "svelte";
+  import { getContext } from 'svelte'
 
-  const userStore = getContext("userStore");
-  const user = $userStore;
+  const userStore = getContext('userStore')
+  const user = $userStore
 </script>
 
 <h2>App</h2>

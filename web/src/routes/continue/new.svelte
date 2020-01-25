@@ -1,30 +1,30 @@
 <script context="module">
-  import { protectRoute } from "../../utils/routes";
+  import { protectRoute } from '../../utils/routes'
 
   export async function preload(page, { savedEmail, user }) {
-    protectRoute(this, "visitor", user);
+    protectRoute(this, 'visitor', user)
 
     return {
-      emailAddress: savedEmail
-    };
+      emailAddress: savedEmail,
+    }
   }
 </script>
 
 <script>
-  import { goto, stores } from "@sapper/app";
+  import { goto, stores } from '@sapper/app'
 
-  import SignupForm from "../../components/auth/SignupForm.svelte";
+  import SignupForm from '../../components/auth/SignupForm.svelte'
 
-  export let emailAddress;
+  export let emailAddress
 
-  const { session } = stores();
+  const { session } = stores()
 
   function submitSuccess(user) {
     if (user) {
-      $session.user = user;
-      goto("/app");
+      $session.user = user
+      goto('/app')
     } else {
-      goto("/continue/new");
+      goto('/continue/new')
     }
   }
 </script>

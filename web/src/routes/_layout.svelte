@@ -1,25 +1,25 @@
 <script>
-  import { setContext } from "svelte";
+  import { setContext } from 'svelte'
 
-  import Notification from "../components/layout/Notification.svelte";
+  import Notification from '../components/layout/Notification.svelte'
 
-  export let segment;
+  export let segment
 
-  let notificationText = "";
-  let notificationLevel = "success";
+  let notificationText = ''
+  let notificationLevel = 'success'
 
-  setContext("notification", {
-    createNotification
-  });
+  setContext('notification', {
+    createNotification,
+  })
 
   /**
    * Create a notification
    * @param {string} text Text to show
    * @param {'error' | 'success'} level Notification level
    **/
-  function createNotification(text, level = "success") {
-    notificationText = text;
-    notificationLevel = level;
+  function createNotification(text, level = 'success') {
+    notificationText = text
+    notificationLevel = level
   }
 
   /**
@@ -27,11 +27,11 @@
    * @param event Click event
    **/
   function mainClick(event) {
-    if (event.target.nodeName === "BUTTON" || !notificationText) {
-      return;
+    if (event.target.nodeName === 'BUTTON' || !notificationText) {
+      return
     }
 
-    notificationText = "";
+    notificationText = ''
   }
 </script>
 

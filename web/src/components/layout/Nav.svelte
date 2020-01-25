@@ -1,6 +1,6 @@
 <script>
-  export let logout;
-  export let segment;
+  export let logout
+  export let segment
 </script>
 
 <style>

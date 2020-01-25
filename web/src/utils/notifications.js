@@ -5,26 +5,26 @@
  * @returns {object} Notification initialization object
  */
 export function getLoadNotification(query) {
-  const notificationsObj = {};
+  const notificationsObj = {}
 
   if (query.e || query.s) {
     const notif = {
-      level: query.e ? "error" : "success"
-    };
+      level: query.e ? 'error' : 'success',
+    }
 
     switch (query.e || query.s) {
       case 'reset':
         notif.text = query.e
-          ? "We could not reset your password with that link, please try again."
-          : "Password successfully reset, please log in."
-        break;
+          ? 'We could not reset your password with that link, please try again.'
+          : 'Password successfully reset, please log in.'
+        break
 
       default:
-        break;
+        break
     }
 
     if (notif.text) {
-      notificationsObj.onLoadNotification = notif;
+      notificationsObj.onLoadNotification = notif
     }
   }
 
@@ -41,6 +41,6 @@ export function showLoadNotification(notification, onLoadNotification) {
     notification.createNotification(
       onLoadNotification.text,
       onLoadNotification.level
-    );
+    )
   }
 }

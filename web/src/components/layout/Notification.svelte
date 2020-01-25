@@ -1,7 +1,7 @@
 <script>
-  import { fly } from "svelte/transition";
+  import { fly } from 'svelte/transition'
 
-  export let text;
+  export let text
 </script>
 
 <style>

@@ -1,9 +1,9 @@
 <script>
-  import { fly } from "svelte/transition";
+  import { fly } from 'svelte/transition'
 
-  export let closeSheet;
-  export let content;
-  export let title;
+  export let closeSheet
+  export let content
+  export let title
 </script>
 
 <style>

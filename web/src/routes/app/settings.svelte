@@ -1,9 +1,9 @@
 <script>
-  import { getContext } from "svelte";
+  import { getContext } from 'svelte'
 
-  import UpdateSettings from "../../components/settings/UpdateSettings.svelte";
+  import UpdateSettings from '../../components/settings/UpdateSettings.svelte'
 
-  const userStore = getContext("userStore");
+  const userStore = getContext('userStore')
 </script>
 
 <h2>Settings</h2>

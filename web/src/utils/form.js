@@ -19,7 +19,7 @@ export function setValueInForm(form, key, updateObject) {
   if (formObjectIndex > -1) {
     form[formObjectIndex] = {
       ...form[formObjectIndex],
-      ...updateObject
+      ...updateObject,
     }
   }
 

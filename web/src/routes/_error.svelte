@@ -1,16 +1,16 @@
 <script context="module">
-  import { log } from "../utils/logging";
+  import { log } from '../utils/logging'
 
   export async function preload({ path }) {
-    log.warn("Error page", { path });
+    log.warn('Error page', { path })
   }
 </script>
 
 <script>
-  export let status;
-  export let error;
+  export let status
+  export let error
 
-  const dev = process.env.NODE_ENV === "development";
+  const dev = process.env.NODE_ENV === 'development'
 </script>
 
 <style>

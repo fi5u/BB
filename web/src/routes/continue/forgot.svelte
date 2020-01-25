@@ -1,28 +1,28 @@
 <script context="module">
-  import { protectRoute } from "../../utils/routes";
+  import { protectRoute } from '../../utils/routes'
 
   export async function preload({ query }, { savedEmail, user }) {
-    protectRoute(this, "visitor", user);
+    protectRoute(this, 'visitor', user)
 
     return {
-      emailAddress: savedEmail
-    };
+      emailAddress: savedEmail,
+    }
   }
 </script>
 
 <script>
-  import { getContext } from "svelte";
+  import { getContext } from 'svelte'
 
-  import ForgotPasswordForm from "../../components/auth/ForgotPasswordForm.svelte";
+  import ForgotPasswordForm from '../../components/auth/ForgotPasswordForm.svelte'
 
-  export let emailAddress;
+  export let emailAddress
 
-  const notification = getContext("notification");
+  const notification = getContext('notification')
 
   function submitSuccess() {
     notification.createNotification(
-      "If you’re registered with us, we’ve sent a password reset link. Please check your inbox."
-    );
+      'If you’re registered with us, we’ve sent a password reset link. Please check your inbox.'
+    )
   }
 </script>
 

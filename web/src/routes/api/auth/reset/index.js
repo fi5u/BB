@@ -1,4 +1,8 @@
-import { generatePasswordHash, getUser, updateUser } from '../../../../utils/auth'
+import {
+  generatePasswordHash,
+  getUser,
+  updateUser,
+} from '../../../../utils/auth'
 import { log } from '../../../../utils/logging'
 
 export async function post(req, res) {
@@ -38,9 +42,13 @@ export async function post(req, res) {
     }
 
     if (errors.length) {
-      log.info('Password reset form errors', {
-        errors,
-      }, userId)
+      log.info(
+        'Password reset form errors',
+        {
+          errors,
+        },
+        userId
+      )
 
       throw new Error('Form validation errors')
     }
@@ -48,13 +56,19 @@ export async function post(req, res) {
     const userRecord = await getUser({ id: parseInt(userId) })
 
     if (!userRecord.id) {
-      setError('notification', 'Sorry but we could not reset the password at this time, please request a new reset link.')
+      setError(
+        'notification',
+        'Sorry but we could not reset the password at this time, please request a new reset link.'
+      )
 
       throw new Error('No user')
     }
 
     if (!userRecord.passwordResetTime) {
-      setError('notification', 'Sorry but we could not reset the password at this time, please request a new reset link.')
+      setError(
+        'notification',
+        'Sorry but we could not reset the password at this time, please request a new reset link.'
+      )
 
       throw new Error('Password reset not requested')
     }
@@ -62,7 +76,10 @@ export async function post(req, res) {
     const resetTime = parseInt(userRecord.passwordResetTime)
 
     if (isNaN(resetTime)) {
-      setError('notification', 'Sorry but we could not reset the password at this time, please request a new reset link.')
+      setError(
+        'notification',
+        'Sorry but we could not reset the password at this time, please request a new reset link.'
+      )
 
       throw new Error('Reset time incorrectly formed')
     }
@@ -71,7 +88,10 @@ export async function post(req, res) {
 
     // Do not permit if greater than one hour (+ 30 mins buffer)
     if (elapsedMs / 1000 / 60 / 60 > 1.5) {
-      setError('notification', 'Password has not been reset since the link has expired. Please request a new password reset link.')
+      setError(
+        'notification',
+        'Password has not been reset since the link has expired. Please request a new password reset link.'
+      )
 
       throw new Error('Reset permission expired')
     }
@@ -81,20 +101,20 @@ export async function post(req, res) {
     // Go ahead and reset password
     const {
       generatedPasswordHashed,
-      generatedSalt
-    } = await generatePasswordHash(passwordNew);
+      generatedSalt,
+    } = await generatePasswordHash(passwordNew)
 
     const { user: updatedUser, error } = await updateUser({
       id: parseInt(userId),
       password: generatedPasswordHashed,
       passwordResetTime: '',
       salt: generatedSalt,
-    });
+    })
 
     if (updatedUser) {
       req.session.hasPassword = true
 
-      res.setHeader('Content-Type', 'application/json');
+      res.setHeader('Content-Type', 'application/json')
       res.end(JSON.stringify({}))
     } else {
       log.info('Password reset', { error: 'Could not update user' }, userId)
@@ -104,10 +124,12 @@ export async function post(req, res) {
   } catch (error) {
     log.info('Password reset', { error: error.message }, userId)
 
-    res.setHeader('Content-Type', 'application/json');
+    res.setHeader('Content-Type', 'application/json')
 
-    return res.end(JSON.stringify({
-      errors
-    }));
+    return res.end(
+      JSON.stringify({
+        errors,
+      })
+    )
   }
 }

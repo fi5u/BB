@@ -8,7 +8,7 @@ import { getUser, updateUser } from '../../../../utils/auth'
  */
 export async function get(req, res) {
   try {
-    const { email: encodedEmail } = req.params;
+    const { email: encodedEmail } = req.params
 
     if (!encodedEmail) {
       log.info('Password reset request')
@@ -35,11 +35,13 @@ export async function get(req, res) {
         email,
       })
 
-      res.setHeader('Content-Type', 'application/json');
+      res.setHeader('Content-Type', 'application/json')
 
-      return res.end(JSON.stringify({
-        errors
-      }));
+      return res.end(
+        JSON.stringify({
+          errors,
+        })
+      )
     }
 
     const userRecord = await getUser({ email })
@@ -56,16 +58,16 @@ export async function get(req, res) {
       send({
         subject: 'BB – password reset link',
         text: `You requested a password reset link. Please visit the following link to reset your password: http://localhost:3000/continue/reset/${resetId}. This link will expire in 1 hour.`,
-        to: userRecord.email
+        to: userRecord.email,
       })
     } else {
       log.info('Password reset user not registered')
     }
 
-    res.end(JSON.stringify({}));
+    res.end(JSON.stringify({}))
   } catch (error) {
     log.error('Forgot password', { error: error.message })
 
-    res.end(JSON.stringify({}));
+    res.end(JSON.stringify({}))
   }
 }

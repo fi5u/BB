@@ -1,15 +1,15 @@
 <script>
-  import { getClient, mutate, restore } from "svelte-apollo";
-  import gql from "graphql-tag";
+  import { getClient, mutate, restore } from 'svelte-apollo'
+  import gql from 'graphql-tag'
 
-  export let addUser;
-  let email = "";
+  export let addUser
+  let email = ''
 
   function _addUser(e) {
-    e.preventDefault();
+    e.preventDefault()
 
-    addUser(email);
-    email = "";
+    addUser(email)
+    email = ''
   }
 </script>
 

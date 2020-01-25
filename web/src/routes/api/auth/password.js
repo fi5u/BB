@@ -6,29 +6,33 @@ import { log } from '../../../utils/logging'
 export async function get(req, res) {
   if (!req.headers.password) {
     log.error('Generate password', {
-      error: 'No authorization headers'
+      error: 'No authorization headers',
     })
 
-    return res.end(JSON.stringify({
-      generatedPasswordHashed: null,
-      generatedSalt: null
-    }));
+    return res.end(
+      JSON.stringify({
+        generatedPasswordHashed: null,
+        generatedSalt: null,
+      })
+    )
   }
 
-  const password = Buffer.from(req.headers.password, 'base64').toString('ascii');
+  const password = Buffer.from(req.headers.password, 'base64').toString('ascii')
 
   const generatedSalt = await crypto.randomBytes(24).toString('hex')
 
   const generatedPasswordHashed = await crypto
-    .createHash("sha256")
+    .createHash('sha256')
     .update(password)
     .update(generatedSalt)
-    .digest("hex")
+    .digest('hex')
 
-  res.end(JSON.stringify({
-    generatedPasswordHashed,
-    generatedSalt,
-  }));
+  res.end(
+    JSON.stringify({
+      generatedPasswordHashed,
+      generatedSalt,
+    })
+  )
 }
 
 /**
@@ -43,21 +47,25 @@ export async function post(req, res) {
     }
 
     const passwordHashed = await crypto
-      .createHash("sha256")
+      .createHash('sha256')
       .update(passwordInput)
       .update(salt)
-      .digest("hex")
+      .digest('hex')
 
-    res.end(JSON.stringify({
-      isVerified: passwordHashed === userRecordPassword,
-    }));
+    res.end(
+      JSON.stringify({
+        isVerified: passwordHashed === userRecordPassword,
+      })
+    )
   } catch (error) {
     log.error('Password verify', {
       error: error.message,
     })
 
-    res.end(JSON.stringify({
-      isVerified: false,
-    }));
+    res.end(
+      JSON.stringify({
+        isVerified: false,
+      })
+    )
   }
 }

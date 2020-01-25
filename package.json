@@ -1,0 +1,20 @@
+{
+  "name": "bb",
+  "version": "0.0.0",
+  "repository": "https://github.com/fi5u/BB.git",
+  "author": "Tommy Fisher <thomasbfisher@gmail.com>",
+  "dependencies": {
+    "svelte": "^3.17.3"
+  },
+  "devDependencies": {
+    "husky": "^4.2.1",
+    "prettier": "^1.19.1",
+    "prettier-plugin-svelte": "^0.7.0",
+    "pretty-quick": "^2.0.1"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "pretty-quick --staged"
+    }
+  }
+}
