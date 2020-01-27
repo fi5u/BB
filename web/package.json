@@ -1,7 +1,7 @@
 {
-  "name": "TODO",
-  "description": "TODO",
-  "version": "0.0.1",
+  "name": "bb-web",
+  "version": "0.0.0",
+  "main": "src/server.js",
   "scripts": {
     "dev": "sapper dev",
     "build": "sapper build --legacy",

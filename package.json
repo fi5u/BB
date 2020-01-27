@@ -2,7 +2,7 @@
   "name": "bb",
   "version": "0.0.0",
   "repository": "https://github.com/fi5u/BB.git",
-  "author": "Tommy Fisher <thomasbfisher@gmail.com>",
+  "author": "Thomas Fisher <thomasbfisher@yahoo.com>",
   "dependencies": {
     "svelte": "^3.17.3"
   },
