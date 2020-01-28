@@ -7,6 +7,7 @@ import sessionFileStore from 'session-file-store'
 import * as sapper from '@sapper/server'
 import * as crypto from 'crypto'
 import { log } from './server/middlewares/logging'
+import { routeLog } from './server/middlewares/route-logging'
 
 import { config } from 'dotenv'
 config()
@@ -35,6 +36,8 @@ app.use(
     }),
   })
 )
+
+app.use(routeLog)
 
 app.post('/api/logging', log)
 
