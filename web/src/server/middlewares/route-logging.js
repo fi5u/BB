@@ -8,10 +8,11 @@ module.exports = {
     const url = req.url
 
     if (
-      url.indexOf('.') > -1 &&
-      (url.lastIndexOf('.') === url.length - 3 ||
-        url.lastIndexOf('.') === url.length - 4 ||
-        url.lastIndexOf('.') === url.length - 5)
+      url.indexOf('/api') === 0 ||
+      (url.indexOf('.') > -1 &&
+        (url.lastIndexOf('.') === url.length - 3 ||
+          url.lastIndexOf('.') === url.length - 4 ||
+          url.lastIndexOf('.') === url.length - 5))
     ) {
       // Do not log file access
       return next()
