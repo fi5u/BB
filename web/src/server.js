@@ -6,7 +6,7 @@ import session from 'express-session'
 import sessionFileStore from 'session-file-store'
 import * as sapper from '@sapper/server'
 import * as crypto from 'crypto'
-import { log } from './server/middlewares/logging'
+import { log } from './server/endpoints/logging'
 import { routeLog } from './server/middlewares/route-logging'
 
 import { config } from 'dotenv'
