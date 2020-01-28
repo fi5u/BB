@@ -4,7 +4,7 @@
 - [x] Handle login with email when has FB account and no password
 - [x] Forgot password link
 - [x] Prettify
-- [ ] Log page views
+- [x] Log page views
 - [ ] Log from server directory
 - [ ] Config file
 - [ ] Clean up server dir
