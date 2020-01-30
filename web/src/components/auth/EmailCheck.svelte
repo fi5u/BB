@@ -45,7 +45,7 @@
     submittedForm({
       email: emailCheckForm[0].value,
       hasPassword: user.hasPassword,
-      userType: user ? 'current' : 'new',
+      userType: user && user.id ? 'current' : 'new',
     })
   }
 </script>
