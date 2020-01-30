@@ -16,6 +16,7 @@
   import ForgotPasswordForm from '../../components/auth/ForgotPasswordForm.svelte'
 
   export let emailAddress
+  export let segment = null
 
   const notification = getContext('notification')
 

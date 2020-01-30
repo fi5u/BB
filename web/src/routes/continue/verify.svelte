@@ -31,7 +31,8 @@
   export let emailAddress
   export let hasFailed
   export let hasPassword
-  export let onLoadNotification
+  export let onLoadNotification = null
+  export let segment = null
 
   const { session } = stores()
 

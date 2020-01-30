@@ -5,7 +5,7 @@
 - [x] Forgot password link
 - [x] Prettify
 - [x] Log page views
-- [ ] Fix unknown props warnings
+- [x] Fix `unknown props` warnings
 - [ ] Clean up server dir
 - [ ] Log from server directory
 - [ ] Config file

@@ -16,7 +16,8 @@
   import { showLoadNotification } from '../../utils/notifications'
   import EmailCheck from '../../components/auth/EmailCheck.svelte'
 
-  export let onLoadNotification
+  export let onLoadNotification = null
+  export let segment = null
 
   const { session } = stores()
   const notification = getContext('notification')

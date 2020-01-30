@@ -3,8 +3,6 @@
 
   import Notification from '../components/layout/Notification.svelte'
 
-  export let segment
-
   let notificationText = ''
   let notificationLevel = 'success'
 

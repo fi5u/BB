@@ -268,4 +268,4 @@
   }
 </script>
 
-<Form bind:form={updateSettingsForm} onsubmit={submit} passwordUpdate />
+<Form bind:form={updateSettingsForm} onsubmit={submit} />
