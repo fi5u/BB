@@ -4,6 +4,7 @@ import commonjs from 'rollup-plugin-commonjs'
 import svelte from 'rollup-plugin-svelte'
 import babel from 'rollup-plugin-babel'
 import { terser } from 'rollup-plugin-terser'
+import nodePolyfills from 'rollup-plugin-node-polyfills'
 import config from 'sapper/config/rollup.js'
 import pkg from './package.json'
 
@@ -35,8 +36,10 @@ export default {
       resolve({
         browser: true,
         dedupe,
+        preferBuiltins: true,
       }),
       commonjs(),
+      nodePolyfills(),
 
       legacy &&
         babel({
