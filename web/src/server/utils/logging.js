@@ -26,7 +26,7 @@ export function serverLogging(req, params) {
     console.log(logString)
   } else {
     const stream = fs.createWriteStream(
-      __dirname + '/../../../logs/debug.log',
+      __dirname + '/../../../../logs/debug.log',
       { flags: 'a' }
     )
     stream.write(logString + '\n')
