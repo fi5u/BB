@@ -1,6 +1,5 @@
 import fs from 'fs'
 
-// TODO: go back and remove res from all serverLog calls
 export function serverLogging(req, params) {
   const { extra = {}, level, message, uId } = params || req.body
   const isDev = process.env.NODE_ENV === 'development'
