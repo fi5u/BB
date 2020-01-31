@@ -44,6 +44,7 @@
 
     submittedForm({
       email: emailCheckForm[0].value,
+      hasFBLogin: user.hasFBLogin,
       hasPassword: user.hasPassword,
       userType: user && user.id ? 'current' : 'new',
     })

@@ -39,11 +39,17 @@ export async function get(req, res) {
     const userRecord = await getUser({ email })
 
     // Only return email, id and hasPassword
-    const { email: emailRecord, id, password } = userRecord
-    const user = { email: emailRecord, hasPassword: !!password, id }
+    const { email: emailRecord, fbId, id, password } = userRecord
+    const user = {
+      email: emailRecord,
+      hasFBLogin: !!fbId,
+      hasPassword: !!password,
+      id,
+    }
 
     // Save has password to session
     req.session.hasPassword = !!password
+    req.session.hasFBLogin = !!fbId
 
     // Note: do not save this user to session
     // This is simply a check

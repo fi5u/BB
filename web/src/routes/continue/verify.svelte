@@ -2,7 +2,10 @@
   import { getLoadNotification } from '../../utils/notifications'
   import { protectRoute } from '../../utils/routes'
 
-  export async function preload({ query }, { hasPassword, savedEmail, user }) {
+  export async function preload(
+    { query },
+    { hasFBLogin, hasPassword, savedEmail, user }
+  ) {
     // If no saved email, redirect back to email entry
     if (!savedEmail) {
       return this.redirect(302, '/continue/email')
@@ -14,6 +17,7 @@
       ...getLoadNotification(query),
       emailAddress: savedEmail,
       hasFailed: query.success === '0',
+      hasFBLogin,
       hasPassword,
     }
   }
@@ -30,6 +34,7 @@
 
   export let emailAddress
   export let hasFailed
+  export let hasFBLogin
   export let hasPassword
   export let onLoadNotification = null
   export let segment = null
@@ -64,6 +69,11 @@
   <VerifyForm {emailAddress} {submitSuccess} />
 
   <a href="/continue/forgot">Forgot password</a>
+
+  {#if hasFBLogin}
+    <p>Or log in with Facebook</p>
+    <FacebookAuthButton />
+  {/if}
 {:else}
   <p>Log in with Facebook</p>
   <FacebookAuthButton />

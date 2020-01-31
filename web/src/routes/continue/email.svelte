@@ -24,12 +24,13 @@
 
   showLoadNotification(notification, onLoadNotification)
 
-  function submittedForm({ email, hasPassword, userType }) {
+  function submittedForm({ email, hasFBLogin, hasPassword, userType }) {
     $session.savedEmail = email
 
     if (userType === 'current') {
       // Has password if signed up with email
       $session.hasPassword = hasPassword
+      $session.hasFBLogin = hasFBLogin
     }
 
     if (userType === 'new') {

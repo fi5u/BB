@@ -46,6 +46,7 @@ app.use(
   sirv('static', { dev }),
   sapper.middleware({
     session: req => ({
+      hasFBLogin: req.session && req.session.hasFBLogin,
       hasPassword: req.session && req.session.hasPassword,
       savedEmail: req.session && req.session.savedEmail,
       user: req.session && req.session.user,
