@@ -9,6 +9,8 @@ const UserAPI = require('./datasources/user')
 
 const internalEngineDemo = require('./engine-demo')
 
+const { log } = require('./utils/logging')
+
 // creates a sequelize connection once. NOT for every request
 const store = createStore()
 
@@ -47,9 +49,9 @@ const server = new ApolloServer({
 // Start our server if we're not in a test env.
 // if we're in a test env, we'll manually start it in a test
 if (process.env.NODE_ENV !== 'test')
-  server
-    .listen({ port: 4000 })
-    .then(({ url }) => console.log(`🚀 app running at ${url}`))
+  server.listen({ port: 4000 }).then(({ url }) => {
+    log.info(`App running at ${url}`)
+  })
 
 // export all the important pieces for integration/e2e tests to use
 module.exports = {

@@ -1,5 +1,6 @@
 const { DataSource } = require('apollo-datasource')
 const isEmail = require('isemail')
+const { log } = require('../utils/logging')
 
 class UserAPI extends DataSource {
   constructor({ store }) {
@@ -25,17 +26,53 @@ class UserAPI extends DataSource {
   async findOrCreateUser({ email: emailArg } = {}) {
     const email =
       this.context && this.context.user ? this.context.user.email : emailArg
-    if (!email || !isEmail.validate(email)) return null
+
+    log.info('Find or create user', { email })
+
+    if (!email || !isEmail.validate(email)) {
+      if (!email) {
+        log.info('Failed to find or create user', {
+          error: 'No email passed or in context',
+        })
+      } else {
+        log.info('Failed to find or create user', {
+          email,
+          error: 'Invalid email',
+        })
+      }
+
+      return null
+    }
 
     const users = await this.store.users.findOrCreate({ where: { email } })
-    return users && users[0] ? users[0] : null
+
+    if (users && users[0]) {
+      log.info('Found or created user', { email }, users[0].id)
+
+      return users[0]
+    } else {
+      log.info('Failed to find or create user', {
+        email,
+        error: 'Unknown error',
+      })
+
+      return null
+    }
   }
 
   async createUser({ email, fbId, name, password, salt }) {
+    log.info('Create user', { email, fbId, name })
+
     if (
       (email && !password && !salt && !isEmail.validate(email)) ||
       (!email && !fbId)
     ) {
+      if (email && !password && !salt && !isEmail.validate(email)) {
+        log.info('Failed to create user', { email, error: 'Invalid email' })
+      } else {
+        log.info('Failed to create user', { error: 'No email or FBID passed' })
+      }
+
       return null
     }
 
@@ -47,6 +84,15 @@ class UserAPI extends DataSource {
       salt,
     })
 
+    log.info(
+      'Created user',
+      {
+        id: user.id,
+        email,
+      },
+      user.id
+    )
+
     return {
       id: user.id,
       email,
@@ -54,70 +100,85 @@ class UserAPI extends DataSource {
   }
 
   async updateUser({ email, id, name, password, passwordResetTime, salt }) {
+    log.info('Updating user', { email, id, name, passwordResetTime, salt })
+
     if (!id) {
-      console.log('Preventing update user..')
+      log.info('Failed to update user', { error: 'No id passed', email })
+
       return null
     }
 
-    try {
-      if (email) {
-        // Check that email has not already been used in db
-        const emailCheckUser = await this.store.users.findOne({
-          where: { email },
-        })
+    if (email) {
+      // Check that email has not already been used in db
+      const emailCheckUser = await this.store.users.findOne({
+        where: { email },
+      })
 
-        if (emailCheckUser) {
-          throw new Error('Cannot change email, already exists')
-        }
+      if (emailCheckUser) {
+        log.info(
+          'Failed to update email',
+          { email, error: 'Email already exists' },
+          id
+        )
+
+        return null
       }
+    }
 
-      const user = await this.store.users.findOne({ where: { id } })
+    const user = await this.store.users.findOne({ where: { id } })
 
-      if (!user) {
-        throw Error(`User not updated. id: ${id}`)
-      }
+    if (!user) {
+      log.error('Failed to update user', { email, error: 'No user found' }, id)
 
-      if (email) {
-        user.email = email
-      }
+      return null
+    }
 
-      if (name) {
-        user.name = name
-      }
+    if (email) {
+      user.email = email
+    }
 
-      if (password) {
-        user.password = password
-      }
+    if (name) {
+      user.name = name
+    }
 
-      if (passwordResetTime || passwordResetTime === '') {
-        user.passwordResetTime = passwordResetTime
-      }
+    if (password) {
+      user.password = password
+    }
 
-      if (salt) {
-        user.salt = salt
-      }
+    if (passwordResetTime || passwordResetTime === '') {
+      user.passwordResetTime = passwordResetTime
+    }
 
-      await user.save()
+    if (salt) {
+      user.salt = salt
+    }
 
-      return {
-        email: user.email,
-        id: user.id,
-        name: user.name,
-      }
-    } catch (error) {
-      console.log('Error updating values:')
-      console.log(error.message)
+    await user.save()
+
+    log.info('Updated user', { email, id, name }, id)
+
+    return {
+      email: user.email,
+      id: user.id,
+      name: user.name,
     }
   }
 
   async findUser({ email, fbId, id }) {
+    log.info('Finding user', { email, fbId, id })
+
     const user = await this.store.users.findOne({
       where: { $or: { email, fbId, id } },
     })
+
+    log.info(!user ? 'No user found' : 'Found user', { email, fbId, id })
+
     return user || null
   }
 
   async getAllUsers() {
+    log.info('Getting all users')
+
     const users = await this.store.users.findAll()
 
     return users

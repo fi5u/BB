@@ -6,7 +6,7 @@
 - [x] Prettify
 - [x] Log page views
 - [x] Fix `unknown props` warnings
-- [ ] Clean up server dir
+- [x] Clean up server dir
 - [ ] Log from server directory
 - [ ] Config file
 - [ ] Theming
