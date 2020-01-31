@@ -7,7 +7,7 @@
 - [x] Log page views
 - [x] Fix `unknown props` warnings
 - [x] Clean up server dir
-- [ ] Log from server directory
+- [x] Log from server directory
 - [ ] Config file
 - [ ] Theming
 - [ ] Localization

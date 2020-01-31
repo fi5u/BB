@@ -42,6 +42,9 @@ export async function get(req, res) {
     const { email: emailRecord, id, password } = userRecord
     const user = { email: emailRecord, hasPassword: !!password, id }
 
+    // Save has password to session
+    req.session.hasPassword = !!password
+
     // Note: do not save this user to session
     // This is simply a check
 
