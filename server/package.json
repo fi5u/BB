@@ -8,7 +8,6 @@
     "start:ci": "node src/index.js"
   },
   "author": "",
-  "license": "ISC",
   "dependencies": {
     "apollo-datasource": "^0.1.3",
     "apollo-datasource-rest": "^0.1.5",

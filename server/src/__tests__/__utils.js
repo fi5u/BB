@@ -10,7 +10,6 @@ const {
   typeDefs,
   resolvers,
   ApolloServer,
-  LaunchAPI,
   UserAPI,
   store,
 } = require('../')
@@ -20,16 +19,15 @@ const {
  */
 const constructTestServer = ({ context = defaultContext } = {}) => {
   const userAPI = new UserAPI({ store })
-  const launchAPI = new LaunchAPI()
 
   const server = new ApolloServer({
     typeDefs,
     resolvers,
-    dataSources: () => ({ userAPI, launchAPI }),
+    dataSources: () => ({ userAPI }),
     context,
   })
 
-  return { server, userAPI, launchAPI }
+  return { server, userAPI }
 }
 
 module.exports.constructTestServer = constructTestServer
