@@ -1,4 +1,5 @@
 import { serverLogging } from '../server/utils/logging'
+import { service } from '../../../config'
 
 const levels = ['info', 'error', 'warn']
 
@@ -23,7 +24,7 @@ export const log = levels.reduce((acc, cur) => {
  * @param {object} params.extra Extra data to log
  */
 async function logging(params) {
-  await fetch('http://localhost:3000/api/logging', {
+  await fetch(`${service.url}/api/logging`, {
     body: JSON.stringify(params),
     credentials: 'include',
     headers: {

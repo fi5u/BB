@@ -1,13 +1,12 @@
 <script>
-  import asyncScriptLoader from 'async-script-loader'
   import { onMount, createEventDispatcher } from 'svelte'
+  import asyncScriptLoader from 'async-script-loader'
+
   import { log } from '../../utils/logging'
   import { authSuccess } from '../../utils/auth'
+  import { externalServices } from '../../../../config'
 
   const dispatch = createEventDispatcher()
-
-  const appId = '565561970918201'
-  const version = 'v4.0'
 
   let disabled = true
   export let text = 'Continue with Facebook'
@@ -27,10 +26,10 @@
     const FB = window['FB']
 
     FB.init({
-      appId: appId,
+      appId: externalServices.facebook.appId,
       cookie: true,
+      version: externalServices.facebook.version,
       xfbml: false,
-      version: version,
     })
 
     disabled = false

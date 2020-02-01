@@ -1,9 +1,9 @@
 <script>
-  import { name } from '../../../../config'
+  import { service } from '../../../../config'
 
   export let title = ''
 </script>
 
 <svelte:head>
-  <title>{title ? `${title} • ` : ''}{name}</title>
+  <title>{title ? `${title} • ` : ''}{service.name}</title>
 </svelte:head>

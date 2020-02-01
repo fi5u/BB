@@ -2,6 +2,7 @@ import * as emailValidator from 'email-validator'
 import { log } from '../../../../utils/logging'
 import { send } from '../../_email/send-email'
 import { getUser, updateUser } from '../../../../utils/auth'
+import { service } from '../../../../../../config'
 
 /**
  * Request a password reset link
@@ -56,8 +57,8 @@ export async function get(req, res) {
 
       // Send email
       send({
-        subject: 'BB – password reset link',
-        text: `You requested a password reset link. Please visit the following link to reset your password: http://localhost:3000/continue/reset/${resetId}. This link will expire in 1 hour.`,
+        subject: `${service.name} – password reset link`,
+        text: `You requested a password reset link. Please visit the following link to reset your password: ${service.url}/continue/reset/${resetId}. This link will expire in 1 hour.`,
         to: userRecord.email,
       })
     } else {

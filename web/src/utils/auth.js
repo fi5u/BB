@@ -1,4 +1,5 @@
 import { log } from './logging'
+import { service } from '../../../config'
 
 /**
  * Get user data
@@ -220,7 +221,7 @@ export async function generatePasswordHash(password) {
 
   const base64Password = new Buffer(password).toString('base64')
 
-  const response = await fetch('http://localhost:3000/api/auth/password', {
+  const response = await fetch(`${service.url}/api/auth/password`, {
     method: 'GET',
     headers: {
       Accept: 'application/json',
@@ -244,7 +245,7 @@ export async function generatePasswordHash(password) {
  * @param {string} salt Salt to verify with
  */
 export async function verifyPassword(passwordInput, userRecordPassword, salt) {
-  const response = await fetch('http://localhost:3000/api/auth/password', {
+  const response = await fetch(`${service.url}/api/auth/password`, {
     body: JSON.stringify({ passwordInput, userRecordPassword, salt }),
     headers: {
       Accept: 'application/json',
