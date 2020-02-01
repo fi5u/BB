@@ -27,6 +27,7 @@
   import { goto, stores } from '@sapper/app'
   import { getContext } from 'svelte'
 
+  import PageTitle from '../../components/head/PageTitle.svelte'
   import { log } from '../../utils/logging'
   import { showLoadNotification } from '../../utils/notifications'
   import FacebookAuthButton from '../../components/auth/FacebookAuthButton.svelte'
@@ -55,9 +56,7 @@
   }
 </script>
 
-<svelte:head>
-  <title>Log in • BB</title>
-</svelte:head>
+<PageTitle title="Log in" />
 
 <p>
   {hasFailed ? 'Oops, incorrect login details, please try again' : 'Welcome back!'}

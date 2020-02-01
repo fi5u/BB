@@ -67,6 +67,7 @@
 <script>
   import { goto, stores } from '@sapper/app'
 
+  import PageTitle from '../../../components/head/PageTitle.svelte'
   import ResetPasswordForm from '../../../components/auth/ResetPasswordForm.svelte'
 
   export let email
@@ -89,8 +90,6 @@
   }
 </script>
 
-<svelte:head>
-  <title>Reset password • BB</title>
-</svelte:head>
+<PageTitle title="Reset password" />
 
 <ResetPasswordForm {submitSuccess} {userId} />

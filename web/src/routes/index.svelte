@@ -7,6 +7,8 @@
 </script>
 
 <script>
+  import { name } from '../../../config'
+  import PageTitle from '../components/head/PageTitle.svelte'
   import Smallprint from '../components/policies/Smallprint.svelte'
   import FacebookAuthButton from '../components/auth/FacebookAuthButton.svelte'
 </script>
@@ -42,15 +44,13 @@
   }
 </style>
 
-<svelte:head>
-  <title>BB</title>
-</svelte:head>
+<PageTitle />
 
 <figure>
   <img alt="BB" height="400" src="https://placehold.it/600" width="400" />
 </figure>
 
-<h1>BB</h1>
+<h1>{name}</h1>
 
 <FacebookAuthButton />
 

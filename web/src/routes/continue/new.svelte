@@ -13,6 +13,7 @@
 <script>
   import { goto, stores } from '@sapper/app'
 
+  import PageTitle from '../../components/head/PageTitle.svelte'
   import SignupForm from '../../components/auth/SignupForm.svelte'
 
   export let emailAddress
@@ -29,9 +30,7 @@
   }
 </script>
 
-<svelte:head>
-  <title>Sign up • BB</title>
-</svelte:head>
+<PageTitle title="Sign up" />
 
 <p>Welcome! Let's get a few more details from you.</p>
 <SignupForm {emailAddress} {submitSuccess} />

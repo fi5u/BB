@@ -13,6 +13,7 @@
   import { goto, stores } from '@sapper/app'
   import { getContext } from 'svelte'
 
+  import PageTitle from '../../components/head/PageTitle.svelte'
   import { showLoadNotification } from '../../utils/notifications'
   import EmailCheck from '../../components/auth/EmailCheck.svelte'
 
@@ -41,9 +42,7 @@
   }
 </script>
 
-<svelte:head>
-  <title>Continue with email • BB</title>
-</svelte:head>
+<PageTitle title="Continue with email" />
 
 <p>Enter your email address to get going</p>
 
