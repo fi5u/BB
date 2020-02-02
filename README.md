@@ -8,9 +8,9 @@
 - [x] Fix `unknown props` warnings
 - [x] Clean up server dir
 - [x] Log from server directory
-- [ ] Config file
-- [ ] Theming
+- [x] Config file
 - [ ] Localization
+- [ ] Theming
 - [ ] Tests
 - [ ] Upload to remote location
 - [ ] Analytics
