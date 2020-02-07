@@ -7,6 +7,8 @@
 </script>
 
 <script>
+  import { _ } from 'svelte-i18n'
+
   import { service } from '../../../config'
   import PageTitle from '../components/head/PageTitle.svelte'
   import Smallprint from '../components/policies/Smallprint.svelte'
@@ -54,6 +56,6 @@
 
 <FacebookAuthButton />
 
-<a href="/continue/email">Continue with email</a>
+<a href="/continue/email">{$_('link_continue_email')}</a>
 
 <Smallprint key="continue" />

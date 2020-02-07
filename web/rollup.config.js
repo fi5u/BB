@@ -5,6 +5,7 @@ import svelte from 'rollup-plugin-svelte'
 import babel from 'rollup-plugin-babel'
 import { terser } from 'rollup-plugin-terser'
 import nodePolyfills from 'rollup-plugin-node-polyfills'
+import json from '@rollup/plugin-json'
 import config from 'sapper/config/rollup.js'
 import pkg from './package.json'
 
@@ -13,6 +14,7 @@ const dev = mode === 'development'
 const legacy = !!process.env.SAPPER_LEGACY_BUILD
 
 const onwarn = (warning, onwarn) =>
+  warning.code === 'THIS_IS_UNDEFINED' ||
   (warning.code === 'CIRCULAR_DEPENDENCY' &&
     /[/\\]@sapper[/\\]/.test(warning.message)) ||
   onwarn(warning)
@@ -40,6 +42,7 @@ export default {
       }),
       commonjs(),
       nodePolyfills(),
+      json(),
 
       legacy &&
         babel({
@@ -90,6 +93,7 @@ export default {
         dedupe,
       }),
       commonjs(),
+      json(),
     ],
     external: Object.keys(pkg.dependencies).concat(
       require('module').builtinModules ||
@@ -110,6 +114,7 @@ export default {
       }),
       commonjs(),
       !dev && terser(),
+      json(),
     ],
 
     onwarn,

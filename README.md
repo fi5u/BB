@@ -9,7 +9,8 @@
 - [x] Clean up server dir
 - [x] Log from server directory
 - [x] Config file
-- [ ] Localization
+- [x] Localization
+- [ ] Allow lang override
 - [ ] Theming
 - [ ] Tests
 - [ ] Upload to remote location

@@ -12,6 +12,7 @@
 <script>
   import { goto, stores } from '@sapper/app'
   import { getContext } from 'svelte'
+  import { _ } from 'svelte-i18n'
 
   import PageTitle from '../../components/head/PageTitle.svelte'
   import { showLoadNotification } from '../../utils/notifications'
@@ -44,6 +45,6 @@
 
 <PageTitle title="Continue with email" />
 
-<p>Enter your email address to get going</p>
+<p>{$_('label_continue_email')}</p>
 
 <EmailCheck {submittedForm} />

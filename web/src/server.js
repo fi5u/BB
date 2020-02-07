@@ -6,8 +6,11 @@ import session from 'express-session'
 import sessionFileStore from 'session-file-store'
 import * as sapper from '@sapper/server'
 import * as crypto from 'crypto'
+
 import { log } from './server/endpoints/logging'
+
 import { routeLog } from './server/middlewares/route-logging'
+import { determineLang, registerLang } from './server/middlewares/i18n'
 
 import { config } from 'dotenv'
 config()
@@ -20,6 +23,10 @@ const FileStore = sessionFileStore(session)
 global.crypto = crypto // TODO: do we need this?
 
 const app = polka()
+
+// Set up i18n
+app.use(determineLang)
+app.use(registerLang)
 
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
