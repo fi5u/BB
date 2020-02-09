@@ -8,7 +8,7 @@
   div {
     background-color: #fff;
     padding: 36px;
-    position: absolute;
+    position: fixed;
     text-align: center;
     top: 0;
     left: 0;

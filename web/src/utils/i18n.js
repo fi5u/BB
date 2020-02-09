@@ -1,8 +1,11 @@
 import { init, register } from 'svelte-i18n'
 import locale from 'locale'
+import { languages } from '../../../config'
 
-const supportedLanguages = ['en_GB', 'en_US', 'fi']
-export const defaultLanguage = 'en_US'
+const supportedLanguages = languages.supported.map(l =>
+  l.code.replace('-', '_')
+)
+export const defaultLanguage = languages.default.replace('-', '_')
 
 /**
  * Determine the best language for the user out of the supported languages
@@ -20,12 +23,12 @@ export function getBestFitLang(acceptLanguage) {
  * @param {string} staticPath Path to static dir
  */
 export function registerLanguages(userLang, staticPath) {
-  // const defaultLangCode = defaultLanguage.replace('_', '-')
   const localeCode = userLang.replace('_', '-')
 
-  register('en-GB', () => import(`${staticPath}/lang/en-GB.json`))
-  register('en-US', () => import(`${staticPath}/lang/en-US.json`))
-  register('fi', () => import(`${staticPath}/lang/fi.json`))
+  // Register each supported language
+  languages.supported.forEach(l =>
+    register(l.code, () => import(`${staticPath}/lang/${l.code}.json`))
+  )
 
   // Initialize
   init({

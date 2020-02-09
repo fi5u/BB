@@ -4,10 +4,14 @@ import { log } from './utils/logging'
 import { defaultLanguage, getBestFitLang } from './utils/i18n'
 
 // Determine language
-const bestFitLang = getBestFitLang(getLocaleFromNavigator())
-const localeCode = bestFitLang.replace('_', '-')
+let localeCode = window.localStorage.getItem('langOverride')
+if (!localeCode) {
+  const bestFitLang = getBestFitLang(getLocaleFromNavigator())
+  localeCode = bestFitLang.replace('_', '-')
+}
 
 // Current fails to register if loaded from other file
+// Also does not work in a forEach block
 register('en-GB', () => import('../static/lang/en-GB.json'))
 register('en-US', () => import('../static/lang/en-US.json'))
 register('fi', () => import('../static/lang/fi.json'))

@@ -10,7 +10,9 @@
 - [x] Log from server directory
 - [x] Config file
 - [x] Localization
-- [ ] Allow lang override
+- [x] Allow lang override
+- [ ] Build logout route
+- [ ] Add user language to logging
 - [ ] Theming
 - [ ] Tests
 - [ ] Upload to remote location

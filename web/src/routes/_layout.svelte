@@ -9,6 +9,7 @@
 <script>
   import { setContext } from 'svelte'
 
+  import Footer from '../components/layout/Footer.svelte'
   import Notification from '../components/layout/Notification.svelte'
 
   let notificationText = ''
@@ -67,4 +68,6 @@
   {/if}
 
   <slot />
+
+  <Footer />
 </main>

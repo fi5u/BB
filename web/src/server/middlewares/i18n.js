@@ -18,7 +18,10 @@ module.exports = {
       return next()
     }
 
-    req.locale = getBestFitLang(req.headers['accept-language'])
+    // If language override set in session, use that
+    req.locale =
+      (req.locale = req.session.langOverride) ||
+      getBestFitLang(req.headers['accept-language'])
 
     next()
   },

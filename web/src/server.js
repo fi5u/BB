@@ -24,10 +24,6 @@ global.crypto = crypto // TODO: do we need this?
 
 const app = polka()
 
-// Set up i18n
-app.use(determineLang)
-app.use(registerLang)
-
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
 app.use(
@@ -44,6 +40,10 @@ app.use(
   })
 )
 
+// Set up i18n
+app.use(determineLang)
+app.use(registerLang)
+
 app.use(routeLog)
 
 app.post('/api/logging', log)
@@ -55,6 +55,7 @@ app.use(
     session: req => ({
       hasFBLogin: req.session && req.session.hasFBLogin,
       hasPassword: req.session && req.session.hasPassword,
+      langOverride: req.session && req.session.langOverride,
       savedEmail: req.session && req.session.savedEmail,
       user: req.session && req.session.user,
     }),
