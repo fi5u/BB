@@ -33,11 +33,12 @@
       }
 
       const result = await this.fetch(`/api/auth/reset/${userIdSplit[1]}`, {
-        method: 'GET',
+        credentials: 'include',
         headers: {
           Accept: 'application/json',
           'Content-Type': 'application/json',
         },
+        method: 'GET',
       })
 
       const { isPermitted, email, reason } = await result.json()

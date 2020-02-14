@@ -11,8 +11,12 @@
 - [x] Config file
 - [x] Localization
 - [x] Allow lang override
-- [ ] Build logout route
-- [ ] Add user language to logging
+- [x] Add user language to logging
+- [x] Build logout route
+- [ ] Implement Rollup import aliases
+- [ ] Create a client fetch helper function
+- [ ] Colorize dev terminal output
+- [ ] Add window error handler
 - [ ] Theming
 - [ ] Tests
 - [ ] Upload to remote location

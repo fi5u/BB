@@ -32,12 +32,13 @@
     )}`
 
     const response = await fetch('/api/auth/user', {
-      method: 'GET',
+      credentials: 'include',
       headers: {
         Accept: 'application/json',
         Authorization: auth,
         'Content-Type': 'application/json',
       },
+      method: 'GET',
     })
 
     const { user } = await response.json()

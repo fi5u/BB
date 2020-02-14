@@ -58,6 +58,7 @@
 
             const response = await fetch('/api/auth/facebook', {
               body: JSON.stringify({ email, fbId, name }),
+              credentials: 'include',
               headers: {
                 Accept: 'application/json',
                 'Content-Type': 'application/json',

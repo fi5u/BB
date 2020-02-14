@@ -7,8 +7,8 @@ import sessionFileStore from 'session-file-store'
 import * as sapper from '@sapper/server'
 import * as crypto from 'crypto'
 
+import { session as sessionConfig } from '../../config'
 import { log } from './server/endpoints/logging'
-
 import { routeLog } from './server/middlewares/route-logging'
 import { determineLang, registerLang } from './server/middlewares/i18n'
 
@@ -44,21 +44,22 @@ app.use(
 app.use(determineLang)
 app.use(registerLang)
 
+// Log routes
 app.use(routeLog)
 
-app.post('/api/logging', log)
+app.post('/api/logging', log) // TODO: move this to api dir
 
 app.use(
   compression({ threshold: 0 }),
   sirv('static', { dev }),
   sapper.middleware({
-    session: req => ({
-      hasFBLogin: req.session && req.session.hasFBLogin,
-      hasPassword: req.session && req.session.hasPassword,
-      langOverride: req.session && req.session.langOverride,
-      savedEmail: req.session && req.session.savedEmail,
-      user: req.session && req.session.user,
-    }),
+    session: req =>
+      sessionConfig.ids.reduce((sessionObject, id) => {
+        return {
+          ...sessionObject,
+          [id]: req.session && req.session[id],
+        }
+      }, {}),
   })
 )
 

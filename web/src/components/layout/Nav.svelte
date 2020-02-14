@@ -1,5 +1,4 @@
 <script>
-  export let logout
   export let segment
 </script>
 
@@ -26,5 +25,5 @@
   <a class={segment === 'settings' ? 'selected' : ''} href="/app/settings">
     Settings
   </a>
-  <button on:click={logout}>Logout</button>
+  <a href="/logout">Logout</a>
 </nav>

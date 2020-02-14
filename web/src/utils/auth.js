@@ -54,15 +54,16 @@ export function authSuccess(user) {
  **/
 export async function logoutUser() {
   await fetch('api/auth/logout', {
-    method: 'POST',
+    credentials: 'include',
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
     },
+    method: 'POST',
   })
 
   if (typeof window !== 'undefined') {
-    window.localStorage.removeItem('user')
+    window.localStorage.clear()
   }
 }
 
@@ -222,12 +223,13 @@ export async function generatePasswordHash(password) {
   const base64Password = new Buffer(password).toString('base64')
 
   const response = await fetch(`${service.url}/api/auth/password`, {
-    method: 'GET',
+    credentials: 'include',
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
       password: base64Password,
     },
+    method: 'GET',
   })
 
   const { generatedPasswordHashed, generatedSalt } = await response.json()
@@ -247,6 +249,7 @@ export async function generatePasswordHash(password) {
 export async function verifyPassword(passwordInput, userRecordPassword, salt) {
   const response = await fetch(`${service.url}/api/auth/password`, {
     body: JSON.stringify({ passwordInput, userRecordPassword, salt }),
+    credentials: 'include',
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
@@ -271,6 +274,7 @@ export async function submitAuthForm(key, inputData, formData, success) {
     `/api/auth/${key === 'verify' ? 'login' : key}`,
     {
       body: JSON.stringify(inputData),
+      credentials: 'include',
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
@@ -313,6 +317,7 @@ export async function submitForgotPasswordForm(inputData, formData, success) {
   const response = await fetch(
     `/api/auth/forgot/${encodeURIComponent(inputData.email)}`,
     {
+      credentials: 'include',
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
@@ -345,6 +350,7 @@ export async function submitResetPasswordForm(inputData, formData, success) {
       passwordRetype: inputData.passwordRetype,
       userId: inputData.userId,
     }),
+    credentials: 'include',
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
