@@ -16,10 +16,15 @@ export function serverLogging(req, params) {
     userId = req.session.user.id
   }
 
+  let lang = '--'
+  if (req && req.locale) {
+    lang = req.locale
+  }
+
   const ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress
 
   const logString = `${level.slice(0, 3).toUpperCase()} ${userId ||
-    0}@${ip} [${d.toISOString()}] ${message} ${JSON.stringify(extra)}`
+    0}@${ip} [${d.toISOString()}] ${lang} ${message} ${JSON.stringify(extra)}`
 
   if (process.env.NODE_ENV === 'development') {
     console.log(logString)
