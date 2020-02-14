@@ -1,4 +1,4 @@
-const { serverLogging } = require('../utils/logging')
+const { serverLogging: log } = require('../utils/logging')
 
 module.exports = {
   /**
@@ -18,7 +18,7 @@ module.exports = {
       return next()
     }
 
-    serverLogging(req, {
+    log(req, {
       extra: {
         type: 'server',
       },

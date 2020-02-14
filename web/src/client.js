@@ -2,6 +2,7 @@ import * as sapper from '@sapper/app'
 import { getLocaleFromNavigator, init, register } from 'svelte-i18n'
 import { log } from './utils/logging'
 import { defaultLanguage, getBestFitLang } from './utils/i18n'
+import { removeQuery } from './utils/url'
 
 // Determine language
 let localeCode = window.localStorage.getItem('langOverride')
@@ -21,6 +22,9 @@ init({
   fallbackLocale: defaultLanguage,
   initialLocale: localeCode,
 })
+
+// Remove url lang query
+removeQuery('lang')
 
 sapper.start({
   target: document.querySelector('#sapper'),

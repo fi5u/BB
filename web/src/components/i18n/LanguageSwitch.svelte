@@ -18,35 +18,12 @@
       )
     }
 
-    log.info('Begin language switch', { language })
+    await log.info('Begin language switch', { language })
 
-    try {
-      const response = await fetch('/api/i18n/language', {
-        body: JSON.stringify({ langOverride: language }),
-        credentials: 'include',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-        },
-        method: 'POST',
-      })
+    window.localStorage.setItem('langOverride', language)
+    $session.langOverride = language
 
-      if (response.status === 400) {
-        log.error('Failed to switch language', { error: 'Bad response' })
-        return failureNotification()
-      }
-
-      window.localStorage.setItem('langOverride', language)
-      $session.langOverride = language
-
-      await log.info('Language switch success', { language })
-
-      window.location.reload()
-    } catch (error) {
-      failureNotification()
-
-      log.error('Failed to switch language', { error: error.message })
-    }
+    window.location.href = `${window.location.pathname}?lang=${language}`
   }
 </script>
 
