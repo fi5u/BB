@@ -13,8 +13,8 @@
 <script>
   import { getContext } from 'svelte'
 
-  import PageTitle from '../../components/head/PageTitle.svelte'
-  import ForgotPasswordForm from '../../components/auth/ForgotPasswordForm.svelte'
+  import PageTitle from 'components/head/PageTitle.svelte'
+  import ForgotPasswordForm from 'components/auth/ForgotPasswordForm.svelte'
 
   export let emailAddress
   export let segment = null

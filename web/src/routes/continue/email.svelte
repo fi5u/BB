@@ -1,6 +1,6 @@
 <script context="module">
-  import { getLoadNotification } from '../../utils/notifications'
-  import { protectRoute } from '../../utils/routes'
+  import { getLoadNotification } from 'utils/notifications'
+  import { protectRoute } from 'utils/routes'
 
   export function preload({ query }, { user }) {
     protectRoute(this, 'visitor', user)
@@ -14,9 +14,9 @@
   import { getContext } from 'svelte'
   import { _ } from 'svelte-i18n'
 
-  import PageTitle from '../../components/head/PageTitle.svelte'
-  import { showLoadNotification } from '../../utils/notifications'
-  import EmailCheck from '../../components/auth/EmailCheck.svelte'
+  import PageTitle from 'components/head/PageTitle.svelte'
+  import { showLoadNotification } from 'utils/notifications'
+  import EmailCheck from 'components/auth/EmailCheck.svelte'
 
   export let onLoadNotification = null
   export let segment = null

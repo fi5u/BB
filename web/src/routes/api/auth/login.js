@@ -1,8 +1,8 @@
 import { query } from 'svelte-apollo'
-import { client } from '../_graphql'
-import { GET_USER } from '../_graphql/_user'
-import { serverLog } from '../../../utils/logging'
-import { verifyPassword } from '../../../utils/auth'
+import { client } from 'api/_graphql'
+import { GET_USER } from 'api/_graphql/_user'
+import { serverLog } from 'utils/logging'
+import { verifyPassword } from 'utils/auth'
 
 export async function post(req, res) {
   try {

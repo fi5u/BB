@@ -1,4 +1,4 @@
-const { serverLogging } = require('../utils/logging')
+const { serverLogging } = require('server/utils/logging')
 
 module.exports = {
   /**

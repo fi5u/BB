@@ -1,9 +1,5 @@
-import {
-  generatePasswordHash,
-  getUser,
-  updateUser,
-} from '../../../../utils/auth'
-import { log } from '../../../../utils/logging'
+import { generatePasswordHash, getUser, updateUser } from 'utils/auth'
+import { log } from 'utils/logging'
 
 export async function post(req, res) {
   const { passwordNew, passwordRetype, userId } = req.body

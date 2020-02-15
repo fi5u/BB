@@ -1,5 +1,5 @@
 <script>
-  import LanguageSwitch from '../i18n/LanguageSwitch.svelte'
+  import LanguageSwitch from 'components/i18n/LanguageSwitch.svelte'
 </script>
 
 <footer>

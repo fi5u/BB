@@ -1,4 +1,4 @@
-import { log } from '../../../utils/logging'
+import { log } from 'utils/logging'
 
 /**
  * Generate a password hash and salt

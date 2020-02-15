@@ -1,6 +1,6 @@
 <script>
   import { getContext } from 'svelte'
-  import PageTitle from '../../components/head/PageTitle.svelte'
+  import PageTitle from 'components/head/PageTitle.svelte'
 
   const userStore = getContext('userStore')
   const user = $userStore

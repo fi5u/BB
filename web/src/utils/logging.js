@@ -1,5 +1,5 @@
-import { serverLogging } from '../server/utils/logging'
-import { service } from '../../../config'
+import { serverLogging } from 'server/utils/logging'
+import { service } from 'config'
 
 const levels = ['info', 'error', 'warn']
 

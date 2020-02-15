@@ -1,5 +1,5 @@
-import { session as sessionConfig } from '../../../../../config'
-import { serverLog } from '../../../utils/logging'
+import { session as sessionConfig } from 'config'
+import { serverLog } from 'utils/logging'
 
 export async function post(req, res) {
   const uId = req.session && req.session.user && req.session.user.id

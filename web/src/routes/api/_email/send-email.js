@@ -1,5 +1,5 @@
 import * as nodemailer from 'nodemailer'
-import { log } from '../../../utils/logging'
+import { log } from 'utils/logging'
 
 export function send({ subject, text, to }) {
   log.info('Sending email', { subject, to })

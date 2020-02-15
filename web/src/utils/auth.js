@@ -1,5 +1,5 @@
-import { log } from './logging'
-import { service } from '../../../config'
+import { log } from 'utils/logging'
+import { service } from 'config'
 
 /**
  * Get user data
@@ -11,8 +11,8 @@ export async function getUser(params) {
 
   const [{ query }, { client }, { GET_USER }] = await Promise.all([
     import('svelte-apollo'),
-    import('../routes/api/_graphql'),
-    import('../routes/api/_graphql/_user'),
+    import('api/_graphql'),
+    import('api/_graphql/_user'),
   ])
 
   const userData = query(client, {
@@ -83,8 +83,8 @@ export async function updateUser(values) {
 
   const [{ mutate }, { client }, { UPDATE_USER }] = await Promise.all([
     import('svelte-apollo'),
-    import('../routes/api/_graphql'),
-    import('../routes/api/_graphql/_user'),
+    import('api/_graphql'),
+    import('api/_graphql/_user'),
   ])
 
   try {
@@ -152,8 +152,8 @@ export async function signUpUser({ email, fbId, name, password }) {
 
   const [{ mutate }, { client }, { ADD_USER }] = await Promise.all([
     import('svelte-apollo'),
-    import('../routes/api/_graphql'),
-    import('../routes/api/_graphql/_user'),
+    import('api/_graphql'),
+    import('api/_graphql/_user'),
   ])
 
   try {

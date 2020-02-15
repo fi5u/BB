@@ -1,6 +1,6 @@
 import * as emailValidator from 'email-validator'
-import { signUpUser } from '../../../utils/auth'
-import { log } from '../../../utils/logging'
+import { signUpUser } from 'utils/auth'
+import { log } from 'utils/logging'
 
 export async function post(req, res) {
   const { email, password } = req.body

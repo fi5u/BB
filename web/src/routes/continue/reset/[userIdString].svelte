@@ -1,8 +1,8 @@
 <script context="module">
   import Buffer_ from 'buffer/'
 
-  import { log } from '../../../utils/logging'
-  import { protectRoute } from '../../../utils/routes'
+  import { log } from 'utils/logging'
+  import { protectRoute } from 'utils/routes'
 
   export async function preload({ params, query }, { user }) {
     const { userIdString } = params

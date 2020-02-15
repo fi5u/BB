@@ -1,5 +1,5 @@
 <script context="module">
-  import { log } from '../utils/logging'
+  import { log } from 'utils/logging'
 
   export async function preload({ path }) {
     log.warn('Error page', { path })

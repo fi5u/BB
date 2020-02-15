@@ -1,5 +1,5 @@
 <script>
-  import Sheet from '../layout/Sheet.svelte'
+  import Sheet from 'components/layout/Sheet.svelte'
 
   export let activePolicy
   export let setActivePolicy

@@ -1,4 +1,4 @@
-import { serverLog as log } from '../../../utils/logging'
+import { serverLog as log } from 'utils/logging'
 
 export async function post(req, res) {
   const { langOverride } = req.body

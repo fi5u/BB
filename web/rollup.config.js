@@ -5,9 +5,11 @@ import svelte from 'rollup-plugin-svelte'
 import babel from 'rollup-plugin-babel'
 import { terser } from 'rollup-plugin-terser'
 import nodePolyfills from 'rollup-plugin-node-polyfills'
+import alias from '@rollup/plugin-alias'
 import json from '@rollup/plugin-json'
 import config from 'sapper/config/rollup.js'
 import pkg from './package.json'
+import path from 'path'
 
 const mode = process.env.NODE_ENV
 const dev = mode === 'development'
@@ -18,14 +20,51 @@ const onwarn = (warning, onwarn) =>
   (warning.code === 'CIRCULAR_DEPENDENCY' &&
     /[/\\]@sapper[/\\]/.test(warning.message)) ||
   onwarn(warning)
+
 const dedupe = importee =>
   importee === 'svelte' || importee.startsWith('svelte/')
+
+console.log(__dirname)
+
+const aliasConfig = {
+  entries: [
+    {
+      find: /^api\/(.*)/,
+      replacement: path.resolve(__dirname, 'src/routes/api/$1'),
+    },
+    {
+      find: /^components\/(.*)/,
+      replacement: path.resolve(__dirname, 'src/components/$1'),
+    },
+    {
+      find: /^config$/,
+      replacement: path.resolve(__dirname, '../config.js'),
+    },
+    {
+      find: /^routes\/(.*)/,
+      replacement: path.resolve(__dirname, 'src/routes/$1'),
+    },
+    {
+      find: /^server\/(.*)/,
+      replacement: path.resolve(__dirname, 'src/server/$1'),
+    },
+    {
+      find: /^stores\/(.*)/,
+      replacement: path.resolve(__dirname, 'src/stores/$1'),
+    },
+    {
+      find: /^utils\/(.*)/,
+      replacement: path.resolve(__dirname, 'src/utils/$1'),
+    },
+  ],
+}
 
 export default {
   client: {
     input: config.client.input(),
     output: config.client.output(),
     plugins: [
+      alias(aliasConfig),
       replace({
         'process.browser': true,
         'process.env.NODE_ENV': JSON.stringify(mode),
@@ -81,6 +120,7 @@ export default {
     input: config.server.input(),
     output: config.server.output(),
     plugins: [
+      alias(aliasConfig),
       replace({
         'process.browser': false,
         'process.env.NODE_ENV': JSON.stringify(mode),

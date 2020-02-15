@@ -1,6 +1,6 @@
 import { init, register } from 'svelte-i18n'
 import locale from 'locale'
-import { languages } from '../../../config'
+import { languages } from 'config'
 
 const supportedLanguages = languages.supported.map(l =>
   l.code.replace('-', '_')

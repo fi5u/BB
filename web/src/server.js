@@ -7,10 +7,10 @@ import sessionFileStore from 'session-file-store'
 import * as sapper from '@sapper/server'
 import * as crypto from 'crypto'
 
-import { session as sessionConfig } from '../../config'
-import { log } from './server/endpoints/logging'
-import { routeLog } from './server/middlewares/route-logging'
-import { determineLang, registerLang } from './server/middlewares/i18n'
+import { session as sessionConfig } from 'config'
+import { log } from 'server/endpoints/logging'
+import { routeLog } from 'server/middlewares/route-logging'
+import { determineLang, registerLang } from 'server/middlewares/i18n'
 
 import { config } from 'dotenv'
 config()

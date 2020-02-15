@@ -1,8 +1,8 @@
 import * as emailValidator from 'email-validator'
-import { log } from '../../../../utils/logging'
-import { send } from '../../_email/send-email'
-import { getUser, updateUser } from '../../../../utils/auth'
-import { service } from '../../../../../../config'
+import { log } from 'utils/logging'
+import { send } from 'api/_email/send-email'
+import { getUser, updateUser } from 'utils/auth'
+import { service } from 'config'
 
 /**
  * Request a password reset link

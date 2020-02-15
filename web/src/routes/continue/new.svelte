@@ -1,5 +1,5 @@
 <script context="module">
-  import { protectRoute } from '../../utils/routes'
+  import { protectRoute } from 'utils/routes'
 
   export async function preload(page, { savedEmail, user }) {
     protectRoute(this, 'visitor', user)
@@ -13,8 +13,8 @@
 <script>
   import { goto, stores } from '@sapper/app'
 
-  import PageTitle from '../../components/head/PageTitle.svelte'
-  import SignupForm from '../../components/auth/SignupForm.svelte'
+  import PageTitle from 'components/head/PageTitle.svelte'
+  import SignupForm from 'components/auth/SignupForm.svelte'
 
   export let emailAddress
 

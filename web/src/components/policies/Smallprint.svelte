@@ -1,5 +1,5 @@
 <script>
-  import PolicySheets from './PolicySheets.svelte'
+  import PolicySheets from 'components/policies/PolicySheets.svelte'
 
   export let key = 'continue'
 

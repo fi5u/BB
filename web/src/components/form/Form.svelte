@@ -1,6 +1,6 @@
 <script>
-  import Button from './Button.svelte'
-  import Input from './Input.svelte'
+  import Button from 'components/form/Button.svelte'
+  import Input from 'components/form/Input.svelte'
 
   export let form
   export let onsubmit

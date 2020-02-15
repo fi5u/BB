@@ -2,8 +2,8 @@
   import { stores } from '@sapper/app'
   import { getContext } from 'svelte'
 
-  import { log } from '../../utils/logging'
-  import { languages } from '../../../../config'
+  import { log } from 'utils/logging'
+  import { languages } from 'config'
 
   const { session } = stores()
 

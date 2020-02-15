@@ -1,5 +1,5 @@
-import { getUser, signUpUser, updateUser } from '../../../utils/auth'
-import { log } from '../../../utils/logging'
+import { getUser, signUpUser, updateUser } from 'utils/auth'
+import { log } from 'utils/logging'
 
 export async function post(req, res) {
   const { email, fbId, name } = req.body

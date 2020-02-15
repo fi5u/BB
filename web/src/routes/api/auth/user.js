@@ -1,5 +1,5 @@
-import { getUser } from '../../../utils/auth'
-import { log } from '../../../utils/logging'
+import { getUser } from 'utils/auth'
+import { log } from 'utils/logging'
 
 export async function get(req, res) {
   if (req.session.user) {

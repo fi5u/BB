@@ -2,9 +2,9 @@
   import { onMount, createEventDispatcher } from 'svelte'
   import asyncScriptLoader from 'async-script-loader'
 
-  import { log } from '../../utils/logging'
-  import { authSuccess } from '../../utils/auth'
-  import { externalServices } from '../../../../config'
+  import { log } from 'utils/logging'
+  import { authSuccess } from 'utils/auth'
+  import { externalServices } from 'config'
 
   const dispatch = createEventDispatcher()
 

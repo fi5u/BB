@@ -2,7 +2,7 @@
   import * as sapper from '@sapper/app'
   import Buffer_ from 'buffer/'
 
-  import Form from '../form/Form.svelte'
+  import Form from 'components/form/Form.svelte'
 
   export let submittedForm
 

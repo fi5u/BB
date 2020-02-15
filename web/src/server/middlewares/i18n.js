@@ -1,5 +1,5 @@
-const { getBestFitLang, registerLanguages } = require('../../utils/i18n')
-const { serverLogging: log } = require('../utils/logging')
+const { getBestFitLang, registerLanguages } = require('utils/i18n')
+const { serverLogging: log } = require('server/utils/logging')
 
 /**
  * Determine is a file request

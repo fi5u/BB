@@ -1,8 +1,8 @@
 <script>
   import { getContext } from 'svelte'
 
-  import PageTitle from '../../components/head/PageTitle.svelte'
-  import UpdateSettings from '../../components/settings/UpdateSettings.svelte'
+  import PageTitle from 'components/head/PageTitle.svelte'
+  import UpdateSettings from 'components/settings/UpdateSettings.svelte'
 
   const userStore = getContext('userStore')
 </script>

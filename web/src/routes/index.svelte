@@ -1,5 +1,5 @@
 <script context="module">
-  import { protectRoute } from '../utils/routes'
+  import { protectRoute } from 'utils/routes'
 
   export function preload(page, { user }) {
     return protectRoute(this, 'visitor', user)
@@ -9,10 +9,10 @@
 <script>
   import { _ } from 'svelte-i18n'
 
-  import { service } from '../../../config'
-  import PageTitle from '../components/head/PageTitle.svelte'
-  import Smallprint from '../components/policies/Smallprint.svelte'
-  import FacebookAuthButton from '../components/auth/FacebookAuthButton.svelte'
+  import { service } from 'config'
+  import PageTitle from 'components/head/PageTitle.svelte'
+  import Smallprint from 'components/policies/Smallprint.svelte'
+  import FacebookAuthButton from 'components/auth/FacebookAuthButton.svelte'
 </script>
 
 <style>

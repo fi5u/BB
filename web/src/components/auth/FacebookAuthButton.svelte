@@ -2,7 +2,7 @@
   import { goto, stores } from '@sapper/app'
   import { getContext } from 'svelte'
 
-  import FacebookAuth from './FacebookAuth.svelte'
+  import FacebookAuth from 'components/auth/FacebookAuth.svelte'
 
   const { session } = stores()
 

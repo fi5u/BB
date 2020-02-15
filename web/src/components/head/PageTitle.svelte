@@ -1,5 +1,5 @@
 <script>
-  import { service } from '../../../../config'
+  import { service } from 'config'
 
   export let title = ''
 </script>

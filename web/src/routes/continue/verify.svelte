@@ -1,6 +1,6 @@
 <script context="module">
-  import { getLoadNotification } from '../../utils/notifications'
-  import { protectRoute } from '../../utils/routes'
+  import { getLoadNotification } from 'utils/notifications'
+  import { protectRoute } from 'utils/routes'
 
   export async function preload(
     { query },
@@ -27,11 +27,11 @@
   import { goto, stores } from '@sapper/app'
   import { getContext } from 'svelte'
 
-  import PageTitle from '../../components/head/PageTitle.svelte'
-  import { log } from '../../utils/logging'
-  import { showLoadNotification } from '../../utils/notifications'
-  import FacebookAuthButton from '../../components/auth/FacebookAuthButton.svelte'
-  import VerifyForm from '../../components/auth/VerifyForm.svelte'
+  import PageTitle from 'components/head/PageTitle.svelte'
+  import { log } from 'utils/logging'
+  import { showLoadNotification } from 'utils/notifications'
+  import FacebookAuthButton from 'components/auth/FacebookAuthButton.svelte'
+  import VerifyForm from 'components/auth/VerifyForm.svelte'
 
   export let emailAddress
   export let hasFailed

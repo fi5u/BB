@@ -1,15 +1,15 @@
 <script>
   import { getContext } from 'svelte'
 
-  import Form from '../form/Form.svelte'
+  import Form from 'components/form/Form.svelte'
   import {
     generatePasswordHash,
     getUser,
     updateUser,
     verifyPassword,
-  } from '../../utils/auth'
-  import { getValueFromForm, setValueInForm } from '../../utils/form'
-  import { log } from '../../utils/logging'
+  } from 'utils/auth'
+  import { getValueFromForm, setValueInForm } from 'utils/form'
+  import { log } from 'utils/logging'
 
   export let userStore
   const user = $userStore

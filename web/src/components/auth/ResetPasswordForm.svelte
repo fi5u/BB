@@ -1,8 +1,8 @@
 <script>
   import { getContext } from 'svelte'
 
-  import Form from '../form/Form.svelte'
-  import { submitResetPasswordForm } from '../../utils/auth'
+  import Form from 'components/form/Form.svelte'
+  import { submitResetPasswordForm } from 'utils/auth'
 
   export let submitSuccess
   export let userId

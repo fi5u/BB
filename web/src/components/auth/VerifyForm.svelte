@@ -1,6 +1,6 @@
 <script>
-  import Form from '../form/Form.svelte'
-  import { submitAuthForm } from '../../utils/auth'
+  import Form from 'components/form/Form.svelte'
+  import { submitAuthForm } from 'utils/auth'
 
   export let emailAddress
   export let submitSuccess
