@@ -1,12 +1,15 @@
 <script>
   import { goto, stores } from '@sapper/app'
-  import { getContext } from 'svelte'
-
   import FacebookAuth from 'components/auth/FacebookAuth.svelte'
 
   const { session } = stores()
 
-  function fbAuthFailure() {
+  /**
+   * Facebook auth failed
+   */
+  async function fbAuthFailure() {
+    const { getContext } = await import('svelte')
+
     const notification = getContext('notification')
 
     notification.createNotification(
@@ -14,7 +17,11 @@
     )
   }
 
-  function fbAuthSuccess(data) {
+  /**
+   * Facebook auth success
+   * @param {object} data Data passed from Facebook
+   */
+  async function fbAuthSuccess(data) {
     $session.user = data.detail.user
 
     goto('/app')

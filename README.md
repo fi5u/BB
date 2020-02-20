@@ -14,7 +14,8 @@
 - [x] Add user language to logging
 - [x] Build logout route
 - [x] Implement Rollup import aliases
-- [ ] Create a client fetch helper function
+- [x] Create a client fetch helper function
+- [ ] Remove serviceUrl from fetch calls
 - [ ] Colorize dev terminal output
 - [ ] Add window error handler
 - [ ] Theming

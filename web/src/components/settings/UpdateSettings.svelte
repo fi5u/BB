@@ -1,15 +1,5 @@
 <script>
-  import { getContext } from 'svelte'
-
   import Form from 'components/form/Form.svelte'
-  import {
-    generatePasswordHash,
-    getUser,
-    updateUser,
-    verifyPassword,
-  } from 'utils/auth'
-  import { getValueFromForm, setValueInForm } from 'utils/form'
-  import { log } from 'utils/logging'
 
   export let userStore
   const user = $userStore
@@ -80,42 +70,74 @@
   }
 
   /**
+   * Update value in form
+   * @param {string} key Form key
+   * @param {string} dbKey DB key
+   */
+  async function editUpdateObject(key, dbKey) {
+    const { getValueFromForm, setValueInForm } = await import('utils/form')
+    const formItemValue = getValueFromForm(updateSettingsForm, key)
+
+    // If form value cleared (but has value in db), set error
+    if (user[dbKey] && !formItemValue) {
+      updateSettingsForm = setValueInForm(updateSettingsForm, key, {
+        errorMessage: 'Oops, this cannot be empty',
+      })
+
+      return false
+    }
+
+    if (formItemValue && formItemValue !== user[dbKey]) {
+      return formItemValue
+    }
+
+    return true
+  }
+
+  /**
    * Submit update settings form
    * @param event Submit event
    */
   async function submit(event) {
     event.preventDefault()
 
+    const [
+      { getContext },
+      { getValueFromForm, setValueInForm },
+      Buffer_,
+      { clientFetch },
+      { generatePasswordHash },
+      { log },
+    ] = await Promise.all([
+      import('svelte'),
+      import('utils/form'),
+      import('buffer/'),
+      import('utils/fetch'),
+      import('utils/auth'),
+      import('utils/logging'),
+    ])
+
     const notification = getContext('notification')
-
-    function editUpdateObject(key, dbKey) {
-      const formItem = getValueFromForm(updateSettingsForm, key)
-
-      // If form value cleared (but has value in db), set error
-      if (user[dbKey] && !formItem) {
-        updateSettingsForm = setValueInForm(updateSettingsForm, key, {
-          errorMessage: 'Oops, this cannot be empty',
-        })
-
-        return false
-      }
-
-      if (formItem && formItem !== user[dbKey]) {
-        updateObject[dbKey] = formItem
-      }
-
-      return true
-    }
 
     const updateObject = {
       id: parseInt(user.id),
     }
 
-    if (
-      !editUpdateObject('update-name', 'name') ||
-      !editUpdateObject('update-email', 'email')
-    ) {
+    const [updatedEmail, updatedName] = await Promise.all([
+      editUpdateObject('update-email', 'email'),
+      editUpdateObject('update-name', 'name'),
+    ])
+
+    if (!updatedName || !updatedEmail) {
       return
+    }
+
+    if (typeof updatedName === 'string') {
+      updateObject.name = updatedName
+    }
+
+    if (typeof updatedEmail === 'string') {
+      updateObject.email = updatedEmail
     }
 
     const currentPassword = getValueFromForm(
@@ -182,8 +204,35 @@
         return false
       }
 
-      // First test does old password match with db
-      const userRecord = await getUser({ id: parseInt(user.id) })
+      const Buffer = Buffer_.Buffer
+
+      // TODO: PASSWORD NEEDED HERE, WHERE TO GET IT FROM
+      // OTHER SOLUTION I.E. JWT ???
+      const auth = `Basic ${new Buffer(
+        `${emailCheckForm[0].value}:${currentPassword}`
+      ).toString('base64')}`
+
+      const { error, data } = await clientFetch(
+        `/api/auth/user/${user.id}`,
+        'GET',
+        null,
+        {
+          headers: {
+            Authorization: auth,
+          },
+        }
+      )
+
+      if (error || !data) {
+        log.error('Error fetching user when saving password', {}, user.id)
+        notification.createNotification(
+          'Oops, an error occurred, please try again.'
+        )
+
+        return
+      }
+
+      const { user: userRecord } = data
 
       if (!userRecord) {
         log.error('No user returned when saving new password', {}, user.id)
@@ -193,13 +242,33 @@
       }
 
       // Only verify if has a current password
-      const isCurrentPasswordCorrect = user.hasPassword
-        ? await verifyPassword(
-            currentPassword,
-            userRecord.password,
-            userRecord.salt
+      let isCurrentPasswordCorrect = true
+      if (user.hasPassword) {
+        const { error, data } = await clientFetch(
+          '/api/auth/password',
+          'POST',
+          {
+            passwordInput: currentPassword,
+            userRecordPassword: userRecord.password,
+            salt: userRecord.salt,
+          }
+        )
+
+        if (error || !data) {
+          log.error(
+            'No data returned when verifying current password',
+            {},
+            user.id
           )
-        : true
+          notification.createNotification(
+            'Oops, an error occurred, please try again.'
+          )
+        }
+
+        const { isVerified } = data
+
+        isCurrentPasswordCorrect = isVerified
+      }
 
       if (!isCurrentPasswordCorrect) {
         log.info('Incorrect password when updating', {}, user.id)
@@ -224,7 +293,25 @@
       updateObject.salt = generatedSalt
     }
 
-    const { user: updatedUser, error } = await updateUser(updateObject)
+    const { error: updateUserError, data: updateUserData } = await clientFetch(
+      `/api/auth/user/${user.id}`,
+      'PUT',
+      null,
+      {
+        headers: {
+          Authorization: auth,
+        },
+      }
+    )
+
+    if (updateUserError || !updateUserData) {
+      log.error('Error updating user', {}, user.id)
+      notification.createNotification('Oops, an error occurred')
+
+      return
+    }
+
+    const { user: updatedUser } = updateUserData
 
     if (updatedUser) {
       notification.createNotification('Settings updated!')

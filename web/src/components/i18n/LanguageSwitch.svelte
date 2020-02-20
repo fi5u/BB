@@ -1,8 +1,6 @@
 <script>
   import { stores } from '@sapper/app'
-  import { getContext } from 'svelte'
 
-  import { log } from 'utils/logging'
   import { languages } from 'config'
 
   const { session } = stores()
@@ -11,12 +9,7 @@
    * Set the language on the session at server
    **/
   async function changeLanguage(language) {
-    function failureNotification() {
-      const notification = getContext('notification')
-      notification.createNotification(
-        'Oops, we couldn’t change the language, please try again.'
-      )
-    }
+    const { log } = await import('utils/logging')
 
     await log.info('Begin language switch', { language })
 

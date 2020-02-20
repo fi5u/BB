@@ -19,7 +19,9 @@ export async function get(req, res) {
     !req.headers.authorization ||
     req.headers.authorization.indexOf('Basic ') === -1
   ) {
-    log.error('Get user, not authorization headers')
+    log.error('Get user, no authorization headers')
+
+    res.setHeader('Content-Type', 'application/json')
 
     return res.end(
       JSON.stringify({
@@ -62,6 +64,8 @@ export async function get(req, res) {
       })
     )
   }
+
+  res.setHeader('Content-Type', 'application/json')
 
   res.end(
     JSON.stringify({

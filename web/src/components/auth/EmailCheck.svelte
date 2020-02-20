@@ -22,6 +22,20 @@
     },
   ]
 
+  /**
+   * Submit error log and notification
+   */
+  async function submitError(errorMessage) {
+    const { generalError } = await import('utils/notifications')
+
+    generalError(errorMessage, {
+      email: emailCheckForm[0].value,
+    })
+  }
+
+  /**
+   * Submit email check form
+   */
   async function submit(event) {
     event.preventDefault()
 
@@ -31,17 +45,23 @@
       'base64'
     )}`
 
-    const response = await fetch('/api/auth/user', {
-      credentials: 'include',
+    const { clientFetch } = await import('utils/fetch')
+
+    const { error, data } = await clientFetch('/api/auth/user', 'GET', null, {
       headers: {
-        Accept: 'application/json',
         Authorization: auth,
-        'Content-Type': 'application/json',
       },
-      method: 'GET',
     })
 
-    const { user } = await response.json()
+    if (error || !data) {
+      return submitError('Error submitting email address')
+    }
+
+    const { user } = data
+
+    if (!user) {
+      return submitError('No user returned')
+    }
 
     submittedForm({
       email: emailCheckForm[0].value,

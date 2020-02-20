@@ -1,6 +1,5 @@
 <script>
   import Form from 'components/form/Form.svelte'
-  import { submitForgotPasswordForm } from 'utils/auth'
 
   export let emailAddress = ''
   export let submitSuccess
@@ -23,6 +22,8 @@
   ]
 
   async function handleSubmit(event) {
+    const { submitForgotPasswordForm } = await import('utils/auth')
+
     const updatedForm = await submitForgotPasswordForm(
       {
         email: forgotPasswordForm[0].value,

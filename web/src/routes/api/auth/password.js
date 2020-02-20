@@ -1,14 +1,17 @@
 import { log } from 'utils/logging'
+import { hashPassword } from 'server/utils/password'
 
 /**
  * Generate a password hash and salt
  */
 export async function get(req, res) {
+  log.info('Getting password XXXXX')
   if (!req.headers.password) {
-    log.error('Generate password', {
+    log.error('Failed to generate password', {
       error: 'No authorization headers',
     })
 
+    res.setHeader('Content-Type', 'application/json')
     return res.end(
       JSON.stringify({
         generatedPasswordHashed: null,
@@ -21,12 +24,9 @@ export async function get(req, res) {
 
   const generatedSalt = await crypto.randomBytes(24).toString('hex')
 
-  const generatedPasswordHashed = await crypto
-    .createHash('sha256')
-    .update(password)
-    .update(generatedSalt)
-    .digest('hex')
+  const generatedPasswordHashed = await hashPassword(password, generatedSalt)
 
+  res.setHeader('Content-Type', 'application/json')
   res.end(
     JSON.stringify({
       generatedPasswordHashed,
@@ -43,15 +43,12 @@ export async function post(req, res) {
 
   try {
     if (!passwordInput || !salt || !userRecordPassword) {
-      throw new Error('Password verify - missing data')
+      throw new Error('Missing data')
     }
 
-    const passwordHashed = await crypto
-      .createHash('sha256')
-      .update(passwordInput)
-      .update(salt)
-      .digest('hex')
+    const passwordHashed = await hashPassword(passwordInput, salt)
 
+    res.setHeader('Content-Type', 'application/json')
     res.end(
       JSON.stringify({
         isVerified: passwordHashed === userRecordPassword,
@@ -60,8 +57,12 @@ export async function post(req, res) {
   } catch (error) {
     log.error('Password verify', {
       error: error.message,
+      hasPasswordInput: !!passwordInput,
+      hasSalt: !!salt,
+      hasUserRecordPassword: !!userRecordPassword,
     })
 
+    res.setHeader('Content-Type', 'application/json')
     res.end(
       JSON.stringify({
         isVerified: false,

@@ -1,28 +1,30 @@
 <script>
-  import { onMount, createEventDispatcher } from 'svelte'
-  import asyncScriptLoader from 'async-script-loader'
-
-  import { log } from 'utils/logging'
-  import { authSuccess } from 'utils/auth'
-  import { externalServices } from 'config'
-
-  const dispatch = createEventDispatcher()
+  import { onMount } from 'svelte'
 
   let disabled = true
+
   export let text = 'Continue with Facebook'
 
-  onMount(() => {
-    asyncScriptLoader('https://connect.facebook.net/en_US/sdk.js')
-      .then(() => {
-        disabled = false
-        initialize()
-      })
-      .catch(fbLoadError => {
-        log.error(`Facebook sdk load`, { error: fbLoadError.message })
-      })
+  onMount(async () => {
+    const { default: asyncScriptLoader } = await import('async-script-loader')
+
+    try {
+      await asyncScriptLoader('https://connect.facebook.net/en_US/sdk.js')
+
+      initialize()
+    } catch (error) {
+      const { log } = await import('utils/logging')
+
+      log.error(`Failed to load Facebook sdk`, { error: error.message })
+    }
   })
 
-  function initialize() {
+  /**
+   * Initialize FB connection
+   */
+  async function initialize() {
+    const { externalServices } = await import('config')
+
     const FB = window['FB']
 
     FB.init({
@@ -35,17 +37,35 @@
     disabled = false
   }
 
-  function login() {
+  /**
+   * Log in with Facebook
+   */
+  async function login() {
+    const [
+      { createEventDispatcher },
+      { clientFetch },
+      { authSuccess },
+      { log },
+    ] = await Promise.all([
+      import('svelte'),
+      import('utils/fetch'),
+      import('utils/auth'),
+      import('utils/logging'),
+    ])
+
+    const dispatch = createEventDispatcher()
+
     const FB = window['FB']
+
     FB.login(
-      function(response) {
+      response => {
         if (response.status === 'connected') {
+          log.info('Facebook login')
+
           const authResponse = response.authResponse
           const accessToken = authResponse.accessToken
 
-          log.info('Facebook login')
-
-          FB.api('/me?fields=id,email,name', async function(fieldsResponse) {
+          FB.api('/me?fields=id,email,name', async fieldsResponse => {
             const email = fieldsResponse.email
             const fbId = fieldsResponse.id
             const name = fieldsResponse.name
@@ -56,40 +76,53 @@
               name,
             })
 
-            const response = await fetch('/api/auth/facebook', {
-              body: JSON.stringify({ email, fbId, name }),
-              credentials: 'include',
-              headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
-              },
-              method: 'POST',
-            })
+            const { error, data } = await clientFetch(
+              '/api/auth/facebook',
+              'POST',
+              { email, fbId, name }
+            )
 
-            const { user } = await response.json()
-
-            if (user) {
-              authSuccess(user)
-
-              dispatch('auth-success', { user })
-            } else {
-              log.error('Facebook auth no user', {
+            if (error || !data) {
+              return loginError('Error logging in with Facebook', {
                 email,
                 fbId,
                 name,
               })
             }
+
+            const { user } = data
+
+            if (!user) {
+              return loginError('Facebook auth no user returned', {
+                email,
+                fbId,
+                name,
+              })
+            }
+
+            authSuccess(user)
+
+            dispatch('auth-success', { user })
           })
         } else {
           dispatch('auth-failure', { response })
 
-          log.error('Facebook auth no connection', {
+          loginError('Facebook auth no connection', {
             status: response.status,
           })
         }
       },
       { scope: 'email, public_profile' }
     )
+  }
+
+  /**
+   * Login error log and notification
+   */
+  async function loginError(errorMessage, logParams = {}) {
+    const { generalError } = await import('utils/notifications')
+
+    generalError(errorMessage, logParams)
   }
 </script>
 

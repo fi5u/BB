@@ -44,3 +44,26 @@ export function showLoadNotification(notification, onLoadNotification) {
     )
   }
 }
+
+/**
+ * Display a notification and log an error
+ * @param {string} errorMessage Message to print in log
+ * @param {string} [notificationMessage] Message for notification
+ * @param {object} [logParams] Params to add to the log event
+ */
+export async function generalError(
+  errorMessage,
+  logParams = {},
+  notificationMessage = 'Oops, something went wrong, please try again.'
+) {
+  const [{ getContext }, { log }] = await Promise.all([
+    import('svelte'),
+    import('utils/logging'),
+  ])
+
+  const notification = getContext('notification')
+
+  notification.createNotification(notificationMessage)
+
+  log.error(errorMessage, logParams)
+}

@@ -1,6 +1,5 @@
 <script>
   import Form from 'components/form/Form.svelte'
-  import { submitAuthForm } from 'utils/auth'
 
   export let emailAddress = ''
   export let submitSuccess
@@ -32,6 +31,8 @@
   ]
 
   async function handleSubmit(event) {
+    const { submitAuthForm } = await import('utils/auth')
+
     const updatedForm = await submitAuthForm(
       'signup',
       {

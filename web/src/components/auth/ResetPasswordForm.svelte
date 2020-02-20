@@ -1,8 +1,5 @@
 <script>
-  import { getContext } from 'svelte'
-
   import Form from 'components/form/Form.svelte'
-  import { submitResetPasswordForm } from 'utils/auth'
 
   export let submitSuccess
   export let userId
@@ -33,7 +30,13 @@
     },
   ]
 
+  /**
+   * Submit reset password form
+   * @param {object} Submit event
+   */
   async function handleSubmit(event) {
+    const { submitResetPasswordForm } = await import('utils/auth')
+
     const {
       updatedForm,
       notification: notifcationText,
@@ -52,7 +55,10 @@
     }
 
     if (notifcationText) {
+      const { getContext } = await import('svelte')
+
       const notification = getContext('notification')
+
       notification.createNotification(notifcationText)
     }
   }

@@ -2,7 +2,6 @@ import { query } from 'svelte-apollo'
 import { client } from 'api/_graphql'
 import { GET_USER } from 'api/_graphql/_user'
 import { serverLog } from 'utils/logging'
-import { verifyPassword } from 'utils/auth'
 
 export async function post(req, res) {
   try {
@@ -25,13 +24,12 @@ export async function post(req, res) {
     }
 
     const userRecord = result.data.user
-    const isCorrectPassword = await verifyPassword(
-      passwordInput,
-      userRecord.password,
-      userRecord.salt
-    )
 
-    if (!isCorrectPassword) {
+    const { hashPassword } = await import('server/utils/password')
+
+    const hashedPassword = await hashPassword(passwordInput, userRecord.salt)
+
+    if (hashedPassword !== userRecord.password) {
       serverLog.info(req, 'Incorrect password', { email })
 
       throw new Error('Incorrect password')

@@ -1,6 +1,6 @@
 /**
  * Get a value from a form object using a key
- * @param {object} form Complete form object
+ * @param {Array} form Complete form array
  * @param {string} key Key from form to get
  */
 export function getValueFromForm(form, key) {

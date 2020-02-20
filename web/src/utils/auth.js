@@ -2,6 +2,15 @@ import { log } from 'utils/logging'
 import { service } from 'config'
 
 /**
+ * Auth error log and notification
+ */
+async function authError(errorMessage, logParams) {
+  const { generalError } = await import('utils/notifications')
+
+  generalError(errorMessage, logParams)
+}
+
+/**
  * Get user data
  * @param {object} params Id params: email, fbId, id
  * @param {object} req Request object
@@ -53,14 +62,18 @@ export function authSuccess(user) {
  * Log the user out from server
  **/
 export async function logoutUser() {
-  await fetch('api/auth/logout', {
-    credentials: 'include',
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-    },
-    method: 'POST',
-  })
+  const { clientFetch } = await import('utils/fetch')
+
+  const { error, data } = await clientFetch(
+    '/api/auth/logout',
+    'POST',
+    null,
+    {}
+  )
+
+  if (error || !data || !data.ok) {
+    authError('Error logging out')
+  }
 
   if (typeof window !== 'undefined') {
     window.localStorage.clear()
@@ -216,50 +229,31 @@ export async function signUpUser({ email, fbId, name, password }) {
  * @param {string} password Plain text password to hash
  */
 export async function generatePasswordHash(password) {
-  const Buffer_ = await import('buffer/')
+  const [Buffer_, { clientFetch }] = await Promise.all([
+    import('buffer/'),
+    import('utils/fetch'),
+  ])
 
   const Buffer = Buffer_.Buffer
 
   const base64Password = new Buffer(password).toString('base64')
 
-  const response = await fetch(`${service.url}/api/auth/password`, {
-    credentials: 'include',
+  const { error, data } = await clientFetch('/api/auth/password', 'GET', null, {
     headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
       password: base64Password,
     },
-    method: 'GET',
   })
 
-  const { generatedPasswordHashed, generatedSalt } = await response.json()
+  if (error || !data) {
+    return authError('Error logging out')
+  }
+
+  const { generatedPasswordHashed, generatedSalt } = data
 
   return {
     generatedPasswordHashed,
     generatedSalt,
   }
-}
-
-/**
- * Verify a password with a salt
- * @param {string} passwordInput Password to verify
- * @param {string} userRecordPassword Hashed db password
- * @param {string} salt Salt to verify with
- */
-export async function verifyPassword(passwordInput, userRecordPassword, salt) {
-  const response = await fetch(`${service.url}/api/auth/password`, {
-    body: JSON.stringify({ passwordInput, userRecordPassword, salt }),
-    credentials: 'include',
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-    },
-    method: 'POST',
-  })
-
-  const { isVerified } = await response.json()
-
-  return isVerified
 }
 
 /**
