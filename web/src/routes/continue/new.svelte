@@ -1,8 +1,8 @@
 <script context="module">
   import { protectRoute } from 'utils/routes'
 
-  export async function preload(page, { savedEmail, user }) {
-    protectRoute(this, 'visitor', user)
+  export async function preload(page, { savedEmail }) {
+    protectRoute(this, 'visitor')
 
     return {
       emailAddress: savedEmail,

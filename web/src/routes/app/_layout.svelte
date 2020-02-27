@@ -1,8 +1,8 @@
 <script context="module">
   import { protectRoute } from 'utils/routes'
 
-  export function preload(page, { user }) {
-    return protectRoute(this, 'registered', user)
+  export async function preload(page) {
+    return await protectRoute(this, 'registered', true)
   }
 </script>
 

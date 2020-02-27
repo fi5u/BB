@@ -1,72 +1,67 @@
-import { query } from 'svelte-apollo'
-import { client } from 'api/_graphql'
-import { GET_USER } from 'api/_graphql/_user'
-import { serverLog } from 'utils/logging'
+import { serverLog as log } from 'utils/logging'
+import { authenticate } from 'routes/api/auth/_utils/auth'
+import * as jwt from 'jsonwebtoken'
 
 export async function post(req, res) {
-  try {
-    const { email, password: passwordInput } = req.body
+  const { email } = req.body
 
-    serverLog.info(req, 'Login', { email })
+  log.info(req, 'Login', { email })
 
-    const userData = query(client, {
-      fetchPolicy: 'no-cache',
-      query: GET_USER,
-      variables: { email },
-    })
+  authenticate.local(req, res, error => {
+    const user = req.user
 
-    const result = await userData.result()
+    user.hasPassword = true
 
-    if (!result.data.user) {
-      serverLog.info(req, 'User not found', { email })
+    try {
+      if (error || !user) {
+        throw new Error(error || 'No user returned')
+      }
 
-      throw new Error('User not found')
-    }
+      const { email, id } = user
+      const tokenData = { email, id }
 
-    const userRecord = result.data.user
+      const expiresSeconds = 60 * 2 // 5 mins
 
-    const { hashPassword } = await import('server/utils/password')
-
-    const hashedPassword = await hashPassword(passwordInput, userRecord.salt)
-
-    if (hashedPassword !== userRecord.password) {
-      serverLog.info(req, 'Incorrect password', { email })
-
-      throw new Error('Incorrect password')
-    }
-
-    // Only return email, hasPassword, id and name
-    const { email: emailRecord, id, name } = userRecord
-    const user = { email: emailRecord, hasPassword: true, id, name }
-
-    serverLog.info(req, 'Successful login', { id }, id)
-
-    // Save user to session
-    req.session.user = user
-
-    // Delete session values
-    delete req.session.hasPassword
-    delete req.session.savedEmail
-
-    res.setHeader('Content-Type', 'application/json')
-
-    return res.end(
-      JSON.stringify({
-        user,
+      const token = jwt.sign(tokenData, process.env.JWT_SECRET, {
+        expiresIn: expiresSeconds,
       })
-    )
-  } catch (error) {
-    res.setHeader('Content-Type', 'application/json')
-    res.end(
-      JSON.stringify({
-        errors: [
-          {
-            error: error.message,
-            field: 'password',
-          },
-        ],
-        user: null,
-      })
-    )
-  }
+
+      log.info(req, 'Successful login', { id }, id)
+
+      // Delete session values
+      delete req.session.hasPassword
+      delete req.session.savedEmail
+
+      res.setHeader(
+        'Set-Cookie',
+        `access_token=${token}; Max-Age=${expiresSeconds}; HttpOnly; SameSite=Strict; Path=/${
+          process.env.NODE_ENV !== 'development' ? '; Secure' : ''
+        }`
+      )
+
+      res.setHeader('Content-Type', 'application/json')
+
+      return res.end(
+        JSON.stringify({
+          user,
+        })
+      )
+    } catch (error) {
+      log.info(req, 'Error on login authentication', { error: error.message })
+
+      res.setHeader('Content-Type', 'application/json')
+
+      res.end(
+        JSON.stringify({
+          errors: [
+            {
+              error: error.message,
+              field: 'password',
+            },
+          ],
+          user: null,
+        })
+      )
+    }
+  })
 }

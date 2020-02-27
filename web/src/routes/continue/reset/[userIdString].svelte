@@ -4,10 +4,10 @@
   import { log } from 'utils/logging'
   import { protectRoute } from 'utils/routes'
 
-  export async function preload({ params, query }, { user }) {
+  export async function preload({ params, query }) {
     const { userIdString } = params
 
-    protectRoute(this, 'visitor', user)
+    protectRoute(this, 'visitor')
 
     let resetPreventReason = ''
 

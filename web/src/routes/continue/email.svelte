@@ -2,8 +2,8 @@
   import { getLoadNotification } from 'utils/notifications'
   import { protectRoute } from 'utils/routes'
 
-  export function preload({ query }, { user }) {
-    protectRoute(this, 'visitor', user)
+  export function preload({ query }) {
+    protectRoute(this, 'visitor')
 
     return getLoadNotification(query)
   }
@@ -11,7 +11,7 @@
 
 <script>
   import { goto, stores } from '@sapper/app'
-  import { getContext } from 'svelte'
+  import { getContext, onMount } from 'svelte'
   import { _ } from 'svelte-i18n'
 
   import PageTitle from 'components/head/PageTitle.svelte'
@@ -25,6 +25,12 @@
   const notification = getContext('notification')
 
   showLoadNotification(notification, onLoadNotification)
+
+  onMount(() => {
+    // Redirected here after unauthorized visit to protected pages
+    // Ensure clear user localStorage
+    window.localStorage.removeItem('user')
+  })
 
   function submittedForm({ email, hasFBLogin, hasPassword, userType }) {
     $session.savedEmail = email

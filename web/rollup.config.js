@@ -24,8 +24,6 @@ const onwarn = (warning, onwarn) =>
 const dedupe = importee =>
   importee === 'svelte' || importee.startsWith('svelte/')
 
-console.log(__dirname)
-
 const aliasConfig = {
   entries: [
     {

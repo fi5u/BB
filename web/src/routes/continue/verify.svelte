@@ -4,14 +4,14 @@
 
   export async function preload(
     { query },
-    { hasFBLogin, hasPassword, savedEmail, user }
+    { hasFBLogin, hasPassword, savedEmail }
   ) {
     // If no saved email, redirect back to email entry
     if (!savedEmail) {
       return this.redirect(302, '/continue/email')
     }
 
-    protectRoute(this, 'visitor', user)
+    protectRoute(this, 'visitor')
 
     return {
       ...getLoadNotification(query),
@@ -40,15 +40,12 @@
   export let onLoadNotification = null
   export let segment = null
 
-  const { session } = stores()
-
   const notification = getContext('notification')
 
   showLoadNotification(notification, onLoadNotification)
 
   function submitSuccess(user) {
     if (user) {
-      $session.user = user
       return goto('/app')
     }
 

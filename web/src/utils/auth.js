@@ -264,20 +264,23 @@ export async function generatePasswordHash(password) {
  * @param {(object) => void} success
  */
 export async function submitAuthForm(key, inputData, formData, success) {
-  const response = await fetch(
+  const { clientFetch } = await import('utils/fetch')
+
+  const { error, data } = await clientFetch(
     `/api/auth/${key === 'verify' ? 'login' : key}`,
-    {
-      body: JSON.stringify(inputData),
-      credentials: 'include',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-      method: 'POST',
-    }
+    'POST',
+    inputData
   )
 
-  const { errors, user } = await response.json()
+  if (error || !data) {
+    authError('Failed to submit auth form', {
+      error: error,
+    })
+
+    return false
+  }
+
+  const { errors, user } = data
 
   if (errors) {
     errors.forEach(err => {

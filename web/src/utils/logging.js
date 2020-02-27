@@ -1,5 +1,6 @@
 import { serverLogging } from 'server/utils/logging'
 import { service } from 'config'
+import fetch from 'cross-fetch'
 
 const levels = ['info', 'error', 'warn']
 

@@ -13,9 +13,15 @@ export async function clientFetch(
   body = null,
   extra = {}
 ) {
+  const { password, ...redactedBody } = body || {}
+
+  if (password) {
+    redactedBody.password = '•••'
+  }
+
   try {
     log.info('Client fetch', {
-      body,
+      body: redactedBody,
       endpoint,
       extra,
       method,
@@ -46,7 +52,7 @@ export async function clientFetch(
     const response = await fetch(endpoint, fetchParams)
 
     if (!response.ok) {
-      throw new Error('Bad response')
+      throw new Error(response.statusText || 'Bad response')
     }
 
     const data = await response.json()
@@ -54,7 +60,7 @@ export async function clientFetch(
     return { data }
   } catch (error) {
     log.error('Error in fetch', {
-      body,
+      body: body ? redactedBody : null,
       endpoint,
       error: error.message,
       extra,

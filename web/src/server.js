@@ -2,6 +2,7 @@ import sirv from 'sirv'
 import polka from 'polka'
 import compression from 'compression'
 import bodyParser from 'body-parser'
+import cookieParser from 'cookie-parser'
 import session from 'express-session'
 import sessionFileStore from 'session-file-store'
 import * as sapper from '@sapper/server'
@@ -15,6 +16,8 @@ import { determineLang, registerLang } from 'server/middlewares/i18n'
 import { config } from 'dotenv'
 config()
 
+import 'routes/api/auth/_utils/passport'
+
 const { PORT, NODE_ENV } = process.env
 const dev = NODE_ENV === 'development'
 
@@ -26,6 +29,7 @@ const app = polka()
 
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
+app.use(cookieParser())
 app.use(
   session({
     secret: process.env.SESSION_SECRET,

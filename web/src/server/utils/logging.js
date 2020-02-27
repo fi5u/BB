@@ -1,7 +1,7 @@
 import fs from 'fs'
 
 export function serverLogging(req, params) {
-  const { extra = {}, level, message, uId } = params || req.body
+  const { extra = {}, level = 'info', message, uId } = params || req.body
   const isDev = process.env.NODE_ENV === 'development'
 
   const d = new Date()
