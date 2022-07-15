@@ -4,7 +4,7 @@
   "repository": "https://github.com/fi5u/BB.git",
   "author": "Thomas Fisher <thomasbfisher@yahoo.com>",
   "dependencies": {
-    "svelte": "^3.17.3"
+    "svelte": "^3.49.0"
   },
   "devDependencies": {
     "husky": "^4.2.1",
